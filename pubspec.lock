@@ -74,6 +74,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  mapmyindia_gl:
+    dependency: "direct main"
+    description:
+      name: mapmyindia_gl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.1"
+  mapmyindia_gl_platform_interface:
+    dependency: transitive
+    description:
+      name: mapmyindia_gl_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.0"
   matcher:
     dependency: transitive
     description:
@@ -165,3 +179,4 @@ packages:
     version: "2.1.2"
 sdks:
   dart: ">=2.18.4 <3.0.0"
+  flutter: ">=1.10.0"
