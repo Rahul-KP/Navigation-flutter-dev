@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  Widget Btn(String text_) {
+  Widget btn(String text_) {
     return Container(
         width: 200,
         padding: const EdgeInsets.all(10),
@@ -30,7 +30,7 @@ class LoginScreen extends StatelessWidget {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // Vertical alignment
-            children: [Btn('AMBULANCE DRIVER'), Btn('USER')],
+            children: [btn('AMBULANCE DRIVER'), btn('USER')],
           ),
         ));
   }

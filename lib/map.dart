@@ -14,7 +14,7 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
-      initialCameraPosition: CameraPosition(
+      initialCameraPosition: const CameraPosition(
         target: LatLng(25.321684, 82.987289),
         zoom: 14.0,
       ),
