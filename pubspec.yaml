@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   material: ^1.0.0+2
   mapmyindia_gl: ^0.3.1
+  location: ^4.2.0
 
 dev_dependencies:
   flutter_test:

@@ -21,6 +21,8 @@ class _MapState extends State<Map> {
       onMapCreated: (map) => {
         mapController = map,
       },
+      // myLocationEnabled: true,
+      // myLocationTrackingMode: MyLocationTrackingMode.NoneCompass,
     );
   }
 
