@@ -10,14 +10,17 @@ class Pos extends StatefulWidget {
 }
 
 class _PosState extends State<Pos> {
-  late Location location;
-  late LocationData _locationData;
+  double lat = 0.0;
+  double lon = 0.0;
+  String latStr = '';
+  String lonStr = '';
 
   void getPermissions() async {
-    location = Location();
+    Location location = Location();
 
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
+    LocationData _loc;
 
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -35,7 +38,13 @@ class _PosState extends State<Pos> {
       }
     }
 
-    _locationData = await location.getLocation();
+    _loc = await location.getLocation();
+    setState(() {
+      lat = _loc.latitude!;
+      lon = _loc.longitude!;
+      latStr = lat.toStringAsFixed(4);
+      lonStr = lon.toStringAsFixed(4);
+    });
   }
 
   @override
@@ -51,24 +60,23 @@ class _PosState extends State<Pos> {
         children: <Widget>[
           const Map(),
           Positioned(
-            bottom: 0,
+            bottom: 15,
             left: 0,
+            right: 0,
             child: Column(
               children: [
-                Text('Latitude  :$_locationData.latitude.toStringAsFixed(4)'),
-                Text("Longitude :$_locationData.longitude.toStringAsFixed(4)"),
+                Text('Latitude  : $latStr'),
+                Text('Longitude : $lonStr'),
               ],
             ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (() => setState(() async {
-                _locationData = await location.getLocation();
-              })),
+          onPressed: (() => getPermissions()),
           child: const Icon(
             Icons.add_location_alt_outlined,
-            color: Colors.blueAccent,
+            color: Colors.white,
           )),
     );
   }
