@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:navigation/get_location.dart';
 
@@ -8,10 +9,12 @@ class Map extends StatefulWidget {
   @override
   State<Map> createState() => _MapState();
 }
+class sharedMemory {
+  static late MapmyIndiaMapController mapController;
+}
 
-class _MapState extends State<Map> with locationInfo {
-  late MapmyIndiaMapController mapController;
-
+class _MapState extends State<Map> {
+  
   @override
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
@@ -20,12 +23,14 @@ class _MapState extends State<Map> with locationInfo {
         zoom: 14.0,
       ),
       onMapCreated: (map) => {
-        mapController = map,
+        sharedMemory.mapController = map,
+        sharedMemory.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(locationInfo.lat,locationInfo.lon), 14)),
       },
       // myLocationEnabled: true,
       // myLocationTrackingMode: MyLocationTrackingMode.NoneCompass,
     );
   }
+  
 
   @override
   void initState() {

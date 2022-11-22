@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'map.dart';
+import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
 
 class Pos extends StatefulWidget {
@@ -9,17 +11,17 @@ class Pos extends StatefulWidget {
   State<Pos> createState() => _PosState();
 }
 
-mixin locationInfo {
+class locationInfo {
   static double lat = 0.0;
   static double lon = 0.0;
+  static late Stream<LocationData> _locationData;
 }
 
-class _PosState extends State<Pos> with locationInfo {
+class _PosState extends State<Pos> {
   // double lat = 0.0;
   // double lon = 0.0;
   String latStr = '';
   String lonStr = '';
-  late Stream<LocationData> _locationData;
 
   void getPermissions() async {
     Location location = Location();
@@ -35,7 +37,7 @@ class _PosState extends State<Pos> with locationInfo {
         return;
       }
     }
-
+    
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
@@ -45,9 +47,10 @@ class _PosState extends State<Pos> with locationInfo {
     }
 
     _loc = await location.getLocation();
-    // _locationData = location.onLocationChanged;
+
+    locationInfo._locationData = location.onLocationChanged;
     setState(() {
-      locationInfo.lat = _loc.latitude!;
+      locationInfo.lat =_loc.latitude!;
       locationInfo.lon = _loc.longitude!;
       // LocationData tempLoc = await _locationData.first;
       // lat = tempLoc.latitude!;
@@ -55,6 +58,18 @@ class _PosState extends State<Pos> with locationInfo {
       latStr = locationInfo.lat.toStringAsFixed(4);
       lonStr = locationInfo.lon.toStringAsFixed(4);
     });
+    function();
+    // LocationData ld = await locationInfo._locationData.first;
+    // sharedMemory.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
+  }
+
+  void function () async {
+    await for(LocationData ld in locationInfo._locationData) {
+      sharedMemory.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
+      Fluttertoast.showToast(
+        msg: "jkdnsfndsjkfndksj",
+        backgroundColor: Colors.amber);
+    }
   }
 
   @override
