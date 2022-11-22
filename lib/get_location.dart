@@ -9,9 +9,14 @@ class Pos extends StatefulWidget {
   State<Pos> createState() => _PosState();
 }
 
-class _PosState extends State<Pos> {
-  double lat = 0.0;
-  double lon = 0.0;
+mixin locationInfo {
+  static double lat = 0.0;
+  static double lon = 0.0;
+}
+
+class _PosState extends State<Pos> with locationInfo {
+  // double lat = 0.0;
+  // double lon = 0.0;
   String latStr = '';
   String lonStr = '';
   late Stream<LocationData> _locationData;
@@ -42,13 +47,13 @@ class _PosState extends State<Pos> {
     _loc = await location.getLocation();
     // _locationData = location.onLocationChanged;
     setState(() {
-      lat = _loc.latitude!;
-      lon = _loc.longitude!;
+      locationInfo.lat = _loc.latitude!;
+      locationInfo.lon = _loc.longitude!;
       // LocationData tempLoc = await _locationData.first;
       // lat = tempLoc.latitude!;
       // lon = tempLoc.longitude!;
-      latStr = lat.toStringAsFixed(4);
-      lonStr = lon.toStringAsFixed(4);
+      latStr = locationInfo.lat.toStringAsFixed(4);
+      lonStr = locationInfo.lon.toStringAsFixed(4);
     });
   }
 
@@ -63,7 +68,7 @@ class _PosState extends State<Pos> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          const Map(),
+          Map(),
           Positioned(
             bottom: 15,
             left: 0,
