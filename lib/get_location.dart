@@ -27,7 +27,7 @@ class _PosState extends State<Pos> {
         return;
       }
     }
-    
+
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
@@ -38,17 +38,20 @@ class _PosState extends State<Pos> {
     SharedData.locationData = location.onLocationChanged;
     // function();
     LocationData ld = await SharedData.locationData.first;
-    SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 18));
+    SharedData.mapController.moveCamera(
+        CameraUpdate.newLatLngZoom(LatLng(ld.latitude!, ld.longitude!), 18));
+    // SharedData.userLoc = LatLng(ld.latitude!, ld.longitude!);
   }
 
-  void function () async {
-    await for(LocationData ld in SharedData.locationData) {
-      SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
-      Fluttertoast.showToast(
-        msg: "Location Data updated!",
-        backgroundColor: Colors.amber);
-    }
-  }
+  // void locationUpdater() async {
+  //   await for (LocationData ld in SharedData.locationData) {
+  //     SharedData.userLoc
+  //     // SharedData.mapController.moveCamera(
+  //     //     CameraUpdate.newLatLngZoom(LatLng(ld.latitude!, ld.longitude!), 14));
+  //     // Fluttertoast.showToast(
+  //     //     msg: "Location Data updated!", backgroundColor: Colors.amber);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -65,7 +68,11 @@ class _PosState extends State<Pos> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (() => getPermissions()), // needs to change
+          onPressed: (() async {
+            LocationData ld = await SharedData.locationData.first;
+            SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18)); // animate and ease camera functions here
+          }),
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,

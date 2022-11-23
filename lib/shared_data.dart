@@ -2,8 +2,7 @@ import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
 
 class SharedData {
-  static double lat = 0.0;
-  static double lon = 0.0;
-  static late Stream<LocationData> locationData;
+  // static late LatLng userLoc; //user's location
+  static late Stream<LocationData> locationData; // user's location
   static late MapmyIndiaMapController mapController;
 }
