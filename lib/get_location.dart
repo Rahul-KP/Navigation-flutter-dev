@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
@@ -11,18 +12,7 @@ class Pos extends StatefulWidget {
   State<Pos> createState() => _PosState();
 }
 
-class locationInfo {
-  static double lat = 0.0;
-  static double lon = 0.0;
-  static late Stream<LocationData> _locationData;
-}
-
 class _PosState extends State<Pos> {
-  // double lat = 0.0;
-  // double lon = 0.0;
-  String latStr = '';
-  String lonStr = '';
-
   void getPermissions() async {
     Location location = Location();
 
@@ -45,29 +35,17 @@ class _PosState extends State<Pos> {
         return;
       }
     }
-
-    _loc = await location.getLocation();
-
-    locationInfo._locationData = location.onLocationChanged;
-    setState(() {
-      locationInfo.lat =_loc.latitude!;
-      locationInfo.lon = _loc.longitude!;
-      // LocationData tempLoc = await _locationData.first;
-      // lat = tempLoc.latitude!;
-      // lon = tempLoc.longitude!;
-      latStr = locationInfo.lat.toStringAsFixed(4);
-      lonStr = locationInfo.lon.toStringAsFixed(4);
-    });
-    function();
-    // LocationData ld = await locationInfo._locationData.first;
-    // sharedMemory.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
+    SharedData.locationData = location.onLocationChanged;
+    // function();
+    LocationData ld = await SharedData.locationData.first;
+    SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 18));
   }
 
   void function () async {
-    await for(LocationData ld in locationInfo._locationData) {
-      sharedMemory.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
+    await for(LocationData ld in SharedData.locationData) {
+      SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(LatLng(ld.latitude!,ld.longitude!), 14));
       Fluttertoast.showToast(
-        msg: "jkdnsfndsjkfndksj",
+        msg: "Location Data updated!",
         backgroundColor: Colors.amber);
     }
   }
@@ -84,21 +62,10 @@ class _PosState extends State<Pos> {
       body: Stack(
         children: <Widget>[
           Map(),
-          Positioned(
-            bottom: 15,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Text('Latitude  : $latStr'),
-                Text('Longitude : $lonStr'),
-              ],
-            ),
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (() => getPermissions()),
+          onPressed: (() => getPermissions()), // needs to change
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,
