@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'shared_data.dart';
 import 'map.dart';
+import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
 
 class Pos extends StatefulWidget {
@@ -10,12 +13,6 @@ class Pos extends StatefulWidget {
 }
 
 class _PosState extends State<Pos> {
-  double lat = 0.0;
-  double lon = 0.0;
-  String latStr = '';
-  String lonStr = '';
-  late Stream<LocationData> _locationData;
-
   void getPermissions() async {
     Location location = Location();
 
@@ -38,19 +35,23 @@ class _PosState extends State<Pos> {
         return;
       }
     }
-
-    _loc = await location.getLocation();
-    // _locationData = location.onLocationChanged;
-    setState(() {
-      lat = _loc.latitude!;
-      lon = _loc.longitude!;
-      // LocationData tempLoc = await _locationData.first;
-      // lat = tempLoc.latitude!;
-      // lon = tempLoc.longitude!;
-      latStr = lat.toStringAsFixed(4);
-      lonStr = lon.toStringAsFixed(4);
-    });
+    SharedData.locationData = location.onLocationChanged;
+    // function();
+    LocationData ld = await SharedData.locationData.first;
+    SharedData.mapController.moveCamera(
+        CameraUpdate.newLatLngZoom(LatLng(ld.latitude!, ld.longitude!), 18));
+    // SharedData.userLoc = LatLng(ld.latitude!, ld.longitude!);
   }
+
+  // void locationUpdater() async {
+  //   await for (LocationData ld in SharedData.locationData) {
+  //     SharedData.userLoc
+  //     // SharedData.mapController.moveCamera(
+  //     //     CameraUpdate.newLatLngZoom(LatLng(ld.latitude!, ld.longitude!), 14));
+  //     // Fluttertoast.showToast(
+  //     //     msg: "Location Data updated!", backgroundColor: Colors.amber);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -63,22 +64,15 @@ class _PosState extends State<Pos> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          const Map(),
-          Positioned(
-            bottom: 15,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Text('Latitude  : $latStr'),
-                Text('Longitude : $lonStr'),
-              ],
-            ),
-          )
+          Map(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: (() => getPermissions()),
+          onPressed: (() async {
+            LocationData ld = await SharedData.locationData.first;
+            SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18)); // animate and ease camera functions here
+          }),
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,
