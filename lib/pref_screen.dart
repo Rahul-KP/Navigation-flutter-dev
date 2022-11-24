@@ -13,7 +13,7 @@ class _PrefScreenState extends State<PrefScreen> {
 
   void update() {
     setState(() {
-      Prefs.saveData('hello');
+      Prefs.saveData('data', 'hello');
     });
   }
 

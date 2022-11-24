@@ -6,8 +6,8 @@ class Prefs {
     prefs = await SharedPreferences.getInstance();
   }
 
-  static void saveData(String data) async {
-    await prefs.setString('data', data);
+  static void saveData(String key, String data) async {
+    await prefs.setString(key, data);
   }
 
   static Future<String> getData() async {
