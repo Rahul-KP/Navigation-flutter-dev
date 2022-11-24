@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
+import 'shared_data.dart';
 
 class Map extends StatefulWidget {
   const Map({super.key});
@@ -9,17 +10,15 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  late MapmyIndiaMapController mapController;
-
   @override
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
-      initialCameraPosition: const CameraPosition(
-        target: LatLng(25.321684, 82.987289),
+      initialCameraPosition: CameraPosition(
+        target: LatLng(0.0, 0.0),
         zoom: 14.0,
       ),
       onMapCreated: (map) => {
-        mapController = map,
+        SharedData.mapController = map,
       },
       // myLocationEnabled: true,
       // myLocationTrackingMode: MyLocationTrackingMode.NoneCompass,
