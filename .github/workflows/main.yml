@@ -6,7 +6,7 @@ on:
     
 jobs:
   build:
-    name: Build APK & upload to Firebase
+    name: Build APK & upload artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
