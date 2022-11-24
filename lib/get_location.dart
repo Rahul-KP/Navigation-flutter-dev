@@ -61,7 +61,24 @@ class _PosState extends State<Pos> {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Drawer(),
+      appBar: AppBar(
+        title: Text("Navigation"),
+        leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: (){
+            if(scaffoldKey.currentState!.isDrawerOpen) {
+              scaffoldKey.currentState!.closeDrawer();
+            }
+            else {
+              scaffoldKey.currentState!.openDrawer();
+            }
+          },
+        )
+      ),
       body: Stack(
         children: <Widget>[
           Map(),
