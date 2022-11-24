@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'search.dart';
 import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
@@ -66,41 +67,40 @@ class _PosState extends State<Pos> {
       key: scaffoldKey,
       drawer: Drawer(),
       appBar: AppBar(
-        title: Text("Navigation"),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: (){
-            if(scaffoldKey.currentState!.isDrawerOpen) {
-              scaffoldKey.currentState!.closeDrawer();
-            }
-            else {
-              scaffoldKey.currentState!.openDrawer();
-            }
-          },
-        ),
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-            onTap: () {},
-            child: Icon(
-              Icons.search,
-              size: 26.0,
-              ),
-            )
+          title: Text("Navigation"),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              if (scaffoldKey.currentState!.isDrawerOpen) {
+                scaffoldKey.currentState!.closeDrawer();
+              } else {
+                scaffoldKey.currentState!.openDrawer();
+              }
+            },
           ),
-        ]
-      ),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.search,
+                    size: 26.0,
+                  ),
+                )),
+          ]),
       body: Stack(
         children: <Widget>[
           Map(),
+          SearchWidget()
         ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (() async {
             LocationData ld = await SharedData.locationData.first;
             SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
-                LatLng(ld.latitude!, ld.longitude!), 18)); // animate and ease camera functions here
+                LatLng(ld.latitude!, ld.longitude!),
+                18)); // animate and ease camera functions here
           }),
           child: const Icon(
             Icons.add_location_alt_outlined,
