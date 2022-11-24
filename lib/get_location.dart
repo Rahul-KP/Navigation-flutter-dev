@@ -77,7 +77,19 @@ class _PosState extends State<Pos> {
               scaffoldKey.currentState!.openDrawer();
             }
           },
-        )
+        ),
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+            onTap: () {},
+            child: Icon(
+              Icons.search,
+              size: 26.0,
+              ),
+            )
+          ),
+        ]
       ),
       body: Stack(
         children: <Widget>[
