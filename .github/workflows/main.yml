@@ -1,0 +1,23 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ "build-apk" ]
+    
+jobs:
+  build:
+    name: Build APK & upload to Firebase
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Flutter action
+        uses: subosito/flutter-action@v2.8.0
+        with:
+          channel: 'stable'
+      - run: flutter pub get
+      - run: flutter build apk --debug
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Navigation Debug APK
+          path: build/app/outputs/apk/debug/app-debug.apk
