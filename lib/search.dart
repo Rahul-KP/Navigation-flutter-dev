@@ -16,19 +16,23 @@ class _SearchWidgetState extends State<SearchWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                height: 50,
-                child: Text('How are you'),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a place',
+                ),
               ),
-              Divider(),
-              Container(
-                height: 50,
-                child: Text('How are you'),
+              // Divider(),
+              TextField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Enter a destination',
+                ),
               ),
             ],
           ),
-          shadowColor: Colors.cyan,
-          elevation: 15,
+          shadowColor: Colors.lightGreen,
+          elevation: 20,
         ));
   }
 }
