@@ -80,10 +80,15 @@ class _PosState extends State<Pos> {
           ),
           actions: <Widget>[
             Padding(
-                padding: EdgeInsets.only(right: 20.0),
+                padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {},
-                  child: Icon(
+                  onTap: () {
+                    // SearchWidget.isVisible = !SearchWidget.isVisible;
+                    setState(() {
+                      SearchWidget.toggleVisisbility();
+                    });
+                  },
+                  child: const Icon(
                     Icons.search,
                     size: 26.0,
                   ),
@@ -92,7 +97,7 @@ class _PosState extends State<Pos> {
       body: Stack(
         children: <Widget>[
           Map(),
-          SearchWidget()
+          SearchWidget(),
         ],
       ),
       floatingActionButton: FloatingActionButton(
