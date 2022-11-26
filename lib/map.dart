@@ -20,7 +20,7 @@ class _MapState extends State<Map> {
       onMapCreated: (map) => {
         SharedData.mapController = map,
       },
-      // myLocationEnabled: true,
+      myLocationEnabled: true,
       // myLocationTrackingMode: MyLocationTrackingMode.NoneCompass,
     );
   }

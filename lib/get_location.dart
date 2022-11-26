@@ -108,9 +108,13 @@ class _PosState extends State<Pos> {
       floatingActionButton: FloatingActionButton(
           onPressed: (() async {
             LocationData ld = await SharedData.locationData.first;
-            SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
-                LatLng(ld.latitude!, ld.longitude!),
-                18)); // animate and ease camera functions here
+            SharedData.mapController.animateCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18));
+            SharedData.mapController.easeCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18));
+            // SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
+            //     LatLng(ld.latitude!, ld.longitude!),
+            //     18)); // animate and ease camera functions here
           }),
           child: const Icon(
             Icons.add_location_alt_outlined,
