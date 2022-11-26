@@ -68,8 +68,8 @@ class loginpg extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 95.0,
-                    backgroundColor: Color.fromARGB(255, 246, 246, 246),
+                    radius: 92.0,
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
                     child: CircleAvatar(
                       backgroundColor: Color.fromARGB(255, 5, 5, 5),
                       backgroundImage: AssetImage('images/ambi2.png'),
@@ -154,7 +154,7 @@ class loginpg extends StatelessWidget {
                     shadowColor: Color.fromARGB(255, 247, 248, 247),
                     child: InkWell(
                       splashColor:
-                          Color.fromARGB(255, 19, 148, 36).withAlpha(30),
+                          Color.fromARGB(255, 72, 202, 21).withAlpha(30),
                       onTap: () {
                         debugPrint('Card tapped.');
                         Navigator.push(

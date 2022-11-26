@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation/starter.dart';
 
 class userDetails extends StatefulWidget {
   const userDetails({super.key});
@@ -83,29 +84,37 @@ class _userDetailsState extends State<userDetails> {
                 height: 20,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
                   // onTap: Map(),
-                  child: Card (
+                  child: Container(
+                    width: 160,
                     child: InkWell(
-                      splashColor: Color.fromARGB(255, 13, 79, 17),
+                      splashColor: Color.fromARGB(255, 5, 181, 5).withAlpha(30),
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => loginpg()));
+                        ;
+                      },
                       child: Container(
-                        padding: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: Colors.green[400],
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Center(
-                          child: Text(
-                            'Next',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                              fontSize: 16,
+                          padding: EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 2,
+                                  color: Color.fromARGB(255, 14, 133, 12)),
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Center(
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 0, 0, 0),
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                                fontSize: 18,
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
+                          )),
                     ),
                   ),
                 ),
@@ -138,3 +147,24 @@ class _userDetailsState extends State<userDetails> {
     );
   }
 }
+
+
+
+
+
+                    // need inkwell inside conatiner
+                    // padding: EdgeInsets.all(20),
+                    // decoration: BoxDecoration(
+                    //     color:Colors.green[400],
+                    //     borderRadius: BorderRadius.circular(15)),
+                    // child: Center(
+                    //   child: Text(
+                    //     'Next',
+                    //     style: TextStyle(
+                    //       color: Colors.white,
+                    //       fontWeight: FontWeight.bold,
+                    //       letterSpacing: 1,
+                    //       fontSize: 16,
+                    //     ),
+                    //   ),
+                    // )
