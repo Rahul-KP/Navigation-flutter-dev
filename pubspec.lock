@@ -127,7 +127,7 @@ packages:
       name: mapmyindia_gl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.2"
+    version: "0.3.1"
   mapmyindia_gl_platform_interface:
     dependency: transitive
     description:

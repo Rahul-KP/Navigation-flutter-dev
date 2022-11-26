@@ -60,6 +60,8 @@ class _PosState extends State<Pos> {
     getPermissions();
   }
 
+  var setStateOverlay;
+
   @override
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -84,7 +86,7 @@ class _PosState extends State<Pos> {
                 child: GestureDetector(
                   onTap: () {
                     // SearchWidget.isVisible = !SearchWidget.isVisible;
-                    setState(() {
+                    setStateOverlay(() {
                       SearchWidget.toggleVisisbility();
                     });
                   },
@@ -97,7 +99,10 @@ class _PosState extends State<Pos> {
       body: Stack(
         children: <Widget>[
           Map(),
-          SearchWidget(),
+          StatefulBuilder(builder: ((context, setState) {
+            setStateOverlay = setState;
+            return SearchWidget();
+          })),
         ],
       ),
       floatingActionButton: FloatingActionButton(
