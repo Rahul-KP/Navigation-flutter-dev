@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'search.dart';
 import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
@@ -59,19 +60,61 @@ class _PosState extends State<Pos> {
     getPermissions();
   }
 
+  var setStateOverlay;
+
   @override
   Widget build(BuildContext context) {
+    final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Drawer(),
+      appBar: AppBar(
+          title: Text("Navigation"),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              if (scaffoldKey.currentState!.isDrawerOpen) {
+                scaffoldKey.currentState!.closeDrawer();
+              } else {
+                scaffoldKey.currentState!.openDrawer();
+              }
+            },
+          ),
+          actions: <Widget>[
+            Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    // SearchWidget.isVisible = !SearchWidget.isVisible;
+                    setStateOverlay(() {
+                      SearchWidget.toggleVisisbility();
+                    });
+                  },
+                  child: const Icon(
+                    Icons.search,
+                    size: 26.0,
+                  ),
+                )),
+          ]),
       body: Stack(
         children: <Widget>[
           Map(),
+          StatefulBuilder(builder: ((context, setState) {
+            setStateOverlay = setState;
+            return SearchWidget();
+          })),
         ],
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (() async {
             LocationData ld = await SharedData.locationData.first;
-            SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
-                LatLng(ld.latitude!, ld.longitude!), 18)); // animate and ease camera functions here
+            SharedData.mapController.animateCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18));
+            SharedData.mapController.easeCamera(CameraUpdate.newLatLngZoom(
+                LatLng(ld.latitude!, ld.longitude!), 18));
+            // SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
+            //     LatLng(ld.latitude!, ld.longitude!),
+            //     18)); // animate and ease camera functions here
           }),
           child: const Icon(
             Icons.add_location_alt_outlined,
