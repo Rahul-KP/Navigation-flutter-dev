@@ -30,31 +30,20 @@ class _SearchWidgetState extends State<SearchWidget> {
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Enter a starting point',
+                    hintText: 'Choose your destination',
                   ),
                   onTap: (() async {
                     LocationData ld = await SharedData.locationData.first;
                     AutocompleteResult x = await openPlaceAutocomplete(
                         PlaceOptions(
                             enableTextSearch: true,
-                            hint: "Search Location",
-                            filter: ld.toString(),
-                            location: LatLng(ld.latitude!,ld.longitude!)));
-                            // pod: AutoSuggestCriteria.POD_CITY));
-                    
-                    SharedData.mapController.moveCameraWithELoc(CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
-                    SharedData.mapController.addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
-                  }),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter your destination',
-                  ),
-                  onTap: (() async {
-                    AutocompleteResult x = await openPlaceAutocomplete(
-                        PlaceOptions(
-                            enableTextSearch: true, hint: "Search Location"));
+                            hint: "Choose your destination",
+                            location: LatLng(ld.latitude!, ld.longitude!)));
+
+                    SharedData.mapController.moveCameraWithELoc(
+                        CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
+                    SharedData.mapController
+                        .addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
                   }),
                 ),
               ],

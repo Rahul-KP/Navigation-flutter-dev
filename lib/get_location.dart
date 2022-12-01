@@ -5,6 +5,7 @@ import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
+import 'package:mapmyindia_place_widget/mapmyindia_place_widget.dart';
 
 class Pos extends StatefulWidget {
   const Pos({super.key});
@@ -84,11 +85,22 @@ class _PosState extends State<Pos> {
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     // SearchWidget.isVisible = !SearchWidget.isVisible;
-                    setStateOverlay(() {
-                      SearchWidget.toggleVisisbility();
-                    });
+                    // setStateOverlay(() {
+                    //   SearchWidget.toggleVisisbility();
+                    // });
+                    LocationData ld = await SharedData.locationData.first;
+                    AutocompleteResult x = await openPlaceAutocomplete(
+                        PlaceOptions(
+                            enableTextSearch: true,
+                            hint: "Choose your destination",
+                            location: LatLng(ld.latitude!, ld.longitude!)));
+
+                    SharedData.mapController.moveCameraWithELoc(
+                        CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
+                    SharedData.mapController
+                        .addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
                   },
                   child: const Icon(
                     Icons.search,
