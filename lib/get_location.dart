@@ -111,7 +111,7 @@ class _PosState extends State<Pos> {
           ]),
       body: Stack(
         children: <Widget>[
-          Map(),
+          MapWidget(),
           StatefulBuilder(builder: ((context, setState) {
             setStateOverlay = setState;
             return SearchWidget();
