@@ -101,6 +101,7 @@ class _PosState extends State<Pos> {
                         CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
                     SharedData.mapController
                         .addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
+                    Fluttertoast.showToast(msg: x.eLocation!.eLoc!.toString());
                   },
                   child: const Icon(
                     Icons.search,
@@ -124,6 +125,8 @@ class _PosState extends State<Pos> {
                 LatLng(ld.latitude!, ld.longitude!), 18));
             SharedData.mapController.easeCamera(CameraUpdate.newLatLngZoom(
                 LatLng(ld.latitude!, ld.longitude!), 18));
+            
+            Fluttertoast.showToast(msg: ld.toString());
             // SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
             //     LatLng(ld.latitude!, ld.longitude!),
             //     18)); // animate and ease camera functions here
