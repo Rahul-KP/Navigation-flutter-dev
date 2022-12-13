@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'shared_data.dart';
 
-class Map extends StatefulWidget {
-  const Map({super.key});
+class MapWidget extends StatefulWidget {
+  const MapWidget({super.key});
 
   @override
-  State<Map> createState() => _MapState();
+  State<MapWidget> createState() => _MapWidgetState();
 }
 
-class _MapState extends State<Map> {
+class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     return MapmyIndiaMap(
