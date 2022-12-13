@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'search.dart';
 import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
+import 'package:mapmyindia_direction_plugin/mapmyindia_direction_plugin.dart';
+import 'package:mapmyindia_place_widget/mapmyindia_place_widget.dart';
 
 class Pos extends StatefulWidget {
   const Pos({super.key});
@@ -84,11 +87,36 @@ class _PosState extends State<Pos> {
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     // SearchWidget.isVisible = !SearchWidget.isVisible;
-                    setStateOverlay(() {
-                      SearchWidget.toggleVisisbility();
-                    });
+                    // setStateOverlay(() {
+                    //   SearchWidget.toggleVisisbility();
+                    // });
+                    LocationData ld = await SharedData.locationData.first;
+                    AutocompleteResult x = await openPlaceAutocomplete(
+                        PlaceOptions(
+                            enableTextSearch: true,
+                            hint: "Choose your destination",
+                            location: LatLng(ld.latitude!, ld.longitude!)));
+                    ELocation destination = x.eLocation!;
+                    SharedData.mapController.moveCameraWithELoc(
+                        CameraELocUpdate.newELocZoom(destination.eLoc!, 14));
+                    SharedData.mapController
+                        .addSymbol(SymbolOptions(eLoc: destination.eLoc));
+                    try {
+                      DirectionCallback y = await openDirectionWidget(
+                          directionOptions: DirectionOptions(
+                              // showStartNavigation: true,
+                              destination: DirectionPoint(
+                                  destination.placeName!,
+                                  destination.placeAddress!,
+                                  eLoc: destination.eLoc!),
+                              showAlternative: true));
+                    } on PlatformException {
+                      Fluttertoast.showToast(msg: "Exception caught");
+                    }
+                    // Fluttertoast.showToast(
+                    //     msg: y.directionResponse!.routes!.first.geometry!);
                   },
                   child: const Icon(
                     Icons.search,
@@ -98,7 +126,7 @@ class _PosState extends State<Pos> {
           ]),
       body: Stack(
         children: <Widget>[
-          Map(),
+          MapWidget(),
           StatefulBuilder(builder: ((context, setState) {
             setStateOverlay = setState;
             return SearchWidget();
@@ -112,6 +140,8 @@ class _PosState extends State<Pos> {
                 LatLng(ld.latitude!, ld.longitude!), 18));
             SharedData.mapController.easeCamera(CameraUpdate.newLatLngZoom(
                 LatLng(ld.latitude!, ld.longitude!), 18));
+
+            Fluttertoast.showToast(msg: ld.toString());
             // SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
             //     LatLng(ld.latitude!, ld.longitude!),
             //     18)); // animate and ease camera functions here
