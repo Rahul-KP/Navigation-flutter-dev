@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation/get_location.dart';
 import 'package:navigation/starter.dart';
+import 'package:navigation/get_location.dart';
 
 class userDetails extends StatefulWidget {
   const userDetails({super.key});
@@ -83,42 +85,71 @@ class _userDetailsState extends State<userDetails> {
               SizedBox(
                 height: 20,
               ),
+
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: GestureDetector(
+              //     // onTap: Map(),
+              //     child: Container(
+              //       width: 160,
+              //       child: InkWell(
+              //         splashColor: Color.fromARGB(255, 5, 181, 5).withAlpha(30),
+              //         onTap: () {
+              //           Navigator.push(context,
+              //               MaterialPageRoute(builder: (context) => loginpg()));
+              //           ;
+              //         },
+              //         child: Container(
+              //             padding: EdgeInsets.all(14),
+              //             decoration: BoxDecoration(
+              //                 border: Border.all(
+              //                     width: 2,
+              //                     color: Color.fromARGB(255, 14, 133, 12)),
+              //                 color: Colors.transparent,
+              //                 borderRadius: BorderRadius.circular(30)),
+              //             child: Center(
+              //               child: Text(
+              //                 'Next',
+              //                 style: TextStyle(
+              //                   color: Color.fromARGB(255, 0, 0, 0),
+              //                   fontWeight: FontWeight.bold,
+              //                   letterSpacing: 1,
+              //                   fontSize: 18,
+              //                 ),
+              //               ),
+              //             )),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
-                  // onTap: Map(),
+                  onTap: () {
+                    Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: ((context) => Pos())));
+                  },
                   child: Container(
-                    width: 160,
-                    child: InkWell(
-                      splashColor: Color.fromARGB(255, 5, 181, 5).withAlpha(30),
-                      onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => loginpg()));
-                        ;
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 2,
-                                  color: Color.fromARGB(255, 14, 133, 12)),
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Center(
-                            child: Text(
-                              'Next',
-                              style: TextStyle(
-                                color: Color.fromARGB(255, 0, 0, 0),
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                                fontSize: 18,
-                              ),
-                            ),
-                          )),
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: Colors.green[400],
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Center(
+                      child: Text(
+                        'Move to Map    🗺️',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
+
               SizedBox(
                 height: 26,
               ),
@@ -131,12 +162,20 @@ class _userDetailsState extends State<userDetails> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    '  Click here',
-                    style: TextStyle(
-                        color: Colors.blue[600],
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5),
+                  Container(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: ((context) => loginpg())));
+                      },
+                      child: Text(
+                        '  Click here',
+                        style: TextStyle(
+                            color: Colors.blue[600],
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5),
+                      ),
+                    ),
                   )
                 ],
               )

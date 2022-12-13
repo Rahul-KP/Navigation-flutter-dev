@@ -8,6 +8,6 @@ import 'starter.dart';
 void main() {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: userDetails(),
+    home: loginpg(),
   ));
 }

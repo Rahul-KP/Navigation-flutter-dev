@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:navigation/get_location.dart';
+import 'package:navigation/starter.dart';
 
 class AmbiDriverDetails extends StatefulWidget {
   const AmbiDriverDetails({super.key});
@@ -28,18 +29,21 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                   'Ambulance Driver',
                   style: GoogleFonts.bebasNeue(
                     fontSize: 40,
-                  ) ,
+                  ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'Enter your details ',
                   style: TextStyle(
                     fontSize: 17,
                   ),
                 ),
-                 SizedBox(height: 30,),
-
-                 Padding(
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
                     decoration: InputDecoration(
@@ -55,10 +59,12 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
-                  ), ),
-                 
-                 SizedBox(height: 10,),
-                 Padding(
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
                     decoration: InputDecoration(
@@ -74,55 +80,72 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
-                  ), ),
-          
-                 SizedBox(height: 20,),
-                 Padding(
-                   padding: const EdgeInsets.symmetric(horizontal: 25),
-                   child: GestureDetector (
-                    // onTap: Map(),
-                     child: Container(
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: ((context) => Pos())));
+                    },
+                    child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.green[400],
-                        borderRadius: BorderRadius.circular(15)
-                             
-                      ),
+                          color: Colors.green[400],
+                          borderRadius: BorderRadius.circular(15)),
                       child: Center(
-                        child: Text('Move to Map    🗺️',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
-                          fontSize: 16,
+                        child: Text(
+                          'Move to Map    🗺️',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                            fontSize: 16,
+                          ),
                         ),
-                        ),
-                        ),
-                     ),
-                   ),
-                 ),
-                 SizedBox(height: 26,
-                 ),
-                 Row(
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 26,
+                ),
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Text('Want to change role ?',
-                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                     ),),
-                     Text('  Click here',
-                     style: TextStyle(
-                      color: Colors.blue[600],
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0.5
-                     ),)
-                   ],
-                 )
+                  children: [
+                    Text(
+                      'Want to change role ?',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Container(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: ((context) => loginpg())));
+                        },
+                        child: Text(
+                          '  Click here',
+                          style: TextStyle(
+                              color: Colors.blue[600],
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5),
+                        ),
+                      ),
+                    )
+                  ],
+                )
               ],
             ),
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }
