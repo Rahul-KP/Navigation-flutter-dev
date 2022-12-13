@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'search.dart';
 import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
 import 'package:location/location.dart';
+import 'package:mapmyindia_direction_plugin/mapmyindia_direction_plugin.dart';
 import 'package:mapmyindia_place_widget/mapmyindia_place_widget.dart';
 
 class Pos extends StatefulWidget {
@@ -96,12 +98,25 @@ class _PosState extends State<Pos> {
                             enableTextSearch: true,
                             hint: "Choose your destination",
                             location: LatLng(ld.latitude!, ld.longitude!)));
-
+                    ELocation destination = x.eLocation!;
                     SharedData.mapController.moveCameraWithELoc(
-                        CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
+                        CameraELocUpdate.newELocZoom(destination.eLoc!, 14));
                     SharedData.mapController
-                        .addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
-                    Fluttertoast.showToast(msg: x.eLocation!.eLoc!.toString());
+                        .addSymbol(SymbolOptions(eLoc: destination.eLoc));
+                    try {
+                      DirectionCallback y = await openDirectionWidget(
+                          directionOptions: DirectionOptions(
+                              // showStartNavigation: true,
+                              destination: DirectionPoint(
+                                  destination.placeName!,
+                                  destination.placeAddress!,
+                                  eLoc: destination.eLoc!),
+                              showAlternative: true));
+                    } on PlatformException {
+                      Fluttertoast.showToast(msg: "Exception caught");
+                    }
+                    // Fluttertoast.showToast(
+                    //     msg: y.directionResponse!.routes!.first.geometry!);
                   },
                   child: const Icon(
                     Icons.search,
@@ -125,7 +140,7 @@ class _PosState extends State<Pos> {
                 LatLng(ld.latitude!, ld.longitude!), 18));
             SharedData.mapController.easeCamera(CameraUpdate.newLatLngZoom(
                 LatLng(ld.latitude!, ld.longitude!), 18));
-            
+
             Fluttertoast.showToast(msg: ld.toString());
             // SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
             //     LatLng(ld.latitude!, ld.longitude!),

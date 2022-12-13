@@ -107,6 +107,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  mapmyindia_direction_plugin:
+    dependency: "direct main"
+    description:
+      name: mapmyindia_direction_plugin
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   mapmyindia_gl:
     dependency: "direct main"
     description:
