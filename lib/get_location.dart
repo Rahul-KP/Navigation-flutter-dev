@@ -17,6 +17,66 @@ class Pos extends StatefulWidget {
 }
 
 class _PosState extends State<Pos> {
+  List points = [
+    [77.586099, 12.928568],
+    [77.586147, 12.928513],
+    [77.586344, 12.928015],
+    [77.586387, 12.927709],
+    [77.586399, 12.92741],
+    [77.586388, 12.927221],
+    [77.586284, 12.926786],
+    [77.586046, 12.926296],
+    [77.585996, 12.926102],
+    [77.585951, 12.924732],
+    [77.585936, 12.923283],
+    [77.584831, 12.92329],
+    [77.582749, 12.923366],
+    [77.581161, 12.923387],
+    [77.5803, 12.923419],
+    [77.577959, 12.923441],
+    [77.576252, 12.923484],
+    [77.574824, 12.923479],
+    [77.572548, 12.92354],
+    [77.571138, 12.92386],
+    [77.570343, 12.924062],
+    [77.570496, 12.924831],
+    [77.570498, 12.924954],
+    [77.57045, 12.925348],
+    [77.570399, 12.925531],
+    [77.570322, 12.925714],
+    [77.570027, 12.926112],
+    [77.569832, 12.926283],
+    [77.56953, 12.926441],
+    [77.569274, 12.926552],
+    [77.568632, 12.926768],
+    [77.568272, 12.926935],
+    [77.567969, 12.927255],
+    [77.567892, 12.927393],
+    [77.567848, 12.927589],
+    [77.567827, 12.927853],
+    [77.56785, 12.928107],
+    [77.567918, 12.9285],
+    [77.567472, 12.928586],
+    [77.565224, 12.928954],
+    [77.563972, 12.929191],
+    [77.562884, 12.929416],
+    [77.562785, 12.929387],
+    [77.562715, 12.929283],
+    [77.562425, 12.928514],
+    [77.562097, 12.927827],
+    [77.561249, 12.926459],
+    [77.561055, 12.926046],
+    [77.560954, 12.925702],
+    [77.560897, 12.925374],
+    [77.560785, 12.925401],
+    [77.559989, 12.925363],
+    [77.55927, 12.925366],
+    [77.559108, 12.924404],
+    [77.558749, 12.924413],
+    [77.558141, 12.924491],
+    [77.558181, 12.924632]
+  ];
+
   void getPermissions() async {
     Location location = Location();
 
@@ -92,31 +152,29 @@ class _PosState extends State<Pos> {
                     // setStateOverlay(() {
                     //   SearchWidget.toggleVisisbility();
                     // });
-                    LocationData ld = await SharedData.locationData.first;
-                    AutocompleteResult x = await openPlaceAutocomplete(
-                        PlaceOptions(
-                            enableTextSearch: true,
-                            hint: "Choose your destination",
-                            location: LatLng(ld.latitude!, ld.longitude!)));
-                    ELocation destination = x.eLocation!;
-                    SharedData.mapController.moveCameraWithELoc(
-                        CameraELocUpdate.newELocZoom(destination.eLoc!, 14));
-                    SharedData.mapController
-                        .addSymbol(SymbolOptions(eLoc: destination.eLoc));
-                    try {
-                      DirectionCallback y = await openDirectionWidget(
-                          directionOptions: DirectionOptions(
-                              // showStartNavigation: true,
-                              destination: DirectionPoint(
-                                  destination.placeName!,
-                                  destination.placeAddress!,
-                                  eLoc: destination.eLoc!),
-                              showAlternative: true));
-                    } on PlatformException {
-                      Fluttertoast.showToast(msg: "Exception caught");
-                    }
+                    // LocationData ld = await SharedData.locationData.first;
+                    // AutocompleteResult x = await openPlaceAutocomplete(
+                    //     PlaceOptions(
+                    //         enableTextSearch: true,
+                    //         hint: "Choose your destination",
+                    //         location: LatLng(ld.latitude!, ld.longitude!)));
+                    // ELocation destination = x.eLocation!;
+                    // // Fluttertoast.showToast(msg: "User: " + ld.latitude!.toString() + ";" + ld.longitude!.toString());
+                    // SharedData.mapController.moveCameraWithELoc(
+                    //     CameraELocUpdate.newELocZoom(destination.eLoc!, 14));
+                    // SharedData.mapController
+                    //     .addSymbol(SymbolOptions(eLoc: destination.eLoc));
+                    // Fluttertoast.showToast(msg: x.eLocation!.placeAddress!);
                     // Fluttertoast.showToast(
                     //     msg: y.directionResponse!.routes!.first.geometry!);
+                    List<LatLng> x = [];
+                    for (int i = 0; i < points.length; i++) {
+                      x.add(LatLng(points[i][1], points[i][0]));
+                    }
+
+                    // Fluttertoast.showToast(msg: x.first.toString());
+
+                    SharedData.mapController.addLine(LineOptions(geometry: x, lineColor: "#30beff", lineWidth: 6));
                   },
                   child: const Icon(
                     Icons.search,
