@@ -41,6 +41,7 @@ dependencies:
   location: ^4.2.0
   fluttertoast: ^8.1.1
   google_fonts:
+  bordered_text: ^2.0.0
 
 dev_dependencies:
   flutter_test:
