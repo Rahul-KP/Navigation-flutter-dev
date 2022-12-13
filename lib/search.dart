@@ -33,17 +33,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                     hintText: 'Choose your destination',
                   ),
                   onTap: (() async {
-                    LocationData ld = await SharedData.locationData.first;
-                    AutocompleteResult x = await openPlaceAutocomplete(
-                        PlaceOptions(
-                            enableTextSearch: true,
-                            hint: "Choose your destination",
-                            location: LatLng(ld.latitude!, ld.longitude!)));
-
-                    SharedData.mapController.moveCameraWithELoc(
-                        CameraELocUpdate.newELocZoom(x.eLocation!.eLoc!, 14));
-                    SharedData.mapController
-                        .addSymbol(SymbolOptions(eLoc: x.eLocation!.eLoc));
+                    
+                    
                   }),
                 ),
               ],

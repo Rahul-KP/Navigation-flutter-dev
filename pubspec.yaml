@@ -41,6 +41,7 @@ dependencies:
   location: ^4.2.0
   fluttertoast: ^8.1.1
   mapmyindia_place_widget: ^0.2.0
+  mapmyindia_direction_plugin: ^0.2.0
   # mapmyindia_place_widget: ^0.2.0
 
 dev_dependencies:
