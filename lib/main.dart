@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'get_location.dart';
+import 'app_screen_ui.dart';
 void main() {
   runApp(const MaterialApp(
-    home: Pos(),
+    home: MapScreen(),
   ));
 }

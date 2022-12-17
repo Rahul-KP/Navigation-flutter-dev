@@ -1,4 +1,4 @@
-name: navigation
+name: AmbiNav
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -37,13 +37,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   material: ^1.0.0+2
-  mapmyindia_gl: ^0.3.1
   location: ^4.2.0
   fluttertoast: ^8.1.1
   shared_preferences: ^2.0.15
-  mapmyindia_place_widget: ^0.2.0
-  mapmyindia_direction_plugin: ^0.2.0
-  # mapmyindia_place_widget: ^0.2.0
+  navigation: ^0.0.0
 
 dev_dependencies:
   flutter_test:
