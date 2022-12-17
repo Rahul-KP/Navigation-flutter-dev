@@ -10,6 +10,12 @@
 .svn/
 migrate_working_dir/
 
+# ignore .vscode, windows, linux and macos folders
+.vscode/
+windows/
+linux/
+macos/
+
 # IntelliJ related
 *.iml
 *.ipr

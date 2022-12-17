@@ -1,12 +1,13 @@
-name: Build APK
+
+name: Build and Test
 
 on:
   push:
-    branches: [ "build-apk" ]
+    branches: [ "master" ]
     
 jobs:
   build:
-    name: Build APK & upload artifact
+    name: Build APK & upload to Github Releases
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -14,10 +15,34 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
+          cache: true
+          architecture: x64
+      - run: |
+          echo CACHE-PATH=${{ steps.flutter-action.outputs.CACHE-PATH }}
+          echo CACHE-KEY=${{ steps.flutter-action.outputs.CACHE-KEY }}
+          echo CHANNEL=${{ steps.flutter-action.outputs.CHANNEL }}
+          echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
+          echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
       - run: flutter pub get
       - run: flutter build apk --debug
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
+      - run: echo "VERSION=$(cat local.properties | cut -d '=' -f 2)" >> $GITHUB_ENV
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
         with:
-          name: Navigation Debug APK
-          path: build/app/outputs/apk/debug/app-debug.apk
+          tag_name: v${{ env.VERSION }}
+          release_name: Release v${{ env.VERSION }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/app/outputs/apk/debug/app-debug.apk
+          asset_name: Navigation.apk
+          asset_content_type: application/apk
