@@ -13,7 +13,7 @@ jobs:
       buildapk: ${{steps.step1.outputs.buildapk}}
     steps:
       - uses: actions/checkout@v3
-      - run: echo "::set-output name=buildapk::$(cat buildapk.txt)"
+      - run: echo "buildapk=$(cat buildapk.txt)" >> $GITHUB_OUTPUT
   build:
     name: Building Debug APK
     needs: check
