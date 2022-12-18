@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation/get_location.dart';
 import 'package:navigation/starter.dart';
+import 'package:shared_preferences/shared_preferences.dart';  
 
 class AmbiDriverDetails extends StatefulWidget {
-  const AmbiDriverDetails({super.key});
+AmbiDriverDetails({super.key});
 
   @override
   State<AmbiDriverDetails> createState() => _AmbiDriverDetailsState();
+  
 }
 
 class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
+
+
+  final myController = TextEditingController();
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +75,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
+                    controller: myController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -88,10 +97,18 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: ((context) => Pos())));
-                    },
+                    onTap: () async{
+                      // Navigator.of(context).pushReplacement(
+                      //     MaterialPageRoute(builder: ((context) => Pos())));
+                          
+                          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          sharedPreferences.setString("ambulanceCode", myController.text );
+                          
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: ((context) => Pos())));
+                          
+                    },  
+            
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(

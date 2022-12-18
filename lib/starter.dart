@@ -1,12 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:navigation/AmbDriverDetails.dart';
+import 'package:navigation/get_location.dart';
 import 'package:navigation/userDetails.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bordered_text/bordered_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class loginpg extends StatelessWidget {
+String finalAmbulanceCode = "";
+
+class loginpg extends StatefulWidget {
+
   const loginpg({super.key});
 
+  @override
+  State<loginpg> createState() => _loginpgState();
+}
+
+class _loginpgState extends State<loginpg> {
+
+
+  @override
+void initState() {
+  super.initState();
+
+
+  // Start listening to changes.
+  
+    getValidationData().whenComplete(() async{
+      if(finalAmbulanceCode ==""){
+        userDetails();
+      }
+      else{
+        Pos();
+      }
+    });
+}
+
+  Future getValidationData() async {
+    
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var obtainedAmbulanceCode = sharedPreferences.getString("ambulanceCode").toString();
+    setState(() {
+      finalAmbulanceCode = obtainedAmbulanceCode;
+    });
+    print(finalAmbulanceCode);
+  }
+
+                  // finalAmbulanceCode = obtainedAmbulanceCode.toString() ;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,30 +124,26 @@ class loginpg extends StatelessWidget {
                     strokeColor: Color.fromARGB(255, 251, 251, 251),
                     child: Text("AMBINAV",
                         style: GoogleFonts.montserrat(
-                          
                           fontSize: 40,
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 2.5,
-                        
                         )),
                   ),
                   SizedBox(
                     height: 20.0,
                   ),
-                  
                   BorderedText(
                     strokeWidth: 0.8,
                     strokeColor: Color.fromARGB(255, 0, 0, 0),
                     child: Text("Choose your role",
                         style: GoogleFonts.rokkitt(
-                           fontSize: 21,
+                          fontSize: 21,
                           color: Colors.green,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1,
                         )),
                   ),
-
                   SizedBox(
                     height: 40.0,
                     width: 260.0,
@@ -122,7 +158,8 @@ class loginpg extends StatelessWidget {
                     elevation: 8.0,
                     shadowColor: Color.fromARGB(255, 255, 255, 255),
                     child: InkWell(
-                      splashColor: Color.fromARGB(255, 25, 143, 96).withAlpha(30),
+                      splashColor:
+                          Color.fromARGB(255, 25, 143, 96).withAlpha(30),
                       onTap: () {
                         debugPrint('Card tapped.');
                         // Connect to map
@@ -135,13 +172,14 @@ class loginpg extends StatelessWidget {
                         width: 200,
                         height: 50,
                         child: Center(
-                          child: Text('Ambulance Driver',
-                          style: TextStyle(
-                            letterSpacing: 0.7,
-                            fontSize: 16,
+                          child: Text(
+                            'Ambulance Driver',
+                            style: TextStyle(
+                              letterSpacing: 0.7,
+                              fontSize: 16,
+                            ),
                           ),
-                          ),
-                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -166,11 +204,12 @@ class loginpg extends StatelessWidget {
                       child: const SizedBox(
                         width: 200,
                         height: 50,
-                        child: Center(child: Text('User Driver',
-                        style: TextStyle(
-                            letterSpacing: 0.7,
-                            fontSize: 16,
-                          ))),
+                        child: Center(
+                            child: Text('User Driver',
+                                style: TextStyle(
+                                  letterSpacing: 0.7,
+                                  fontSize: 16,
+                                ))),
                       ),
                     ),
                   ),
