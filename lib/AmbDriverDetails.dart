@@ -103,6 +103,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                   child: GestureDetector(
                     onTap: () async {
 
+                      logindata = await SharedPreferences.getInstance();
                       String username = nameController.text;
                       String code = codeController.text;
 
