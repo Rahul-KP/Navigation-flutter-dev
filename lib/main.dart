@@ -7,8 +7,6 @@ import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //demonstarting git to sumedh
 
-Widget appScreen = loginpg();
-
 void alreadyLoggedin() {
   SharedPreferences.getInstance().then((value) {
     bool newuser = (value.getBool('login') ?? true);
@@ -16,10 +14,19 @@ void alreadyLoggedin() {
     // print(newuser);
 
     if (newuser == false) {
-      appScreen = Pos();
+      runApp(MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Pos(),
+      ));
 
       // Navigator.pushReplacement(
       //     context, new MaterialPageRoute(builder: (context) => Pos()));
+    }
+    else{
+      runApp(MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: loginpg(),
+      ));
     }
   });
 }
@@ -28,9 +35,4 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   alreadyLoggedin();
-
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: appScreen,
-  ));
 }
