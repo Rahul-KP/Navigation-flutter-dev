@@ -2,22 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation/get_location.dart';
 import 'package:navigation/starter.dart';
-import 'package:shared_preferences/shared_preferences.dart';  
+import 'package:navigation/userDetails.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AmbiDriverDetails extends StatefulWidget {
-AmbiDriverDetails({super.key});
+  AmbiDriverDetails({super.key});
 
   @override
   State<AmbiDriverDetails> createState() => _AmbiDriverDetailsState();
-  
 }
 
 class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
-
-
   final myController = TextEditingController();
 
+  final nameConroller = TextEditingController();
+  final codeController = TextEditingController();
 
+  late SharedPreferences logindata;
+  late bool newuser;
+
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+
+    // getValidationData().whenComplete(() async {
+      // if (finalAmbulanceCode == "") {
+      //   userDetails();
+      // } else {
+      //   Pos();
+      // }
+
+
+    alreadyLoggedin();
+  }
+
+  // Future getValidationData() async {
+  //   final SharedPreferences sharedPreferences =
+  //       await SharedPreferences.getInstance();
+  //   var obtainedAmbulanceCode =
+  //       sharedPreferences.getString("ambulanceCode").toString();
+  //   setState(() {
+  //     finalAmbulanceCode = obtainedAmbulanceCode;
+  //   });
+  //   print(finalAmbulanceCode);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +104,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
-                    controller: myController,
+                    controller: nameConroller,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -97,18 +126,33 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
+
+                      String username = nameConroller.text;
+                      String code = codeController.text;
+
+                      if (username != '' && code != '') {
+                        print("sucessssssss");
+                        logindata.setBool('login', false);
+
+                        logindata.setString('username', username);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Pos()));
+                      }
+
+                      
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: ((context) => Pos())));
+
+                      // final SharedPreferences sharedPreferences =
+                      //     await SharedPreferences.getInstance();
+
+                      // sharedPreferences.setString(
+                      //     "ambulanceCode", myController.text);
+
                       // Navigator.of(context).pushReplacement(
                       //     MaterialPageRoute(builder: ((context) => Pos())));
-                          
-                          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                          sharedPreferences.setString("ambulanceCode", myController.text );
-                          
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: ((context) => Pos())));
-                          
-                    },  
-            
+                    },
                     child: Container(
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -144,7 +188,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: ((context) => loginpg())));
+                              MaterialPageRoute(
+                                  builder: ((context) => loginpg())));
                         },
                         child: Text(
                           '  Click here',
@@ -163,6 +208,24 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
         ),
       ),
     );
-    ;
+  }
+
+  void alreadyLoggedin() async {
+    logindata = await SharedPreferences.getInstance();
+    newuser = (logindata.getBool('login') ?? true);
+
+    print(newuser);
+    
+    if (newuser == false) {
+      Navigator.pushReplacement(
+          context, new MaterialPageRoute(builder: (context) => Pos()));
+    }
+  }
+
+  @override
+  void dispose(){
+    nameConroller.dispose();
+    codeController.dispose();
+    super.dispose();
   }
 }

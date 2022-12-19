@@ -20,31 +20,31 @@ class _loginpgState extends State<loginpg> {
 
 
   @override
-void initState() {
-  super.initState();
+// void initState() {
+//   super.initState();
 
 
-  // Start listening to changes.
+//   // Start listening to changes.
   
-    getValidationData().whenComplete(() async{
-      if(finalAmbulanceCode ==""){
-        userDetails();
-      }
-      else{
-        Pos();
-      }
-    });
-}
+//     getValidationData().whenComplete(() async{
+//       if(finalAmbulanceCode ==""){
+//         userDetails();
+//       }
+//       else{
+//         Pos();
+//       }
+//     });
+// }
 
-  Future getValidationData() async {
+  // Future getValidationData() async {
     
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var obtainedAmbulanceCode = sharedPreferences.getString("ambulanceCode").toString();
-    setState(() {
-      finalAmbulanceCode = obtainedAmbulanceCode;
-    });
-    print(finalAmbulanceCode);
-  }
+  //   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  //   var obtainedAmbulanceCode = sharedPreferences.getString("ambulanceCode").toString();
+  //   setState(() {
+  //     finalAmbulanceCode = obtainedAmbulanceCode;
+  //   });
+  //   print(finalAmbulanceCode);
+  // }
 
                   // finalAmbulanceCode = obtainedAmbulanceCode.toString() ;
   @override

@@ -6,10 +6,9 @@ import 'get_location.dart';
 import 'starter.dart';
 //demonstarting git to sumedh
 
-
 void main() {
   runApp( MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: loginpg(),
+    home: AmbiDriverDetails(),
   ));
 }

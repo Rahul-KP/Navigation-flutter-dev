@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'shared_data.dart';
 import 'map.dart';
 import 'package:mapmyindia_gl/mapmyindia_gl.dart';
@@ -13,6 +14,23 @@ class Pos extends StatefulWidget {
 }
 
 class _PosState extends State<Pos> {
+  late SharedPreferences logindata;
+  late String username;
+
+  @override
+  void initState() {
+    super.initState();
+    getPermissions();
+    initial();
+  }
+
+  void initial() async {
+    logindata = await SharedPreferences.getInstance();
+    setState(() {
+      username = logindata.getString('username').toString();
+    });
+  }
+
   void getPermissions() async {
     Location location = Location();
 
@@ -54,10 +72,10 @@ class _PosState extends State<Pos> {
   // }
 
   @override
-  void initState() {
-    super.initState();
-    getPermissions();
-  }
+  // void initState() {
+  //   super.initState();
+  //   getPermissions();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +89,8 @@ class _PosState extends State<Pos> {
           onPressed: (() async {
             LocationData ld = await SharedData.locationData.first;
             SharedData.mapController.moveCamera(CameraUpdate.newLatLngZoom(
-                LatLng(ld.latitude!, ld.longitude!), 18)); // animate and ease camera functions here
+                LatLng(ld.latitude!, ld.longitude!),
+                18)); // animate and ease camera functions here
           }),
           child: const Icon(
             Icons.add_location_alt_outlined,
