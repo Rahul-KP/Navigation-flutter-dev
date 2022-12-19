@@ -131,6 +131,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                       String username = nameConroller.text;
                       String code = codeController.text;
 
+                      print(username);
+
                       if (username != '' && code != '') {
                         print("sucessssssss");
                         logindata.setBool('login', false);
