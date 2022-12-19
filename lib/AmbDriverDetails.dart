@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation/get_location.dart';
 import 'package:navigation/starter.dart';
@@ -13,40 +14,13 @@ class AmbiDriverDetails extends StatefulWidget {
 }
 
 class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
-  final myController = TextEditingController();
+  // final myController = TextEditingController();
 
-  final nameConroller = TextEditingController();
+  final nameController = TextEditingController();
   final codeController = TextEditingController();
 
   late SharedPreferences logindata;
   late bool newuser;
-
-  void initState() {
-    super.initState();
-
-    // Start listening to changes.
-
-    // getValidationData().whenComplete(() async {
-      // if (finalAmbulanceCode == "") {
-      //   userDetails();
-      // } else {
-      //   Pos();
-      // }
-
-
-    alreadyLoggedin();
-  }
-
-  // Future getValidationData() async {
-  //   final SharedPreferences sharedPreferences =
-  //       await SharedPreferences.getInstance();
-  //   var obtainedAmbulanceCode =
-  //       sharedPreferences.getString("ambulanceCode").toString();
-  //   setState(() {
-  //     finalAmbulanceCode = obtainedAmbulanceCode;
-  //   });
-  //   print(finalAmbulanceCode);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +57,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -104,7 +79,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextField(
-                    controller: nameConroller,
+                    controller: codeController,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
@@ -128,7 +103,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                   child: GestureDetector(
                     onTap: () async {
 
-                      String username = nameConroller.text;
+                      String username = nameController.text;
                       String code = codeController.text;
 
                       print(username);
@@ -138,22 +113,11 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setBool('login', false);
 
                         logindata.setString('username', username);
+                        Fluttertoast.showToast(msg: username);
                         Navigator.pushReplacement(context,
                             MaterialPageRoute(builder: (context) => Pos()));
                       }
 
-                      
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: ((context) => Pos())));
-
-                      // final SharedPreferences sharedPreferences =
-                      //     await SharedPreferences.getInstance();
-
-                      // sharedPreferences.setString(
-                      //     "ambulanceCode", myController.text);
-
-                      // Navigator.of(context).pushReplacement(
-                      //     MaterialPageRoute(builder: ((context) => Pos())));
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -212,21 +176,10 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
     );
   }
 
-  void alreadyLoggedin() async {
-    logindata = await SharedPreferences.getInstance();
-    newuser = (logindata.getBool('login') ?? true);
-
-    print(newuser);
-    
-    if (newuser == false) {
-      Navigator.pushReplacement(
-          context, new MaterialPageRoute(builder: (context) => Pos()));
-    }
-  }
 
   @override
   void dispose(){
-    nameConroller.dispose();
+    nameController.dispose();
     codeController.dispose();
     super.dispose();
   }
