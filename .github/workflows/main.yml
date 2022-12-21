@@ -17,7 +17,7 @@ jobs:
   build:
     name: Building Debug APK
     needs: check
-    if: needs.check.outputs.buildapk == '1'
+    if: needs.check.outputs.buildapk == '1' || needs.check.outputs.buildapk == '2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,6 +25,12 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
+      - run: |
+          if ${{ needs.check.outputs.buildapk }} == '2'
+          then
+            echo ${{ secrets.HereCreds }} > credentials.env
+          fi
+        shell: bash
       - run: flutter pub get
       - run: flutter build apk --debug
       - uses: actions/upload-artifact@v3
