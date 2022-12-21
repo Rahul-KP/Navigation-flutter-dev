@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 /*
  * Copyright (C) 2019-2022 HERE Europe B.V.
  *
@@ -26,29 +28,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'TrafficExample.dart';
 
-void main() {
-  // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
-  _initializeHERESDK();
+// void main() {
+//   // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
+//   _initializeHERESDK();
 
-  // Ensure that all widgets, including MyApp, have a MaterialLocalizations object available.
-  runApp(MaterialApp(home: MyApp()));
-}
-
-void _initializeHERESDK() async {
-  // Needs to be called before accessing SDKOptions to load necessary libraries.
-  SdkContext.init(IsolateOrigin.main);
-
-  // Set your credentials for the HERE SDK.
-  String accessKeyId = dotenv.env['here.access.key.id']!;
-  String accessKeySecret = dotenv.env['here.access.key.secret']!;
-  SDKOptions sdkOptions = SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
-
-  try {
-    await SDKNativeEngine.makeSharedInstance(sdkOptions);
-  } on InstantiationException {
-    throw Exception("Failed to initialize the HERE SDK.");
-  }
-}
+//   // Ensure that all widgets, including MyApp, have a MaterialLocalizations object available.
+//   runApp(MaterialApp(home: MyApp()));
+// }
 
 class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
