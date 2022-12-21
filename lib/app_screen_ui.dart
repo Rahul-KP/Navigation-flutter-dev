@@ -43,7 +43,7 @@ class _MapScreenState extends State<MapScreen> {
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: MapScreenRes.search,
+                  onTap: SearchWidget.toggleVisisbility,
                   child: const Icon(
                     Icons.search,
                     size: 26.0,
