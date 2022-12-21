@@ -21,15 +21,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+            lfs: true
+      - name: Checkout LFS objects
+        run: git lfs checkout
       - name: Flutter Setup
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
       - run: |
-          if ${{ needs.check.outputs.buildapk }} == '2'
-          then
-            echo ${{ secrets.HereCreds }} > credentials.env
-          fi
+          echo ${{ secrets.HereCreds }} > credentials.env
+          mkdir -p plugins/here_sdk
+          tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
         shell: bash
       - run: flutter pub get
       - run: flutter build apk --debug
