@@ -19,8 +19,6 @@ void alreadyLoggedin() {
         home: Pos(),
       ));
 
-      // Navigator.pushReplacement(
-      //     context, new MaterialPageRoute(builder: (context) => Pos()));
     }
     else{
       runApp(MaterialApp(
