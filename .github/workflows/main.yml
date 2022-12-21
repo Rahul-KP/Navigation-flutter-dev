@@ -17,7 +17,7 @@ jobs:
   build:
     name: Building Debug APK
     needs: check
-    if: needs.check.outputs.buildapk == '1' || needs.check.outputs.buildapk == '2'
+    if: needs.check.outputs.buildapk == '1'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,12 +30,9 @@ jobs:
         with:
           channel: 'stable'
       - run: |
-          if ${{ needs.check.outputs.buildapk }} == '2'
-          then
-            echo ${{ secrets.HereCreds }} > credentials.env
-            mkdir -p plugins/here_sdk
-            tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
-          fi
+          echo ${{ secrets.HereCreds }} > credentials.env
+          mkdir -p plugins/here_sdk
+          tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
         shell: bash
       - run: flutter pub get
       - run: flutter build apk --debug
