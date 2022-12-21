@@ -37,8 +37,9 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
-      - run: |
-          echo ${{ secrets.HereCreds }} > credentials.env
+      - name: Extract SDK and load Access keys
+        run: |
+          echo "${{ secrets.HereCreds }}" > credentials.env
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
         shell: bash
