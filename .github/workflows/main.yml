@@ -10,10 +10,18 @@ jobs:
     name: Check whether to build or not
     runs-on: ubuntu-latest
     outputs:
-      buildapk: ${{steps.step1.outputs.buildapk}}
+      buildapk: ${{steps.step2.outputs.buildapk}}
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "buildapk=$(cat buildapk.txt)" >> $GITHUB_OUTPUT
+      - id: step1
+        uses: actions/checkout@v3
+      - id: step2
+        run: echo "buildapk=$(cat buildapk.txt)" >> $GITHUB_OUTPUT
+  test:
+    name: Test output
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{needs.check.outputs.buildapk}}
   build:
     name: Building Debug APK
     needs: check
@@ -29,10 +37,11 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
-      - run: |
-          echo ${{ secrets.HereCreds }} > credentials.env
+      - name: Extract SDK and load Access keys
+        run: |
+          echo "${{ secrets.HereCreds }}" > credentials.env
           mkdir -p plugins/here_sdk
-          tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
+          tar xzf heresdk-explore-flutter-*.tar.gz -C plugins/here_sdk
         shell: bash
       - run: flutter pub get
       - run: flutter build apk --debug

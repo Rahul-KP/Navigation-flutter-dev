@@ -9,6 +9,9 @@ import 'here_test.dart';
 void _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
+  
+  // Load credentials
+  await dotenv.load(fileName: "credentials.env");
 
   // Set your credentials for the HERE SDK.
   String accessKeyId = dotenv.env['here.access.key.id']!;
@@ -22,11 +25,7 @@ void _initializeHERESDK() async {
   }
 }
 
-void loadCreds() async {
-  await dotenv.load(fileName: "credentials.env");
-}
 void main() {
-  loadCreds();
   _initializeHERESDK();
   runApp(MaterialApp(
     home: MyApp(),
