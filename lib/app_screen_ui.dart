@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'search.dart';
+import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
 
 class MapScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class _MapScreenState extends State<MapScreen> {
     MapScreenRes.getPermissions();
   }
 
+  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   var setStateOverlay;
 
   @override
@@ -28,6 +29,7 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
           title: Text("Navigation"),
           leading: IconButton(
+            //hamburger icon
             icon: Icon(Icons.menu),
             onPressed: () {
               if (scaffoldKey.currentState!.isDrawerOpen) {
@@ -51,6 +53,9 @@ class _MapScreenState extends State<MapScreen> {
       body: Stack(
         children: <Widget>[
           // MapWidget
+          //here the stateful builder is used to render search widget of search.dart (a card element to enter destination)
+          //it renders without redrawing the entire screen
+          //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             setStateOverlay = setState;
             return SearchWidget();
@@ -58,6 +63,7 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        //this button moves the camera to user's current location - recenter button
           onPressed: (MapScreenRes.gotoUserLoc),
           child: const Icon(
             Icons.add_location_alt_outlined,
