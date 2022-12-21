@@ -41,6 +41,10 @@ dependencies:
   fluttertoast: ^8.1.1
   shared_preferences: ^2.0.15
   navigation: ^0.0.0
+  flutter_dotenv: ^5.0.2
+
+  here_sdk:
+    path: plugins/here_sdk
 
 dev_dependencies:
   flutter_test:
@@ -65,7 +69,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - credentials.env
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
