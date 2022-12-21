@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "${{ secrets.HereCreds }}" > credentials.env
           mkdir -p plugins/here_sdk
-          tar xzf heresdk-explore-flutter-*.tar.gz -C=plugins/here_sdk
+          tar xzf heresdk-explore-flutter-*.tar.gz -C plugins/here_sdk
         shell: bash
       - run: flutter pub get
       - run: flutter build apk --debug
