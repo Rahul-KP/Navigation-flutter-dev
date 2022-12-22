@@ -66,7 +66,7 @@ class _AppScreenState extends State<AppScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         //this button moves the camera to user's current location - recenter button
-          onPressed: (MapScreenRes.gotoUserLoc),
+          onPressed: (MapScreenRes.goToUserLoc),
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,

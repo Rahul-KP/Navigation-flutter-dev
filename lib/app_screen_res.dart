@@ -1,3 +1,4 @@
+import 'package:here_sdk/core.dart';
 import 'package:location/location.dart';
 import 'shared_data.dart';
 
@@ -30,8 +31,10 @@ class MapScreenRes {
     
   }
 
-  static void gotoUserLoc() async {
+  static void goToUserLoc() async {
     // Code to move the camera to user's current location
+    LocationData ld = await SharedData.locationData.first;
+    SharedData.mapController.camera.lookAtPoint(GeoCoordinates(ld.latitude!, ld.longitude!));
   }
 
   static void search() async {
