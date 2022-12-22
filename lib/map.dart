@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
+import 'shared_data.dart';
 
 class MapWidget extends StatelessWidget {
   @override
@@ -23,5 +24,7 @@ class MapWidget extends StatelessWidget {
       MapMeasure mapMeasureZoom = MapMeasure(MapMeasureKind.distance, distanceToEarthInMeters);
       hereMapController.camera.lookAtPointWithMeasure(GeoCoordinates(52.530932, 13.384915), mapMeasureZoom);
     });
+
+    SharedData.mapController = hereMapController;
   }
 }
