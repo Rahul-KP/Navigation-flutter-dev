@@ -42,6 +42,8 @@ dependencies:
   shared_preferences: ^2.0.15
   navigation: ^0.0.0
   flutter_dotenv: ^5.0.2
+  here_sdk:
+    path: ./plugins/here_sdk
 
 
 dev_dependencies:

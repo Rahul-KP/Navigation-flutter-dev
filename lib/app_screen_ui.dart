@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
+import 'map.dart';
 
-class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
+class AppScreen extends StatefulWidget {
+  const AppScreen({super.key});
 
   @override
-  State<MapScreen> createState() => _MapScreenState();
+  State<AppScreen> createState() => _AppScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _AppScreenState extends State<AppScreen> {
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _MapScreenState extends State<MapScreen> {
       body: Stack(
         children: <Widget>[
           // MapWidget
+          MapWidget(),
           //here the stateful builder is used to render search widget of search.dart (a card element to enter destination)
           //it renders without redrawing the entire screen
           //if the below lines are not included , map will be redrawn every time the search button is toggled
