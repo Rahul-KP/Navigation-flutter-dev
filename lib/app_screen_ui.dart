@@ -50,6 +50,15 @@ class _AppScreenState extends State<AppScreen> {
                     size: 26.0,
                   ),
                 )),
+                Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: GestureDetector(
+                  onTap: MapScreenRes.plot,
+                  child: const Icon(
+                    Icons.navigation,
+                    size: 26.0,
+                  ),
+                ))
           ]),
       body: Stack(
         children: <Widget>[
