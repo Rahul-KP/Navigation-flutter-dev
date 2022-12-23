@@ -43,23 +43,13 @@ class _AppScreenState extends State<AppScreen> {
           actions: <Widget>[
             Padding(
                 padding: const EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: SearchWidget.toggleVisisbility,
-                  child: const Icon(
-                    Icons.search,
-                    size: 26.0,
-                  ),
-                )),
-                Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: GestureDetector(
-                  onTap: MapScreenRes.plot,
-                  child: const Icon(
-                    Icons.navigation,
-                    size: 26.0,
-                  ),
-                ))
-          ]),
+                child: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: SearchWidget.toggleVisisbility,
+                  ), 
+              ),
+            ]
+          ),
       body: Stack(
         children: <Widget>[
           // MapWidget

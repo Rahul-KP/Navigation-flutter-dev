@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
 
-  static bool isVisible = false;
+  static bool isVisible = true;
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
   static void toggleVisisbility() {
     isVisible = !isVisible;
@@ -28,10 +28,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     border: OutlineInputBorder(),
                     hintText: 'Choose your destination',
                   ),
-                  onTap: (() async {
+                  // onTap: (() async {
                     
                     
-                  }),
+                  // }),
                 ),
               ],
             ),
