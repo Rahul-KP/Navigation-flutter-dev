@@ -8,10 +8,7 @@ import 'shared_data.dart';
 class MapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HERE SDK for Flutter - Hello Map!',
-      home: HereMap(onMapCreated: _onMapCreated),
-    );
+    return  HereMap(onMapCreated: _onMapCreated);
   }
 
   void _onMapCreated(HereMapController hereMapController) async {

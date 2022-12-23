@@ -45,7 +45,7 @@ class _AppScreenState extends State<AppScreen> {
                 padding: const EdgeInsets.only(right: 20.0),
                 child: IconButton(
                     icon: Icon(Icons.search),
-                    onPressed: SearchWidget.toggleVisisbility,
+                    onPressed: (() => setStateOverlay(() => SearchWidget.toggleVisisbility())),
                   ), 
               ),
             ]
