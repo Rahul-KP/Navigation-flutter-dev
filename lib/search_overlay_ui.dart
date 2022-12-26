@@ -28,10 +28,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     border: OutlineInputBorder(),
                     hintText: 'Choose your destination',
                   ),
-                  onTap: (() async {
+                  // onTap: (() async {
                     
                     
-                  }),
+                  // }),
                 ),
               ],
             ),

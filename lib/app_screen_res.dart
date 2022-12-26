@@ -1,3 +1,4 @@
+import 'package:here_sdk/core.dart' as core;
 import 'package:location/location.dart';
 import 'shared_data.dart';
 
@@ -25,13 +26,12 @@ class MapScreenRes {
     }
     // Stream of data containing user's current location
     SharedData.locationData = location.onLocationChanged;
-
-    // Code to move the camera to user's current location
-    
   }
 
-  static void gotoUserLoc() async {
+  static void goToUserLoc() async {
     // Code to move the camera to user's current location
+    LocationData ld = await SharedData.locationData.first;
+    SharedData.mapController.camera.lookAtPoint(core.GeoCoordinates(ld.latitude!, ld.longitude!));
   }
 
   static void search() async {
