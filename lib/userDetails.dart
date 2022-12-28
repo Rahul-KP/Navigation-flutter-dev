@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation/get_location.dart';
 import 'package:navigation/starter.dart';
 import 'package:navigation/get_location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class userDetails extends StatefulWidget {
   const userDetails({super.key});
@@ -12,6 +14,14 @@ class userDetails extends StatefulWidget {
 }
 
 class _userDetailsState extends State<userDetails> {
+
+  final nameController = TextEditingController();
+  final codeController = TextEditingController();
+
+  late SharedPreferences logindata;
+  late bool newuser;
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +56,7 @@ class _userDetailsState extends State<userDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
+                  controller: nameController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -67,6 +78,7 @@ class _userDetailsState extends State<userDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: TextField(
+                  controller: codeController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -126,10 +138,26 @@ class _userDetailsState extends State<userDetails> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: ((context) => Pos())));
-                  },
+                  
+                  onTap: () async {
+
+                      logindata = await SharedPreferences.getInstance();
+                      String username = nameController.text;
+                      String code = codeController.text;
+
+                      print(username);
+
+                      if (username != '' && code != '') {
+                        print("sucessssssss");
+                        logindata.setBool('login', false);
+
+                        logindata.setString('username', username);
+                        Fluttertoast.showToast(msg: username);
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => Pos()));
+                      }
+
+                    },
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -185,25 +213,14 @@ class _userDetailsState extends State<userDetails> {
       ),
     );
   }
+  
+  @override
+  void dispose(){
+    nameController.dispose();
+    codeController.dispose();
+    super.dispose();
+  }
 }
 
 
 
-
-
-                    // need inkwell inside conatiner
-                    // padding: EdgeInsets.all(20),
-                    // decoration: BoxDecoration(
-                    //     color:Colors.green[400],
-                    //     borderRadius: BorderRadius.circular(15)),
-                    // child: Center(
-                    //   child: Text(
-                    //     'Next',
-                    //     style: TextStyle(
-                    //       color: Colors.white,
-                    //       fontWeight: FontWeight.bold,
-                    //       letterSpacing: 1,
-                    //       fontSize: 16,
-                    //     ),
-                    //   ),
-                    // )
