@@ -101,23 +101,20 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: GestureDetector(
                     onTap: () async {
-
                       logindata = await SharedPreferences.getInstance();
                       String username = nameController.text;
                       String code = codeController.text;
 
-                      print(username);
-
                       if (username != '' && code != '') {
-                        print("sucessssssss");
                         logindata.setBool('login', false);
 
                         logindata.setString('username', username);
                         Fluttertoast.showToast(msg: username);
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => AppScreen()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AppScreen()));
                       }
-
                     },
                     child: Container(
                       padding: EdgeInsets.all(20),
@@ -176,9 +173,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
     );
   }
 
-
   @override
-  void dispose(){
+  void dispose() {
     nameController.dispose();
     codeController.dispose();
     super.dispose();

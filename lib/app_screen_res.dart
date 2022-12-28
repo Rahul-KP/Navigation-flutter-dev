@@ -31,7 +31,8 @@ class MapScreenRes {
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
     LocationData ld = await SharedData.locationData.first;
-    SharedData.mapController.camera.lookAtPoint(core.GeoCoordinates(ld.latitude!, ld.longitude!));
+    SharedData.mapController.camera
+        .lookAtPoint(core.GeoCoordinates(ld.latitude!, ld.longitude!));
   }
 
   static void search() async {

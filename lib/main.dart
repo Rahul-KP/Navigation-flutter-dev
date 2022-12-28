@@ -8,7 +8,6 @@ import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void _initializeHERESDK() async {
-
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
@@ -17,7 +16,8 @@ void _initializeHERESDK() async {
   // Set your credentials for the HERE SDK.
   String accessKeyId = dotenv.env["here.access.key.id"]!;
   String accessKeySecret = dotenv.env["here.access.key.secret"]!;
-  SDKOptions sdkOptions = SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
+  SDKOptions sdkOptions =
+      SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
 
   try {
     await SDKNativeEngine.makeSharedInstance(sdkOptions);
@@ -26,23 +26,16 @@ void _initializeHERESDK() async {
   }
 }
 
-
-//demonstarting git to sumedh
-
 void alreadyLoggedin() {
   SharedPreferences.getInstance().then((value) {
     bool newuser = (value.getBool('login') ?? true);
-
-    // print(newuser);
 
     if (newuser == false) {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AppScreen(),
       ));
-
-    }
-    else{
+    } else {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: loginpg(),

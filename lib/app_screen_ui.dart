@@ -11,7 +11,6 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -42,14 +41,14 @@ class _AppScreenState extends State<AppScreen> {
           ),
           actions: <Widget>[
             Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: (() => setStateOverlay(() => SearchWidget.toggleVisisbility())),
-                  ), 
+              padding: const EdgeInsets.only(right: 20.0),
+              child: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: (() =>
+                    setStateOverlay(() => SearchWidget.toggleVisisbility())),
               ),
-            ]
-          ),
+            ),
+          ]),
       body: Stack(
         children: <Widget>[
           // MapWidget
@@ -64,7 +63,7 @@ class _AppScreenState extends State<AppScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        //this button moves the camera to user's current location - recenter button
+          //this button moves the camera to user's current location - recenter button
           onPressed: (MapScreenRes.goToUserLoc),
           child: const Icon(
             Icons.add_location_alt_outlined,

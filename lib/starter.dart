@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'AmbDriverDetails.dart';
-import 'userDetails.dart';
+import 'driver_details.dart';
+import 'user_details.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:bordered_text/bordered_text.dart';
 
 String finalAmbulanceCode = "";
 
 class loginpg extends StatefulWidget {
-
   const loginpg({super.key});
 
   @override
@@ -15,8 +14,6 @@ class loginpg extends StatefulWidget {
 }
 
 class _loginpgState extends State<loginpg> {
-
-
   @override
   @override
   Widget build(BuildContext context) {

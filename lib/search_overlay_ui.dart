@@ -29,8 +29,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     hintText: 'Choose your destination',
                   ),
                   // onTap: (() async {
-                    
-                    
+
                   // }),
                 ),
               ],

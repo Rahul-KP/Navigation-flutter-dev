@@ -13,14 +13,12 @@ class userDetails extends StatefulWidget {
 }
 
 class _userDetailsState extends State<userDetails> {
-
   final nameController = TextEditingController();
   final codeController = TextEditingController();
 
   late SharedPreferences logindata;
   late bool newuser;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,30 +94,23 @@ class _userDetailsState extends State<userDetails> {
               SizedBox(
                 height: 20,
               ),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: GestureDetector(
-                  
                   onTap: () async {
+                    logindata = await SharedPreferences.getInstance();
+                    String username = nameController.text;
+                    String code = codeController.text;
 
-                      logindata = await SharedPreferences.getInstance();
-                      String username = nameController.text;
-                      String code = codeController.text;
+                    if (username != '' && code != '') {
+                      logindata.setBool('login', false);
 
-                      print(username);
-
-                      if (username != '' && code != '') {
-                        print("sucessssssss");
-                        logindata.setBool('login', false);
-
-                        logindata.setString('username', username);
-                        Fluttertoast.showToast(msg: username);
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => AppScreen()));
-                      }
-
-                    },
+                      logindata.setString('username', username);
+                      Fluttertoast.showToast(msg: username);
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => AppScreen()));
+                    }
+                  },
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -139,7 +130,6 @@ class _userDetailsState extends State<userDetails> {
                   ),
                 ),
               ),
-
               SizedBox(
                 height: 26,
               ),
@@ -155,8 +145,8 @@ class _userDetailsState extends State<userDetails> {
                   Container(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: ((context) => loginpg())));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: ((context) => loginpg())));
                       },
                       child: Text(
                         '  Click here',
@@ -175,14 +165,11 @@ class _userDetailsState extends State<userDetails> {
       ),
     );
   }
-  
+
   @override
-  void dispose(){
+  void dispose() {
     nameController.dispose();
     codeController.dispose();
     super.dispose();
   }
 }
-
-
-
