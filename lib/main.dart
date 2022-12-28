@@ -3,8 +3,9 @@ import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling InstantiationException while initializing sdk
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'starter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void _initializeHERESDK() async {
 
@@ -25,9 +26,33 @@ void _initializeHERESDK() async {
   }
 }
 
+
+//demonstarting git to sumedh
+
+void alreadyLoggedin() {
+  SharedPreferences.getInstance().then((value) {
+    bool newuser = (value.getBool('login') ?? true);
+
+    // print(newuser);
+
+    if (newuser == false) {
+      runApp(MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: AppScreen(),
+      ));
+
+    }
+    else{
+      runApp(MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: loginpg(),
+      ));
+    }
+  });
+}
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   _initializeHERESDK();
-  runApp(MaterialApp(
-    home: AppScreen(),
-  ));
+  alreadyLoggedin();
 }
