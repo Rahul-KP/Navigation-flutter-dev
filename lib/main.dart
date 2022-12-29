@@ -46,10 +46,7 @@ void alreadyLoggedin() {
 }
 
 void main() {
-  FirebaseRes firebaseRes = new FirebaseRes();
   WidgetsFlutterBinding.ensureInitialized();
-  firebaseRes.initializeFire();
-  firebaseRes.initializeNotif();
   _initializeHERESDK();
   alreadyLoggedin();
 }

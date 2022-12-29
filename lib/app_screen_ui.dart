@@ -17,6 +17,8 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+    widget.firebaseRes.initializeFire();
+    widget.firebaseRes.initializeNotif();
     MapScreenRes.getPermissions();
     widget.firebaseRes.initializeNotifWidget(context);
   }
