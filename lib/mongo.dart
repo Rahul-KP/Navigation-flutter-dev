@@ -16,6 +16,7 @@ class MongoRes {
         ':' +
         pass +
         '@cluster0.fg98e.mongodb.net/flutter_test?retryWrites=true&w=majority');
+    await db.open();
     Fluttertoast.showToast(msg: "Connected to MongoDB Cluster");
   }
 }

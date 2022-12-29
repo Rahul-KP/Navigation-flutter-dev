@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/core.dart';
@@ -44,8 +48,14 @@ void alreadyLoggedin() {
   });
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  ByteData data =
+      await PlatformAssetBundle().load('assets/lets-encrypt-r3.pem');
+  SecurityContext.defaultContext
+      .setTrustedCertificatesBytes(data.buffer.asUint8List());
+
   _initializeHERESDK();
   alreadyLoggedin();
 }
