@@ -1,3 +1,4 @@
+import 'package:AmbiNav/mongo.dart';
 import 'package:flutter/material.dart';
 import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
@@ -11,10 +12,13 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
+  MongoRes mongoObj = MongoRes();
+
   @override
   void initState() {
     super.initState();
     MapScreenRes.getPermissions();
+    mongoObj.connect();
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
@@ -46,6 +50,13 @@ class _AppScreenState extends State<AppScreen> {
                 icon: Icon(Icons.search),
                 onPressed: (() =>
                     setStateOverlay(() => SearchWidget.toggleVisisbility())),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: IconButton(
+                icon: Icon(Icons.connect_without_contact_rounded),
+                onPressed: (() {}),
               ),
             ),
           ]),

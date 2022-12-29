@@ -47,6 +47,7 @@ dependencies:
 
   google_fonts:
   bordered_text: ^2.0.0
+  mongo_dart: ^0.8.2
 
 dev_dependencies:
   flutter_test:
