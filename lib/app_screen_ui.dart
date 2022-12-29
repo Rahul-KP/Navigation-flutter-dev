@@ -1,14 +1,13 @@
-import 'package:AmbiNav/main.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:AmbiNav/firebase.dart';
 import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
+import 'package:flutter/material.dart';
 
 class AppScreen extends StatefulWidget {
-  const AppScreen({super.key});
+  final FirebaseRes firebaseRes = new FirebaseRes();
+
+  AppScreen({super.key});
 
   @override
   State<AppScreen> createState() => _AppScreenState();
@@ -19,66 +18,7 @@ class _AppScreenState extends State<AppScreen> {
   void initState() {
     super.initState();
     MapScreenRes.getPermissions();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message){
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if(notification != null && android!= null){
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              color: Colors.amber,
-              playSound: true,
-
-            )
-          )
-        );
-      }
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print(' A new onMessageOpendApp event was published!');
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-      if(notification != null && android !=null){
-        showDialog(context: context,
-         builder: (_){
-          return AlertDialog(
-            title: Text(notification.title.toString()),
-            content: SingleChildScrollView(
-              child:  Column(
-                children: [
-                  Text(notification.body.toString())
-                ]),
-            ),
-          );
-         });
-      }
-     });
-  }
-
-  void showNotification(){
-    flutterLocalNotificationsPlugin.show(
-      0,
-      "Testing ",
-      "Hoe are you",
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-               channel.id,
-        channel.name,
-        color: Colors.amber,
-        importance: Importance.high,
-        playSound: true,
-        )
-   
-
-      )
-    );
+    widget.firebaseRes.initializeNotifWidget(context);
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
@@ -128,33 +68,14 @@ class _AppScreenState extends State<AppScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button
-          onPressed: (){
-            (MapScreenRes.goToUserLoc);
-            showNotification();
+          onPressed: () {
+            MapScreenRes.goToUserLoc();
+            widget.firebaseRes.showNotification();
           },
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,
           )),
-
-          // RaisedButton(
-          //      color: Colors.blueAccent, 
-          //      onPressed: () {
-          //      sendData(); //fun1
-          //      signupPage(context); //fun2
-          //      },
-          //      child: 
-          //       Text("Signup"),
-          //    )
-
-      // floatingActionButton : FloatingActionButton(
-      //   onPressed: showNotification,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ),
-
-      
-
     );
   }
 }

@@ -1,7 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:AmbiNav/firebase.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/core.dart';
@@ -9,22 +7,6 @@ import 'package:here_sdk/core.errors.dart'; //for handling InstantiationExceptio
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
- const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel',
-  'High Importance Notification',
-  // 'This channel is used for important notification',
-  importance: Importance.high,
-  playSound: true
-);
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = 
- FlutterLocalNotificationsPlugin();
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
-  await Firebase.initializeApp();
-  print('A bg message just showed up : ${message.messageId}');
-}
-
 
 void _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
@@ -63,21 +45,11 @@ void alreadyLoggedin() {
   });
 }
 
- Future<void> main() async{
-
-
+void main() {
+  FirebaseRes firebaseRes = new FirebaseRes();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
-
-await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  alert: true,
-  badge: true,
-  sound: true,
-);
+  firebaseRes.initializeFire();
+  firebaseRes.initializeNotif();
   _initializeHERESDK();
   alreadyLoggedin();
 }
