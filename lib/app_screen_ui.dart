@@ -44,20 +44,14 @@ class _AppScreenState extends State<AppScreen> {
             },
           ),
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: (() =>
-                    setStateOverlay(() => SearchWidget.toggleVisisbility())),
-              ),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: (() =>
+                  setStateOverlay(() => SearchWidget.toggleVisisbility())),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: IconButton(
-                icon: Icon(Icons.connect_without_contact_rounded),
-                onPressed: (() {}),
-              ),
+            IconButton(
+              icon: Icon(Icons.add_circle),
+              onPressed: (() => mongoObj.insert()),
             ),
           ]),
       body: Stack(

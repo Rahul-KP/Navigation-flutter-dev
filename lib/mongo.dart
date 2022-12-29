@@ -6,6 +6,7 @@ class MongoRes {
   late final String username;
   late final String pass;
   late final Db db;
+  late final DbCollection dbCollection;
 
   void connect() async {
     await dotenv.load(fileName: "credentials.env");
@@ -17,6 +18,11 @@ class MongoRes {
         pass +
         '@cluster0.fg98e.mongodb.net/flutter_test?retryWrites=true&w=majority');
     await db.open();
+    dbCollection = db.collection('flutter_test1');
     Fluttertoast.showToast(msg: "Connected to MongoDB Cluster");
+  }
+
+  void insert() async {
+    await dbCollection.insertOne({'time': DateTime.now().toString()});
   }
 }
