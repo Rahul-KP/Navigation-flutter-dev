@@ -1,5 +1,7 @@
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 import 'package:mongo_dart/mongo_dart.dart';
 
 class MongoRes {
@@ -23,6 +25,11 @@ class MongoRes {
   }
 
   void insert() async {
-    await dbCollection.insertOne({'time': DateTime.now().toString()});
+    LocationData ld = await SharedData.locationData.first;
+    await dbCollection.insertOne({
+      'time': DateTime.now().toString(),
+      'current_loc_lat': ld.latitude,
+      'current_loc_lon': ld.longitude
+    });
   }
 }
