@@ -5,7 +5,7 @@ class SearchWidget extends StatefulWidget {
 
   static bool isVisible = false;
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
-  static void toggleVisisbility() {
+  static void toggleVisibility() {
     isVisible = !isVisible;
   }
 

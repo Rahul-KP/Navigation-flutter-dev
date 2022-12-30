@@ -1,10 +1,10 @@
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
-import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
 
 class AppScreen extends StatefulWidget {
-  const AppScreen({super.key});
+  AppScreen({super.key});
 
   @override
   State<AppScreen> createState() => _AppScreenState();
@@ -16,9 +16,6 @@ class _AppScreenState extends State<AppScreen> {
     super.initState();
     MapScreenRes.getPermissions();
   }
-
-  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
-  var setStateOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +36,7 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: IconButton(
-                icon: Icon(Icons.search),
-                onPressed: (() =>
-                    setStateOverlay(() => SearchWidget.toggleVisisbility())),
-              ),
-            ),
-          ]),
+          actions: MapScreenRes.getActionButtonList()),
       body: Stack(
         children: <Widget>[
           // MapWidget
@@ -57,8 +45,8 @@ class _AppScreenState extends State<AppScreen> {
           //it renders without redrawing the entire screen
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
-            setStateOverlay = setState;
-            return SearchWidget();
+            SharedData.setStateOverlay = setState;
+            return MapScreenRes.chooseOverlayWidget()!;
           })),
         ],
       ),

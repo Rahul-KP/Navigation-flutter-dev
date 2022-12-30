@@ -7,4 +7,7 @@ class SharedData {
   static late Stream<LocationData> locationData; // user's location
   static late HereMapController mapController;
   static late RoutingEngine routingEngine;
+  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
+  static late var setStateOverlay;
+  static late String usertype;
 }

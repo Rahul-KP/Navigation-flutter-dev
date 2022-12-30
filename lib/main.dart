@@ -1,3 +1,4 @@
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
@@ -31,6 +32,7 @@ void alreadyLoggedin() {
     bool newuser = (value.getBool('login') ?? true);
 
     if (newuser == false) {
+      SharedData.usertype = value.getString('usertype')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AppScreen(),
