@@ -3,14 +3,20 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
+import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
 import 'shared_data.dart';
+typedef ShowDialogFunction = void Function(String title, String message);
 
 class MapScreenRes {
   MapImage? _poiMapImage;
   List<MapMarker> _mapMarkerList = [];
+  ShowDialogFunction _showDialog;
+
+  MapScreenRes(ShowDialogFunction showDialogCallback)
+  :_showDialog = showDialogCallback;
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -83,6 +89,8 @@ class MapScreenRes {
       throw Exception("Initialization of SearchEngine failed.");
     }
 
+    _setTapGestureHandler();
+
     SearchOptions searchOptions = SearchOptions();
     searchOptions.languageCode = core.LanguageCode.enUs;
     searchOptions.maxItems = 30;
@@ -105,8 +113,8 @@ class MapScreenRes {
       }
 
       // If error is null, list is guaranteed to be not empty.
-      // int listLength = list!.length;
-      // _showDialog("Search for $queryString", "Results: $listLength. Tap marker to see details.");
+      int listLength = list!.length;
+      _showDialog("Search for $queryString", "Results: $listLength. Tap marker to see details.");
 
       // Add new marker for each search result on map.
       for (Place searchResult in list!) {
@@ -116,6 +124,44 @@ class MapScreenRes {
         // SharedData.mapController. 
         addPoiMapMarker(searchResult.geoCoordinates!, metadata);
       }
+    });
+  }
+  
+  void _pickMapMarker(core.Point2D touchPoint) {
+    double radiusInPixel = 2;
+    SharedData.mapController.pickMapItems(touchPoint, radiusInPixel, (pickMapItemsResult) {
+      if (pickMapItemsResult == null) {
+        // Pick operation failed.
+        return;
+      }
+      List<MapMarker> mapMarkerList = pickMapItemsResult.markers;
+      if (mapMarkerList.length == 0) {
+        print("No map markers found.");
+        return;
+      }
+
+      MapMarker topmostMapMarker = mapMarkerList.first;
+      core.Metadata? metadata = topmostMapMarker.metadata;
+      if (metadata != null) {
+        core.CustomMetadataValue? customMetadataValue = metadata.getCustomValue("key_search_result");
+        if (customMetadataValue != null) {
+          SearchResultMetadata searchResultMetadata = customMetadataValue as SearchResultMetadata;
+          String title = searchResultMetadata.searchResult.title;
+          String vicinity = searchResultMetadata.searchResult.address.addressText;
+          _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
+          return;
+        }
+      }
+
+      double lat = topmostMapMarker.coordinates.latitude;
+      double lon = topmostMapMarker.coordinates.longitude;
+      _showDialog("Picked Map Marker", "Geographic coordinates: $lat, $lon.");
+    });
+  }
+
+  void _setTapGestureHandler() {
+    SharedData.mapController.gestures.tapListener = TapListener((core.Point2D touchPoint) {
+      _pickMapMarker(touchPoint);
     });
   }
 
