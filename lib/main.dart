@@ -1,3 +1,4 @@
+import 'package:AmbiNav/countdown_timer.dart';
 import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
@@ -49,5 +50,9 @@ void alreadyLoggedin() {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   _initializeHERESDK();
-  alreadyLoggedin();
+  // alreadyLoggedin();
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: CountDownTimer(),
+  ));
 }
