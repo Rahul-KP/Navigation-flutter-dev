@@ -1,33 +1,29 @@
+import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
-import 'marker_details_ui.dart';
 
 class AppScreen extends StatefulWidget {
   const AppScreen({super.key});
 
   @override
   State<AppScreen> createState() => _AppScreenState();
-
-  void displayLocationDetails(context,String place, String vicinity) {
-    showModalBottomSheet(context: context, builder: (BuildContext bc) {
-      return DisplayMarkerInfo(place, vicinity);
-    });
-  }
 }
 
 class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+    SharedData.mapContext = this.context;
     MapScreenRes.getPermissions();
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   var setStateOverlay;
   
-  MapScreenRes m = new MapScreenRes();
+  SearchRes search = new SearchRes();
   @override
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -54,7 +50,7 @@ class _AppScreenState extends State<AppScreen> {
                 icon: Icon(Icons.search),
                 // onPressed: (() =>
                 //     setStateOverlay(() => SearchWidget.toggleVisisbility())),
-                onPressed: (() => m.search()),
+                onPressed: (() => search.search()),
               ),
             ),
           ]),
