@@ -10,7 +10,6 @@ import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
 import 'shared_data.dart';
 import 'app_screen_ui.dart';
-// typedef ShowDialogFunction = void Function(String title, String message);
 
 class MapScreenRes {
   MapImage? _poiMapImage;
@@ -116,7 +115,7 @@ class MapScreenRes {
       Fluttertoast.showToast(msg: "$queryString"+"\nResults: $listLength. Tap marker to see details");
 
       // Add new marker for each search result on map.
-      for (Place searchResult in list!) {
+      for (Place searchResult in list) {
         core.Metadata metadata = core.Metadata();
         metadata.setCustomValue("key_search_result", SearchResultMetadata(searchResult));
         // Note: getGeoCoordinates() may return null only for Suggestions.
@@ -147,7 +146,7 @@ class MapScreenRes {
           SearchResultMetadata searchResultMetadata = customMetadataValue as SearchResultMetadata;
           String title = searchResultMetadata.searchResult.title;
           String vicinity = searchResultMetadata.searchResult.address.addressText;
-          // _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
+          
           AppScreen a = new AppScreen();
           a.displayLocationDetails(GlobalContextService.navigatorKey.currentContext, title, vicinity);
           return;
@@ -156,7 +155,6 @@ class MapScreenRes {
 
       double lat = topmostMapMarker.coordinates.latitude;
       double lon = topmostMapMarker.coordinates.longitude;
-      // _showDialog("Picked Map Marker", "Geographic coordinates: $lat, $lon.");
     });
   }
 

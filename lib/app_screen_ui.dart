@@ -80,10 +80,4 @@ class _AppScreenState extends State<AppScreen> {
           )),
     );
   }
-
-  void displayLocationDetails(context,String place, String vicinity) {
-    showModalBottomSheet(context: context, builder: (BuildContext bc) {
-      return DisplayMarkerInfo(place, vicinity);
-    });
-  }
 }
