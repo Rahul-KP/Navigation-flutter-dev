@@ -8,6 +8,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
 import 'shared_data.dart';
+import 'app_screen_ui.dart';
 // typedef ShowDialogFunction = void Function(String title, String message);
 
 class MapScreenRes {
@@ -146,6 +147,8 @@ class MapScreenRes {
           String title = searchResultMetadata.searchResult.title;
           String vicinity = searchResultMetadata.searchResult.address.addressText;
           // _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
+          AppScreen a = new AppScreen();
+          a.displayLocationDetails(context, title, vicinity);
           return;
         }
       }

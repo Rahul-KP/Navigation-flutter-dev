@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'search_overlay_ui.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
+import 'marker_details_ui.dart';
 
 class AppScreen extends StatefulWidget {
   const AppScreen({super.key});
 
   @override
   State<AppScreen> createState() => _AppScreenState();
+
+  void displayLocationDetails(context,String place, String vicinity) {
+    showModalBottomSheet(context: context, builder: (BuildContext bc) {
+      return DisplayMarkerInfo(place, vicinity);
+    });
+  }
 }
 
 class _AppScreenState extends State<AppScreen> {
@@ -19,6 +26,7 @@ class _AppScreenState extends State<AppScreen> {
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   var setStateOverlay;
+  
   MapScreenRes m = new MapScreenRes();
   @override
   Widget build(BuildContext context) {
@@ -71,5 +79,11 @@ class _AppScreenState extends State<AppScreen> {
             color: Colors.white,
           )),
     );
+  }
+
+  void displayLocationDetails(context,String place, String vicinity) {
+    showModalBottomSheet(context: context, builder: (BuildContext bc) {
+      return DisplayMarkerInfo(place, vicinity);
+    });
   }
 }
