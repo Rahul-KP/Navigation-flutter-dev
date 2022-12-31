@@ -8,15 +8,11 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
 import 'shared_data.dart';
-typedef ShowDialogFunction = void Function(String title, String message);
+// typedef ShowDialogFunction = void Function(String title, String message);
 
 class MapScreenRes {
   MapImage? _poiMapImage;
   List<MapMarker> _mapMarkerList = [];
-  ShowDialogFunction _showDialog;
-
-  MapScreenRes(ShowDialogFunction showDialogCallback)
-  :_showDialog = showDialogCallback;
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -114,7 +110,8 @@ class MapScreenRes {
 
       // If error is null, list is guaranteed to be not empty.
       int listLength = list!.length;
-      _showDialog("Search for $queryString", "Results: $listLength. Tap marker to see details.");
+      // _showDialog("Search for $queryString", "Results: $listLength. Tap marker to see details.");
+      Fluttertoast.showToast(msg: "$queryString"+"\nResults: $listLength. Tap marker to see details");
 
       // Add new marker for each search result on map.
       for (Place searchResult in list!) {
@@ -148,14 +145,14 @@ class MapScreenRes {
           SearchResultMetadata searchResultMetadata = customMetadataValue as SearchResultMetadata;
           String title = searchResultMetadata.searchResult.title;
           String vicinity = searchResultMetadata.searchResult.address.addressText;
-          _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
+          // _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
           return;
         }
       }
 
       double lat = topmostMapMarker.coordinates.latitude;
       double lon = topmostMapMarker.coordinates.longitude;
-      _showDialog("Picked Map Marker", "Geographic coordinates: $lat, $lon.");
+      // _showDialog("Picked Map Marker", "Geographic coordinates: $lat, $lon.");
     });
   }
 
