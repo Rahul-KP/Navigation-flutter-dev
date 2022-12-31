@@ -1,3 +1,4 @@
+import 'package:AmbiNav/global_context.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
@@ -33,11 +34,13 @@ void alreadyLoggedin() {
     if (newuser == false) {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: GlobalContextService.navigatorKey, // set property
         home: AppScreen(),
       ));
     } else {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
+        navigatorKey: GlobalContextService.navigatorKey, // set property
         home: loginpg(),
       ));
     }

@@ -1,3 +1,4 @@
+import 'package:AmbiNav/global_context.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -148,7 +149,7 @@ class MapScreenRes {
           String vicinity = searchResultMetadata.searchResult.address.addressText;
           // _showDialog("Picked Search Result", title + ". Vicinity: " + vicinity);
           AppScreen a = new AppScreen();
-          a.displayLocationDetails(context, title, vicinity);
+          a.displayLocationDetails(GlobalContextService.navigatorKey.currentContext, title, vicinity);
           return;
         }
       }
