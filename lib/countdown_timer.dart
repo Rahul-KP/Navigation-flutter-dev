@@ -25,9 +25,9 @@ class _CountDownTimerState extends State<CountDownTimer>
       vsync: this,
       duration: Duration(seconds: 5),
     );
-    controller.forward(from: controller.value);
+    controller.reverse(from: 1.0);
     controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
+      if (status == AnimationStatus.dismissed) {
         SharedData.setStateOverlay(() {
           NavigationNotif.toggleVisibility();
         });
@@ -55,14 +55,14 @@ class _CountDownTimerState extends State<CountDownTimer>
                       size: Size(40, 40),
                       painter: CustomTimerPainter(
                           animation: controller,
-                          color: Colors.white,
-                          backgroundColor: Colors.blue));
+                          color: Colors.blue,
+                          backgroundColor: Colors.white));
                 },
               ),
               VerticalDivider(
                 width: 20,
               ),
-              Text(seconds)
+              Text(seconds) // Text here
             ],
           ),
         ));
@@ -89,8 +89,8 @@ class CustomTimerPainter extends CustomPainter {
 
     canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
     paint.color = color;
-    double progress = (1.0 - animation.value) * 2 * pi;
-    canvas.drawArc(Offset.zero & size, pi * 1.5, -progress, false, paint);
+    double progress = (animation.value) * 2 * pi;
+    canvas.drawArc(Offset.zero & size, pi * 1.5, progress, false, paint);
   }
 
   @override
