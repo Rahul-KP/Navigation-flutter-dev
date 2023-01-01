@@ -23,7 +23,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 5),
+      duration: Duration(seconds: 15),
     );
     controller.reverse(from: 1.0);
     controller.addStatusListener((status) {
@@ -43,7 +43,7 @@ class _CountDownTimerState extends State<CountDownTimer>
         decoration: BoxDecoration(
             boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(10))),
+            borderRadius: BorderRadius.all(Radius.circular(13))),
         child: Padding(
           padding: EdgeInsets.all(15),
           child: Row(
