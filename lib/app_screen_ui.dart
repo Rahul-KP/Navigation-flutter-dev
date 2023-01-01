@@ -1,4 +1,3 @@
-import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'search_overlay_ui.dart';
@@ -23,7 +22,6 @@ class _AppScreenState extends State<AppScreen> {
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   var setStateOverlay;
   
-  SearchRes search = new SearchRes();
   @override
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -48,9 +46,8 @@ class _AppScreenState extends State<AppScreen> {
               padding: const EdgeInsets.only(right: 20.0),
               child: IconButton(
                 icon: Icon(Icons.search),
-                // onPressed: (() =>
-                //     setStateOverlay(() => SearchWidget.toggleVisisbility())),
-                onPressed: (() => search.search()),
+                onPressed: (() => setStateOverlay(() => SearchWidget.toggleVisisbility())),
+                // onPressed: (() => search.search()),
               ),
             ),
           ]),

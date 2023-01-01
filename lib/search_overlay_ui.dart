@@ -1,3 +1,4 @@
+import 'package:AmbiNav/search_res.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -14,6 +15,9 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
+
+  SearchRes search = new SearchRes();
+
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -26,11 +30,14 @@ class _SearchWidgetState extends State<SearchWidget> {
                 TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Choose your destination',
+                    hintText: 'Enter destination',
                   ),
-                  // onTap: (() async {
-
-                  // }),
+                  onSubmitted: (
+                    (value) {
+                      search.search(value);
+                      SearchWidget.toggleVisisbility();
+                    } 
+                  ),
                 ),
               ],
             ),

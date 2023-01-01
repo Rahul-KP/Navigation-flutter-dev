@@ -42,7 +42,7 @@ class SearchRes {
     mapMarker.metadata = metadata;
   }
 
-  void search() async {
+  void search(String queryString) async {
     // Code to implement search functionality
     //clear map markers before every search
     _clearMap();
@@ -66,7 +66,6 @@ class SearchRes {
     //build the search query
     TextQueryArea queryArea = TextQueryArea.withCenter(
         core.GeoCoordinates(loc.latitude!, loc.longitude!));
-    String queryString = "pizza"; //needs to be read from search overlay
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
