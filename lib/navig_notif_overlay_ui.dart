@@ -1,3 +1,4 @@
+import 'package:AmbiNav/countdown_timer.dart';
 import 'package:flutter/material.dart';
 
 class NavigationNotif extends StatefulWidget {
@@ -16,9 +17,7 @@ class _NavigationNotifState extends State<NavigationNotif> {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-      child: Container(
-        child: Center(child: const Text('hello')),
-      ),
+      child: CountDownTimer(),
       visible: NavigationNotif.isVisible,
     );
   }

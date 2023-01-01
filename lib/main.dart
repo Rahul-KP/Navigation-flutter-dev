@@ -50,9 +50,9 @@ void alreadyLoggedin() {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   _initializeHERESDK();
-  // alreadyLoggedin();
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: CountDownTimer(),
-  ));
+  alreadyLoggedin();
+  // runApp(MaterialApp(
+  //   debugShowCheckedModeBanner: false,
+  //   home: CountDownTimer(),
+  // ));
 }
