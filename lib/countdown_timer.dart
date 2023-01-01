@@ -23,7 +23,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 15),
+      duration: Duration(seconds: 5),
     );
     controller.reverse(from: 1.0);
     controller.addStatusListener((status) {
@@ -62,7 +62,7 @@ class _CountDownTimerState extends State<CountDownTimer>
               VerticalDivider(
                 width: 20,
               ),
-              Text(seconds) // Text here
+              Text('Duration: $seconds') // Text here
             ],
           ),
         ));
