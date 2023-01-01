@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
@@ -27,7 +28,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     controller.forward(from: controller.value);
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        setState(() {
+        SharedData.setStateOverlay(() {
           NavigationNotif.toggleVisibility();
         });
       }
@@ -40,11 +41,7 @@ class _CountDownTimerState extends State<CountDownTimer>
         margin: EdgeInsets.all(30),
         height: 70,
         decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Color.fromARGB(255, 87, 87, 87),
-                  blurRadius: 2)
-            ],
+            boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Padding(
