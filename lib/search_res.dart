@@ -1,7 +1,6 @@
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/shared_data.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
@@ -14,6 +13,9 @@ import 'package:location/location.dart';
 class SearchRes {
   MapImage? _poiMapImage;
   List<MapMarker> _mapMarkerList = [];
+  static var setStateMarkerDetailsCard;
+  static String place = "";
+  static String vicinity = "";
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -107,10 +109,13 @@ class SearchRes {
       }
       List<MapMarker> mapMarkerList = pickMapItemsResult.markers;
       if (mapMarkerList.length == 0) {
+        // setStateMarkerDetailsCard(()=>DisplayMarkerInfo.toggleVisisbility());
+        setStateMarkerDetailsCard(()=>DisplayMarkerInfo.isVisible=false);
         print("No map markers found.");
         return;
       }
 
+      // setStateMarkerDetailsCard(()=>DisplayMarkerInfo.isVisible=true);
       MapMarker topmostMapMarker = mapMarkerList.first;
       core.Metadata? metadata = topmostMapMarker.metadata;
       if (metadata != null) {
@@ -119,23 +124,19 @@ class SearchRes {
         if (customMetadataValue != null) {
           SearchResultMetadata searchResultMetadata =
               customMetadataValue as SearchResultMetadata;
-          String title = searchResultMetadata.searchResult.title;
-          String vicinity =
+          place = searchResultMetadata.searchResult.title;
+          vicinity =
               searchResultMetadata.searchResult.address.addressText;
 
-          displayLocationDetails(title,vicinity);
+          setStateMarkerDetailsCard((){
+            DisplayMarkerInfo.isVisible = true;
+          });
           return;
         }
       }
 
       // double lat = topmostMapMarker.coordinates.latitude;
       // double lon = topmostMapMarker.coordinates.longitude;
-    });
-  }
-
-  void displayLocationDetails(String place, String vicinity) {
-    showModalBottomSheet(context: SharedData.mapContext, builder: (BuildContext bc) {
-      return DisplayMarkerInfo(place, vicinity);
     });
   }
 
