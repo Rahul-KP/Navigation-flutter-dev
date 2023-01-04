@@ -113,6 +113,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setString('usertype', 'driver');
                         SharedData.usertype = 'driver';
                         Fluttertoast.showToast(msg: username);
+                        Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

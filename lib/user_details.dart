@@ -111,6 +111,7 @@ class _userDetailsState extends State<userDetails> {
                         logindata.setString('usertype', 'user');
                         SharedData.usertype = 'user';
                         Fluttertoast.showToast(msg: username);
+                        Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
