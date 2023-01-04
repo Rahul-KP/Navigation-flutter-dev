@@ -1,3 +1,5 @@
+import 'package:AmbiNav/marker_details_ui.dart';
+import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_res.dart';
@@ -14,8 +16,13 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+    SharedData.mapContext = this.context;
     MapScreenRes.getPermissions();
   }
+
+  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
+  var setStateOverlay;
+  var setStateMarkerDetailsCard;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,11 @@ class _AppScreenState extends State<AppScreen> {
           StatefulBuilder(builder: ((context, setState) {
             SharedData.setStateOverlay = setState;
             return MapScreenRes.chooseOverlayWidget()!;
+          })),
+
+          StatefulBuilder(builder: ((context, setState) {
+            SearchRes.setStateMarkerDetailsCard = setState;
+            return DisplayMarkerInfo();
           })),
         ],
       ),
