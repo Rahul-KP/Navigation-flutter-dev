@@ -1,4 +1,5 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +14,6 @@ class userDetails extends StatefulWidget {
 }
 
 class _userDetailsState extends State<userDetails> {
-
   final nameController = TextEditingController();
   final codeController = TextEditingController();
 
@@ -26,7 +26,7 @@ class _userDetailsState extends State<userDetails> {
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView (
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -103,14 +103,18 @@ class _userDetailsState extends State<userDetails> {
                       logindata = await SharedPreferences.getInstance();
                       String username = nameController.text;
                       String code = codeController.text;
-          
+
                       if (username != '' && code != '') {
                         logindata.setBool('login', false);
-          
+
                         logindata.setString('username', username);
+                        logindata.setString('usertype', 'user');
+                        SharedData.usertype = 'user';
                         Fluttertoast.showToast(msg: username);
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => AppScreen()));
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AppScreen()));
                       }
                     },
                     child: Container(
@@ -147,8 +151,9 @@ class _userDetailsState extends State<userDetails> {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: ((context) => loginpg())));
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: ((context) => loginpg())));
                         },
                         child: Text(
                           '  Click here',

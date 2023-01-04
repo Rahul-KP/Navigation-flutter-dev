@@ -1,4 +1,5 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -109,6 +110,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setBool('login', false);
 
                         logindata.setString('username', username);
+                        logindata.setString('usertype', 'driver');
+                        SharedData.usertype = 'driver';
                         Fluttertoast.showToast(msg: username);
                         Navigator.pushReplacement(
                             context,
