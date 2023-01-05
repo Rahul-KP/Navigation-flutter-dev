@@ -1,5 +1,7 @@
 import 'package:AmbiNav/countdown_timer.dart';
+import 'package:AmbiNav/receive_data_firebase.dart';
 import 'package:AmbiNav/shared_data.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
@@ -47,12 +49,17 @@ void alreadyLoggedin() {
   });
 }
 
+void showFirebaseDemo() async {
+  await Firebase.initializeApp();
+  runApp(const MaterialApp(
+    title: 'Navigation Basics',
+    home: FirstRoute(),
+  ));
+}
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   _initializeHERESDK();
-  alreadyLoggedin();
-  // runApp(MaterialApp(
-  //   debugShowCheckedModeBanner: false,
-  //   home: CountDownTimer(),
-  // ));
+  // alreadyLoggedin();
+  showFirebaseDemo();
 }
