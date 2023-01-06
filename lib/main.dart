@@ -1,4 +1,3 @@
-import 'package:AmbiNav/countdown_timer.dart';
 import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
@@ -8,6 +7,8 @@ import 'package:here_sdk/core.errors.dart'; //for handling InstantiationExceptio
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
@@ -47,8 +48,13 @@ void alreadyLoggedin() {
   });
 }
 
-void main() {
+
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   _initializeHERESDK();
   alreadyLoggedin();
   // runApp(MaterialApp(

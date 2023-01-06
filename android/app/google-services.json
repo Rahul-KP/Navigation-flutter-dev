@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "364373603563",
+    "project_id": "navigation-flutter-dev",
+    "storage_bucket": "navigation-flutter-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364373603563:android:3ff63b4f531e45098f7aae",
+        "android_client_info": {
+          "package_name": "com.example.navigation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364373603563-ifs23hn6bfa248b5sh0civqtfs8vna0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAYlh0UXv5uNjN7PA5AYXPoWlrVZWanQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364373603563-ifs23hn6bfa248b5sh0civqtfs8vna0v.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "364373603563-rcsp0d9hhhv2m0hrhaobq55gkanjlc2b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.navigation"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
