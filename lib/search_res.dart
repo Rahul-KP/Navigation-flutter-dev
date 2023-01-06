@@ -9,6 +9,7 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class SearchRes {
   MapImage? _poiMapImage;
@@ -16,6 +17,10 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
+  late LocationData loc;
+
+  FirebaseDatabase database = FirebaseDatabase.instance;
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -63,7 +68,7 @@ class SearchRes {
     searchOptions.maxItems = 30;
 
     //Device's current location
-    LocationData loc = await SharedData.locationData.first;
+    loc = await SharedData.locationData.first;
 
     //build the search query
     TextQueryArea queryArea = TextQueryArea.withCenter(
@@ -131,10 +136,16 @@ class SearchRes {
           setStateMarkerDetailsCard((){
             DisplayMarkerInfo.isVisible = true;
           });
+
+        ref.set({
+          "Location":"Marker",
+          "Latitude":loc.latitude,
+          "longitude":loc.longitude,
+        });
           return;
         }
       }
-
+      
       // double lat = topmostMapMarker.coordinates.latitude;
       // double lon = topmostMapMarker.coordinates.longitude;
     });

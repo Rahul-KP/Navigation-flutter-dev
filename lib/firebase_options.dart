@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '364373603563',
     projectId: 'navigation-flutter-dev',
     authDomain: 'navigation-flutter-dev.firebaseapp.com',
+    databaseURL: 'https://navigation-flutter-dev-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'navigation-flutter-dev.appspot.com',
     measurementId: 'G-2CC3VPRETT',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:364373603563:android:3ff63b4f531e45098f7aae',
     messagingSenderId: '364373603563',
     projectId: 'navigation-flutter-dev',
+    databaseURL: 'https://navigation-flutter-dev-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'navigation-flutter-dev.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:364373603563:ios:e2d8ab678eb58af08f7aae',
     messagingSenderId: '364373603563',
     projectId: 'navigation-flutter-dev',
+    databaseURL: 'https://navigation-flutter-dev-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'navigation-flutter-dev.appspot.com',
     iosClientId: '364373603563-rcsp0d9hhhv2m0hrhaobq55gkanjlc2b.apps.googleusercontent.com',
     iosBundleId: 'com.example.navigation',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:364373603563:ios:e2d8ab678eb58af08f7aae',
     messagingSenderId: '364373603563',
     projectId: 'navigation-flutter-dev',
+    databaseURL: 'https://navigation-flutter-dev-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'navigation-flutter-dev.appspot.com',
     iosClientId: '364373603563-rcsp0d9hhhv2m0hrhaobq55gkanjlc2b.apps.googleusercontent.com',
     iosBundleId: 'com.example.navigation',
