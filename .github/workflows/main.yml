@@ -29,23 +29,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-            lfs: true
-      - name: Checkout LFS objects
-        run: git lfs checkout
       - name: Flutter Setup
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
       - name: Extract SDK and load Access keys
         run: |
+          wget https://heresdk-amitu.pitunnel.com/heresdk-explore-flutter-4.13.0.0.3315.tar.gz
           echo "${{ secrets.HereCreds }}" > credentials.env
+          echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+          echo "${{ secrets.KEYSTORE }}" > navigation.keystore
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter-*.tar.gz -C plugins/here_sdk
         shell: bash
       - run: flutter pub get
-      - run: flutter build apk --debug
+      - run: flutter build apk
       - uses: actions/upload-artifact@v3
         with:
-          name: Navigation Debug APK
+          name: Navigation Release APK
           path: build/app/outputs/apk/debug/app-debug.apk
