@@ -38,7 +38,7 @@ jobs:
           wget https://4caa-106-51-242-176.in.ngrok.io/heresdk-explore-flutter-4.13.0.0.3315.tar.gz
           echo "${{ secrets.HereCreds }}" > credentials.env
           echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
-          echo "${{ secrets.KEYSTORE }}" > navigation.keystore
+          echo "${{ secrets.KEYSTORE }}" > android/navigation.keystore
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter-*.tar.gz -C plugins/here_sdk
         shell: bash
