@@ -138,7 +138,7 @@ class SearchRes {
           });
 
         ref.set({
-          "Location":"Marker",
+          "Location":"Marker1",
           "Latitude":loc.latitude,
           "longitude":loc.longitude,
         });
