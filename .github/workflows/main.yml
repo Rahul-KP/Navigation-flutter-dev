@@ -35,7 +35,7 @@ jobs:
           channel: 'stable'
       - name: Extract SDK and load Access keys
         run: |
-          wget https://heresdk-amitu.pitunnel.com/heresdk-explore-flutter-4.13.0.0.3315.tar.gz
+          wget https://4caa-106-51-242-176.in.ngrok.io/heresdk-explore-flutter-4.13.0.0.3315.tar.gz
           echo "${{ secrets.HereCreds }}" > credentials.env
           echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
           echo "${{ secrets.KEYSTORE }}" > navigation.keystore
