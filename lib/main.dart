@@ -1,4 +1,6 @@
 import 'package:AmbiNav/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
@@ -52,4 +54,7 @@ void main() async {
   Services.setLoc(); // start streaming the location
   _initializeHERESDK(); // initialise the HERE SDK
   alreadyLoggedin(); // check if user is already logged in
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
