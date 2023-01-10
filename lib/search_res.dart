@@ -9,6 +9,8 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 
 class SearchRes {
   MapImage? _poiMapImage;
@@ -16,6 +18,7 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
+  DatabaseReference ref = FirebaseDatabase.instance.ref();
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -102,7 +105,7 @@ class SearchRes {
   void _pickMapMarker(core.Point2D touchPoint) {
     double radiusInPixel = 2;
     SharedData.mapController.pickMapItems(touchPoint, radiusInPixel,
-        (pickMapItemsResult) {
+        (pickMapItemsResult) async {
       if (pickMapItemsResult == null) {
         // Pick operation failed.
         return;
@@ -130,6 +133,13 @@ class SearchRes {
 
           setStateMarkerDetailsCard((){
             DisplayMarkerInfo.isVisible = true;
+          });
+
+          DateTime now = DateTime.now();
+          String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+          await ref.set({
+            "Time:" :formattedDate,
+            "Text" : "Hello"
           });
           return;
         }

@@ -48,6 +48,7 @@ dependencies:
   google_fonts:
   bordered_text: ^2.0.0
   firebase_core: ^2.4.1
+  firebase_database: ^10.0.9
 
 dev_dependencies:
   flutter_test:
