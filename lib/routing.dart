@@ -1,4 +1,4 @@
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
@@ -49,7 +49,7 @@ class Routing {
     double widthInPixels = 20;
     MapPolyline routeMapPolyline = MapPolyline(
         routeGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
-    SharedData.mapController.mapScene.addMapPolyline(routeMapPolyline);
+    Services.mapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapPolylines.add(routeMapPolyline);
   }
 
@@ -76,7 +76,7 @@ class Routing {
 
   void clearMap() {
     for (var mapPolyline in _mapPolylines) {
-      SharedData.mapController.mapScene.removeMapPolyline(mapPolyline);
+      Services.mapController.mapScene.removeMapPolyline(mapPolyline);
     }
     _mapPolylines.clear();
   }
