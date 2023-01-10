@@ -36,7 +36,7 @@ jobs:
       - name: Firebase login
         run: |
           dart pub global activate flutterfire_cli
-          flutterfire configure -p ${{ secrets.PROJ_ID }} --platforms=android,ios -i com.example.navigation --token=${{ secrets.FIREBASE_TOKEN }}
+          flutterfire configure -p ${{ secrets.PROJ_ID }} --platforms="android,ios" -i com.example.navigation -m com.example.navigation --token=${{ secrets.FIREBASE_TOKEN }}
       - name: Extract SDK and load Access keys
         run: |
           curl -o heresdk-explore-flutter-4.13.0.0.3315.tar.gz https://file.io/PYhF9rU6SmFN
