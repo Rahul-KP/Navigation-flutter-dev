@@ -73,4 +73,11 @@ class Routing {
       }
     });
   }
+
+  void clearMap() {
+    for (var mapPolyline in _mapPolylines) {
+      SharedData.mapController.mapScene.removeMapPolyline(mapPolyline);
+    }
+    _mapPolylines.clear();
+  }
 }

@@ -2,6 +2,8 @@ import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
@@ -11,7 +13,6 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
 import 'package:location/location.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:intl/intl.dart';
 
 class SearchRes {
@@ -20,7 +21,13 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
+  late DatabaseReference ref;
+  late Routing obj;
+
+  SearchRes(DatabaseReference ref, Routing obj) {
+    this.ref = ref;
+    this.obj = obj;
+  }
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.

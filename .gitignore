@@ -55,3 +55,4 @@ heresdk-explore-flutter-4.13.0.0.3315.tar.gz
 /android/app/google-services.json
 firebase_rules.txt
 lib/firebase_options.dart
+ios/firebase_app_id_file.json

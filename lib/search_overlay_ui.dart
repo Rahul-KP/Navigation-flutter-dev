@@ -1,4 +1,6 @@
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_res.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -16,7 +18,16 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
 
-  SearchRes search = new SearchRes();
+  late SearchRes search;
+
+  @override
+  void initState() {
+    super.initState();
+    Routing obj = Routing();
+    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    obj.initRoutingEngine();
+    search = SearchRes(ref, obj);
+  }
 
   @override
   Widget build(BuildContext context) {
