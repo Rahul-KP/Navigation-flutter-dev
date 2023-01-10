@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '361650748719',
     projectId: 'ambinav-bbc44',
     authDomain: 'ambinav-bbc44.firebaseapp.com',
+    databaseURL: 'https://ambinav-bbc44-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'ambinav-bbc44.appspot.com',
     measurementId: 'G-7Y8B2NS6Y3',
   );
@@ -58,6 +59,7 @@ class DefaultFirebaseOptions {
     appId: '1:361650748719:android:c6213549b2402efbee35da',
     messagingSenderId: '361650748719',
     projectId: 'ambinav-bbc44',
+    databaseURL: 'https://ambinav-bbc44-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'ambinav-bbc44.appspot.com',
   );
 
@@ -66,6 +68,7 @@ class DefaultFirebaseOptions {
     appId: '1:361650748719:ios:2d70b938cd2ef900ee35da',
     messagingSenderId: '361650748719',
     projectId: 'ambinav-bbc44',
+    databaseURL: 'https://ambinav-bbc44-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'ambinav-bbc44.appspot.com',
     iosClientId: '361650748719-0ejsbo8b8n5s01euhfj8eo71j4rter5g.apps.googleusercontent.com',
     iosBundleId: 'com.example.navigation',
@@ -76,6 +79,7 @@ class DefaultFirebaseOptions {
     appId: '1:361650748719:ios:2d70b938cd2ef900ee35da',
     messagingSenderId: '361650748719',
     projectId: 'ambinav-bbc44',
+    databaseURL: 'https://ambinav-bbc44-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'ambinav-bbc44.appspot.com',
     iosClientId: '361650748719-0ejsbo8b8n5s01euhfj8eo71j4rter5g.apps.googleusercontent.com',
     iosBundleId: 'com.example.navigation',

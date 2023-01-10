@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "361650748719",
+    "firebase_url": "https://ambinav-bbc44-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "ambinav-bbc44",
     "storage_bucket": "ambinav-bbc44.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "361650748719-4asdaf5k43m3hgr1r49fvefosefhian5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "361650748719-0ejsbo8b8n5s01euhfj8eo71j4rter5g.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.navigation"
+              }
             }
           ]
         }
