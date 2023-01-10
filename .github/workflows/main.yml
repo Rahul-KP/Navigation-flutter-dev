@@ -37,7 +37,7 @@ jobs:
         run: |
           dart pub global activate flutterfire_cli
           curl -sL https://firebase.tools | bash
-          flutterfire configure -p ${{ secrets.PROJ_ID }} --platforms="android,ios" -i com.example.navigation -m com.example.navigation --token=${{ secrets.FIREBASE_TOKEN }}
+          flutterfire configure -p ${{ secrets.PROJ_ID }} --platforms="android,ios" -i com.example.navigation -a com.example.navigation --token=${{ secrets.FIREBASE_TOKEN }}
         shell: bash
       - name: Extract SDK and load Access keys
         run: |
