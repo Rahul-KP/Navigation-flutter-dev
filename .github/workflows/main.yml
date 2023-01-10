@@ -29,23 +29,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-            lfs: true
-      - name: Checkout LFS objects
-        run: git lfs checkout
       - name: Flutter Setup
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
+      - name: Firebase login
+        run: |
+          dart pub global activate flutterfire_cli
+          flutterfire configure -p ${{ secrets.PROJ_ID }}
       - name: Extract SDK and load Access keys
         run: |
+          curl -o heresdk-explore-flutter-4.13.0.0.3315.tar.gz https://file.io/PYhF9rU6SmFN
           echo "${{ secrets.HereCreds }}" > credentials.env
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter-*.tar.gz -C plugins/here_sdk
         shell: bash
       - run: flutter pub get
-      - run: flutter build apk --debug
+      - run: flutter build apk
       - uses: actions/upload-artifact@v3
         with:
-          name: Navigation Debug APK
-          path: build/app/outputs/apk/debug/app-debug.apk
+          name: Navigation Release APK
+          path: build/app/outputs/flutter-apk/app-release.apk
