@@ -1,8 +1,10 @@
 import 'package:AmbiNav/marker_details_ui.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/shared_data.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
@@ -130,6 +132,11 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity =
               searchResultMetadata.searchResult.address.addressText;
+
+          Routing obj = Routing();
+          LocationData ld = await SharedData.locationData.first;
+          obj.initRoutingEngine();
+          await obj.addRoute(GeoCoordinates(ld.latitude!, ld.longitude!), searchResultMetadata.searchResult.geoCoordinates);
 
           setStateMarkerDetailsCard((){
             DisplayMarkerInfo.isVisible = true;
