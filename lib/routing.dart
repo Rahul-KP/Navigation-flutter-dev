@@ -1,4 +1,5 @@
 import 'package:AmbiNav/shared_data.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
@@ -9,6 +10,7 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
+  DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
 
   void initRoutingEngine() {
     try {
@@ -67,6 +69,7 @@ class Routing {
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         _showRouteOnMap(route);
+        _broadcastRoute(route);
       } else {
         var error = routingError.toString();
         Fluttertoast.showToast(msg: error);
@@ -79,5 +82,13 @@ class Routing {
       SharedData.mapController.mapScene.removeMapPolyline(mapPolyline);
     }
     _mapPolylines.clear();
+  }
+
+  void _broadcastRoute(here.Route route) {
+    List sendList = [];
+    for (var element in route.geometry.vertices) {
+      sendList.add({"lat": element.latitude, "lon": element.longitude});
+    }
+    ref.set({"amb1" : sendList.toString()});
   }
 }
