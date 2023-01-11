@@ -1,3 +1,4 @@
+import 'package:AmbiNav/ambulance_form.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/services.dart';
@@ -28,7 +29,20 @@ class _AppScreenState extends State<AppScreen> {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: scaffoldKey,
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            GestureDetector(
+              child: ListTile(
+                title: const Text('Book an ambulance'),
+                leading: Icon(Icons.edit_note_rounded),
+              ),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AmbulanceForm())),
+            )
+          ],
+        ),
+      ),
       appBar: AppBar(
           title: Text("Navigation"),
           leading: IconButton(
