@@ -1,6 +1,6 @@
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
@@ -8,7 +8,6 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'package:location/location.dart';
 
 class SearchRes {
   MapImage? _poiMapImage;
@@ -32,7 +31,7 @@ class SearchRes {
     }
 
     MapMarker mapMarker = MapMarker(geoCoordinates, _poiMapImage!);
-    SharedData.mapController.mapScene.addMapMarker(mapMarker);
+    Services.mapController.mapScene.addMapMarker(mapMarker);
     _mapMarkerList.add(mapMarker);
 
     return mapMarker;
@@ -62,12 +61,8 @@ class SearchRes {
     searchOptions.languageCode = core.LanguageCode.enUs;
     searchOptions.maxItems = 30;
 
-    //Device's current location
-    LocationData loc = await SharedData.locationData.first;
-
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(
-        core.GeoCoordinates(loc.latitude!, loc.longitude!));
+    TextQueryArea queryArea = TextQueryArea.withCenter(Services.userLocation);
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
@@ -101,7 +96,7 @@ class SearchRes {
 
   void _pickMapMarker(core.Point2D touchPoint) {
     double radiusInPixel = 2;
-    SharedData.mapController.pickMapItems(touchPoint, radiusInPixel,
+    Services.mapController.pickMapItems(touchPoint, radiusInPixel,
         (pickMapItemsResult) {
       if (pickMapItemsResult == null) {
         // Pick operation failed.
@@ -110,7 +105,7 @@ class SearchRes {
       List<MapMarker> mapMarkerList = pickMapItemsResult.markers;
       if (mapMarkerList.length == 0) {
         // setStateMarkerDetailsCard(()=>DisplayMarkerInfo.toggleVisisbility());
-        setStateMarkerDetailsCard(()=>DisplayMarkerInfo.isVisible=false);
+        setStateMarkerDetailsCard(() => DisplayMarkerInfo.isVisible = false);
         print("No map markers found.");
         return;
       }
@@ -125,10 +120,9 @@ class SearchRes {
           SearchResultMetadata searchResultMetadata =
               customMetadataValue as SearchResultMetadata;
           place = searchResultMetadata.searchResult.title;
-          vicinity =
-              searchResultMetadata.searchResult.address.addressText;
+          vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          setStateMarkerDetailsCard((){
+          setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
           });
           return;
@@ -141,7 +135,7 @@ class SearchRes {
   }
 
   void _setTapGestureHandler() {
-    SharedData.mapController.gestures.tapListener =
+    Services.mapController.gestures.tapListener =
         TapListener((core.Point2D touchPoint) {
       _pickMapMarker(touchPoint);
     });
@@ -149,7 +143,7 @@ class SearchRes {
 
   void _clearMap() {
     _mapMarkerList.forEach((mapMarker) {
-      SharedData.mapController.mapScene.removeMapMarker(mapMarker);
+      Services.mapController.mapScene.removeMapMarker(mapMarker);
     });
     _mapMarkerList.clear();
   }

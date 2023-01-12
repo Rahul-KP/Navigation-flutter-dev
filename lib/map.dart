@@ -2,8 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:location/location.dart' as loc;
-import 'shared_data.dart';
+import 'services.dart';
 
 class MapWidget extends StatelessWidget {
   @override
@@ -12,7 +11,6 @@ class MapWidget extends StatelessWidget {
   }
 
   void _onMapCreated(HereMapController hereMapController) async {
-    loc.LocationData ld = await SharedData.locationData.first;
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
         (MapError? error) {
       if (error != null) {
@@ -24,32 +22,31 @@ class MapWidget extends StatelessWidget {
       MapMeasure mapMeasureZoom =
           MapMeasure(MapMeasureKind.distance, distanceToEarthInMeters);
 
-      hereMapController.camera.lookAtPointWithMeasure(
-          GeoCoordinates(ld.latitude!, ld.longitude!), mapMeasureZoom);
+      hereMapController.camera
+          .lookAtPointWithMeasure(Services.userLocation, mapMeasureZoom);
     });
 
-    SharedData.mapController = hereMapController;
-    _addLocationIndicator(GeoCoordinates(ld.latitude!, ld.longitude!),
-        LocationIndicatorIndicatorStyle.navigation);
+    Services.mapController = hereMapController;
+    _addLocationIndicator(
+        Services.userLocation, LocationIndicatorIndicatorStyle.values.first);
   }
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
       LocationIndicatorIndicatorStyle indicatorStyle) {
-    LocationIndicator locationIndicator = LocationIndicator();
-    locationIndicator.locationIndicatorStyle = indicatorStyle;
+    Services.locationIndicator.locationIndicatorStyle = indicatorStyle;
 
     // A LocationIndicator is intended to mark the user's current location,
     // including a bearing direction.
     // For testing purposes, we create a Location object. Usually, you may want to get this from
     // a GPS sensor instead.
-    Location location = Location.withCoordinates(geoCoordinates);
-    location.time = DateTime.now();
-    // location.bearingInDegrees = _getRandom(0, 360);
+    // Location location = Location.withCoordinates(geoCoordinates);
+    // location.time = DateTime.now();
+    // // location.bearingInDegrees = _getRandom(0, 360);
 
-    locationIndicator.updateLocation(location);
+    // Services.locationIndicator.updateLocation(location);
 
     // A LocationIndicator listens to the lifecycle of the map view,
     // therefore, for example, it will get destroyed when the map view gets destroyed.
-    SharedData.mapController.addLifecycleListener(locationIndicator);
+    Services.mapController.addLifecycleListener(Services.locationIndicator);
   }
 }

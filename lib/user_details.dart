@@ -1,5 +1,5 @@
 import 'package:AmbiNav/app_screen_ui.dart';
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -109,7 +109,7 @@ class _userDetailsState extends State<userDetails> {
 
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'user');
-                        SharedData.usertype = 'user';
+                        Services.usertype = 'user';
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(

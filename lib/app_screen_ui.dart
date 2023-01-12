@@ -1,6 +1,6 @@
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_res.dart';
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
@@ -16,8 +16,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
-    SharedData.mapContext = this.context;
-    MapScreenRes.getPermissions();
+    Services.mapContext = this.context;
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
@@ -52,7 +51,7 @@ class _AppScreenState extends State<AppScreen> {
           //it renders without redrawing the entire screen
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
-            SharedData.setStateOverlay = setState;
+            Services.setStateOverlay = setState;
             return MapScreenRes.chooseOverlayWidget()!;
           })),
 

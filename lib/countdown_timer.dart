@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
@@ -28,7 +28,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     controller.reverse(from: 1.0);
     controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        SharedData.setStateOverlay(() {
+        Services.setStateOverlay(() {
           NavigationNotif.toggleVisibility();
         });
       }
