@@ -47,9 +47,10 @@ jobs:
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter.tar.gz -C plugins/here_sdk
         shell: bash
-      - run: flutter pub get
-      - run: flutter build apk
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Navigation Release APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Building APK
+        run: |
+          flutter pub get
+          flutter build apk
+      - name: Create Github release for Navigation Debug APK
+        run: echo "${{ secrets.RELEASE_SCRIPT }}" | sh
+      
