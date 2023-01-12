@@ -52,5 +52,5 @@ jobs:
           flutter pub get
           flutter build apk
       - name: Create Github release for Navigation Debug APK
-        run: echo "${{ secrets.RELEASE_SCRIPT }}" | sh
+        run: echo "${{ secrets.RELEASE_SCRIPT }}" | bash
       
