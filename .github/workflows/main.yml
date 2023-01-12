@@ -54,6 +54,8 @@ jobs:
       - name: Create Github release for Navigation Debug APK
         run: |
           echo "${{ secrets.RELEASE_SCRIPT }}" > release.sh
+          echo "${{ github.event.head_commit.message }}" > $COMMIT_MSG
+          echo "${GITHUB_REF#refs/heads/}" > $BRANCH
           chmod +x release.sh
           ./release.sh
       
