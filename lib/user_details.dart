@@ -18,7 +18,6 @@ class _userDetailsState extends State<userDetails> {
   final codeController = TextEditingController();
 
   late SharedPreferences logindata;
-  late bool newuser;
 
   @override
   Widget build(BuildContext context) {

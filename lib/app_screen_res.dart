@@ -1,8 +1,11 @@
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
+import 'package:AmbiNav/starter.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ambulance_form.dart';
 import 'shared_data.dart';
 
 class MapScreenRes {
@@ -57,6 +60,36 @@ class MapScreenRes {
     }
 
     return actionButtonList;
+  }
+
+  static List<Widget> getDrawerOptions(BuildContext context) {
+    List<Widget> drawerButtonList = [];
+    drawerButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text("Logout"),
+        leading: Icon(Icons.logout_rounded),
+      ),
+      onTap: () async {
+        SharedPreferences logindata = await SharedPreferences.getInstance();
+        logindata.setBool('login', true);
+        logindata.setString('username', "");
+        logindata.setString('usertype', "");
+        SharedData.usertype = "";
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => loginpg())));
+      },
+    ));
+    if (SharedData.usertype == 'user') {
+      drawerButtonList.add(GestureDetector(
+        child: ListTile(
+          title: const Text('Book an ambulance'),
+          leading: Icon(Icons.edit_note_rounded),
+        ),
+        onTap: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AmbulanceForm())),
+      ));
+    }
+    return drawerButtonList;
   }
 
   static void search() async {

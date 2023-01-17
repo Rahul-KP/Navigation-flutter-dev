@@ -31,17 +31,10 @@ class _AppScreenState extends State<AppScreen> {
     return Scaffold(
       key: scaffoldKey,
       drawer: Drawer(
-        child: Column(
-          children: [
-            GestureDetector(
-              child: ListTile(
-                title: const Text('Book an ambulance'),
-                leading: Icon(Icons.edit_note_rounded),
-              ),
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AmbulanceForm())),
-            )
-          ],
+        child: SafeArea(
+          child: Column(
+            children: MapScreenRes.getDrawerOptions(context)
+          ),
         ),
       ),
       appBar: AppBar(

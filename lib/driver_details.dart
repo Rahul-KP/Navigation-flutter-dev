@@ -20,7 +20,6 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
   final codeController = TextEditingController();
 
   late SharedPreferences logindata;
-  late bool newuser;
 
   @override
   Widget build(BuildContext context) {
