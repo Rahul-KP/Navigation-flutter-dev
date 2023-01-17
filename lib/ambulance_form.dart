@@ -1,12 +1,21 @@
+import 'dart:convert';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:crypto/crypto.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
   @override
   AmbulanceFormState createState() {
     return AmbulanceFormState();
+  }
+
+  String generateFormHash(String name, String age, String hospital) {
+    var bytes = utf8.encode(name + age + hospital);
+    var hash = sha256.convert(bytes);
+    return hash.toString();
   }
 }
 
@@ -76,11 +85,22 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () {
-                      ref.set({
-                        "patient_name" : patient_name.text,
-                        "age" : age.text,
-                        "preferred_hospital" : preferred_hosp.text
+                      SharedData.ref =
+                          FirebaseDatabase.instance.ref("Bookings");
+                      //call to hashing function
+                      String hashvalue = AmbulanceForm().generateFormHash(patient_name.text, age.text, preferred_hosp.text);
+                      SharedData.ref.set({
+                        hashvalue: {
+                          "patient_name": patient_name.text,
+                          "age": age.text,
+                          "preferred_hospital": preferred_hosp.text
+                        }
                       });
+                      // ref.set({
+                      //   "patient_name": patient_name.text,
+                      //   "age": age.text,
+                      //   "preferred_hospital": preferred_hosp.text
+                      // });
                     },
                   ))
                 ],

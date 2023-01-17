@@ -21,11 +21,9 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
-  late DatabaseReference ref;
   late Routing obj;
 
-  SearchRes(DatabaseReference ref, Routing obj) {
-    this.ref = ref;
+  SearchRes(Routing obj) {
     this.obj = obj;
   }
 
@@ -145,7 +143,7 @@ class SearchRes {
 
           DateTime now = DateTime.now();
           String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-          await ref.set({
+          await Services.ref.set({
             "Time:" :formattedDate,
             "Text" : "Hello"
           });
