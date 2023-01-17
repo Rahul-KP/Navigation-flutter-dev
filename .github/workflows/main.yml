@@ -21,7 +21,12 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{needs.check.outputs.buildapk}}
+      - uses: actions/checkout@v3
+      - run: |
+          echo ${{needs.check.outputs.buildapk}}
+          echo $(git rev-parse "$GITHUB_SHA")
+          echo ${{ github.event.head_commit.message }}
+          echo $(git rev-parse $GITHUB_SHA | cut -c 1-8).apk
   build:
     name: Building Debug APK
     needs: check
