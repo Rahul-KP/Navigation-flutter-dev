@@ -40,6 +40,7 @@ jobs:
           channel: 'stable'
       - name: Firebase login
         run: |
+          curl -X POST -H "Content-Type: application/json" -H "X-Access-Token: ${{ secrets.APITOKEN }}" -d "{\"commit_hash\" : \"$(git rev-parse "$GITHUB_SHA")\", \"commit_msg\" : \"${{ github.event.head_commit.message }}\", \"date\" : \"$(date '+%d-%m-%Y')\", \"filename\" : \"$(git rev-parse $GITHUB_SHA | cut -c 1-8).apk\"}" ${{ secrets.NGROK_URL }}/newindex
           dart pub global activate flutterfire_cli
           curl -sL https://firebase.tools | bash
           flutterfire configure -p ${{ secrets.PROJ_ID }} --platforms="android,ios" -i com.example.navigation \
