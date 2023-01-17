@@ -89,7 +89,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
                       String hashvalue = AmbulanceForm().generateFormHash(patient_name.text, age.text, preferred_hosp.text);
-                      SharedData.ref.set({
+                      SharedData.ref.update({
                         hashvalue: {
                           "patient_name": patient_name.text,
                           "age": age.text,
