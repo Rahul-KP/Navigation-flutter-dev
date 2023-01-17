@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart';
@@ -11,4 +12,5 @@ class SharedData {
   static late var setStateOverlay;
   static late String usertype;
   static late BuildContext mapContext;
+  static DatabaseReference ref = FirebaseDatabase.instance.ref();
 }

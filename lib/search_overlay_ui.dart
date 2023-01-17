@@ -1,5 +1,6 @@
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/shared_data.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,9 @@ class _SearchWidgetState extends State<SearchWidget> {
   void initState() {
     super.initState();
     Routing obj = Routing();
-    DatabaseReference ref = FirebaseDatabase.instance.ref();
+    
     obj.initRoutingEngine();
-    search = SearchRes(ref, obj);
+    search = SearchRes(obj);
   }
 
   @override

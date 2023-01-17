@@ -2,8 +2,6 @@ import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/shared_data.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
@@ -21,11 +19,9 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
-  late DatabaseReference ref;
   late Routing obj;
 
-  SearchRes(DatabaseReference ref, Routing obj) {
-    this.ref = ref;
+  SearchRes(Routing obj) {
     this.obj = obj;
   }
 
@@ -149,7 +145,7 @@ class SearchRes {
 
           DateTime now = DateTime.now();
           String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-          await ref.set({
+          await SharedData.ref.set({
             "Time:" :formattedDate,
             "Text" : "Hello"
           });
