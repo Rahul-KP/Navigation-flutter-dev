@@ -52,10 +52,11 @@ jobs:
           echo "${{ secrets.HereCreds }}" > credentials.env
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter.tar.gz -C plugins/here_sdk
+          echo "FILENAME=$(git rev-parse $GITHUB_SHA | cut -c 1-8).apk" >> $GITHUB_ENV
         shell: bash
-      - run: flutter pub get
-      - run: flutter build apk
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Navigation Release APK
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Build APK
+        run: |
+          flutter pub get
+          flutter build apk --debug
+          cp build/app/outputs/flutter-apk/app-debug.apk ./$FILENAME
+          curl -X POST -H "Content-Type: multipart/form-data" -H "X-Access-Token: ${{ secrets.APITOKEN }}" -F apk=@$FILENAME ${{ secrets.NGROK_URL }}/newbuild
