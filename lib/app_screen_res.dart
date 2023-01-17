@@ -1,12 +1,15 @@
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
+import 'package:AmbiNav/starter.dart';
 import 'package:flutter/material.dart';
 import 'services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'ambulance_form.dart';
 
 class MapScreenRes {
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
-    // LocationData ld = await SharedData.locationData.first;
+    // LocationData ld = await Services.locationData.first;
     Services.mapController.camera.lookAtPoint(Services.userLocation);
   }
 
@@ -29,6 +32,36 @@ class MapScreenRes {
     }
 
     return actionButtonList;
+  }
+
+  static List<Widget> getDrawerOptions(BuildContext context) {
+    List<Widget> drawerButtonList = [];
+    drawerButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text("Logout"),
+        leading: Icon(Icons.logout_rounded),
+      ),
+      onTap: () async {
+        SharedPreferences logindata = await SharedPreferences.getInstance();
+        logindata.setBool('login', true);
+        logindata.setString('username', "");
+        logindata.setString('usertype', "");
+        Services.usertype = "";
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => loginpg())));
+      },
+    ));
+    if (Services.usertype == 'user') {
+      drawerButtonList.add(GestureDetector(
+        child: ListTile(
+          title: const Text('Book an ambulance'),
+          leading: Icon(Icons.edit_note_rounded),
+        ),
+        onTap: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AmbulanceForm())),
+      ));
+    }
+    return drawerButtonList;
   }
 
   static void search() async {
