@@ -1,6 +1,7 @@
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
 import 'package:AmbiNav/starter.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,15 @@ class MapScreenRes {
       ));
     }
     return drawerButtonList;
+  }
+
+  static void listenToBookings() {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
+    ref.onChildAdded.listen((event){
+      for (var element in event.snapshot.children) {
+        print(element);
+      }
+    });
   }
 
   static void search() async {
