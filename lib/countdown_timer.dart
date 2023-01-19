@@ -62,7 +62,7 @@ class _CountDownTimerState extends State<CountDownTimer>
               VerticalDivider(
                 width: 20,
               ),
-              Text('Duration: $seconds') // Text here
+              Text('Accept?') // Text here
             ],
           ),
         ));
