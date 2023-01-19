@@ -29,7 +29,7 @@ jobs:
           mkdir -p plugins/here_sdk
           tar xzf heresdk-explore-flutter.tar.gz -C plugins/here_sdk
           echo "FILENAME=$(git rev-parse $GITHUB_SHA | cut -c 1-8).apk" >> $GITHUB_ENV
-          echo "RELEASE_NOTES=$(cat release-notes.txt)" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=$(cat release-notes.txt 2 > /dev/null)" >> $GITHUB_ENV
         shell: bash
       - name: Update index on Release server
         run : |
