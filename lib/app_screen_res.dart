@@ -97,7 +97,7 @@ class MapScreenRes {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     ref.onChildAdded.listen((event){
       for (var element in event.snapshot.children) {
-        print(element);
+        print(element.key.toString()+":"+element.value.toString());
       }
     });
   }
