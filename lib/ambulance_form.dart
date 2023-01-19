@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:location/location.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -54,7 +55,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                     controller: age,
                     decoration: new InputDecoration(
                         icon: const Icon(Icons.numbers_rounded),
-                        labelText: 'Enter patient age'),
+                        labelText: 'Patient age',
+                        hintText: 'Enter patient age'),
                     keyboardType: TextInputType.number,
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
@@ -67,7 +69,6 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       // This is called when the user selects an item.
                       setState(() {
                         gender = value!;
-                        Fluttertoast.showToast(msg: "Ha");
                       });
                     },
                     items: ["Male", "Female", "Other"]
@@ -90,9 +91,10 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       // padding: const EdgeInsets.only(left: 150.0, top: 40.0),
                       child: new ElevatedButton(
                     child: const Text("Submit"),
-                    onPressed: () {
+                    onPressed: () async {
                       SharedData.ref =
                           FirebaseDatabase.instance.ref("Bookings");
+                      LocationData ld = await SharedData.locationData.first;
                       //call to hashing function
                       String hashvalue = AmbulanceForm().generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
@@ -100,7 +102,12 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                         hashvalue: {
                           "patient_name": patient_name.text,
                           "age": age.text,
-                          "preferred_hospital": preferred_hosp.text
+                          "preferred_hospital": preferred_hosp.text,
+                          "gender": gender,
+                          "user_location": {
+                            "lat": ld.latitude,
+                            "lon": ld.longitude,
+                          }
                         }
                       });
                       // ref.set({
