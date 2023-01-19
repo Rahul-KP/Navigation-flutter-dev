@@ -96,9 +96,7 @@ class MapScreenRes {
   static void listenToBookings() {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     ref.onChildAdded.listen((event) {
-      for (var element in event.snapshot.children) {
-        print(element.key.toString() + ":" + element.value.toString());
-      }
+      SharedData.formDetails = event.snapshot;
       SharedData.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
   }
