@@ -13,4 +13,5 @@ class SharedData {
   static late String usertype;
   static late BuildContext mapContext;
   static DatabaseReference ref = FirebaseDatabase.instance.ref();
+  static late DataSnapshot formDetails;
 }
