@@ -17,6 +17,9 @@ class _AppScreenState extends State<AppScreen> {
   void initState() {
     super.initState();
     SharedData.mapContext = this.context;
+    if(SharedData.usertype=="driver") {
+      MapScreenRes.listenToBookings();
+    }
     MapScreenRes.getPermissions();
   }
 
