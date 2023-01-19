@@ -95,10 +95,11 @@ class MapScreenRes {
 
   static void listenToBookings() {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    ref.onChildAdded.listen((event){
+    ref.onChildAdded.listen((event) {
       for (var element in event.snapshot.children) {
-        print(element.key.toString()+":"+element.value.toString());
+        print(element.key.toString() + ":" + element.value.toString());
       }
+      SharedData.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
   }
 
