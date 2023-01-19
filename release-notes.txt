@@ -1,1 +1,1 @@
-test
+Now the form response event is listened to , and the details can be seen on the console when a form is submitted
