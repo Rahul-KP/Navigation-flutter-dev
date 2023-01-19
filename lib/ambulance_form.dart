@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -23,15 +24,13 @@ class AmbulanceForm extends StatefulWidget {
 class AmbulanceFormState extends State<AmbulanceForm> {
   // a global key to validate form and identify widget
   final _formKey = GlobalKey<FormState>();
-
+  final appTitle = 'Book an Ambulance';
+  TextEditingController patient_name = TextEditingController();
+  TextEditingController age = TextEditingController();
+  TextEditingController preferred_hosp = TextEditingController();
+  String? gender;
   @override
   Widget build(BuildContext context) {
-    final DatabaseReference ref = FirebaseDatabase.instance.ref('forms');
-    final appTitle = 'Book an Ambulance';
-    TextEditingController patient_name = TextEditingController();
-    TextEditingController age = TextEditingController();
-    TextEditingController preferred_hosp = TextEditingController();
-    String gender;
     return MaterialApp(
         title: appTitle,
         home: Scaffold(
@@ -62,15 +61,22 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                     ],
                   ),
                   DropdownButton<String>(
-                    items: ['Male', 'Female', 'Other'].map((String value) {
+                    hint: Text("Select Gender"),
+                    value: gender,
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        gender = value!;
+                        Fluttertoast.showToast(msg: "Ha");
+                      });
+                    },
+                    items: ["Male", "Female", "Other"]
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value),
                       );
                     }).toList(),
-                    onChanged: (_) {
-                      gender = _!;
-                    },
                   ),
                   TextField(
                     controller: preferred_hosp,
@@ -88,7 +94,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       SharedData.ref =
                           FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
-                      String hashvalue = AmbulanceForm().generateFormHash(patient_name.text, age.text, preferred_hosp.text);
+                      String hashvalue = AmbulanceForm().generateFormHash(
+                          patient_name.text, age.text, preferred_hosp.text);
                       SharedData.ref.update({
                         hashvalue: {
                           "patient_name": patient_name.text,
