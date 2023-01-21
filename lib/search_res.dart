@@ -17,11 +17,6 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
-  late Routing obj;
-
-  SearchRes(Routing obj) {
-    this.obj = obj;
-  }
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.

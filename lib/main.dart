@@ -12,7 +12,7 @@ import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-void _initializeHERESDK() async {
+Future<void> _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
@@ -59,11 +59,12 @@ void checkLoginStatus() {
     }
   });
 }
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Services.getPermissions(); // wait for permissions
   Services.setLoc(); // start streaming the location
-  _initializeHERESDK(); // initialise the HERE SDK
+  await _initializeHERESDK(); // initialise the HERE SDK
   alreadyLoggedin(); // check if user is already logged in
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
