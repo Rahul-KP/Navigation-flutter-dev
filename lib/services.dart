@@ -15,6 +15,7 @@ class Services {
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref();
+  static late DataSnapshot formDetails;
 
   static void setLoc() async {
     await for (final location_ in Location().onLocationChanged) {

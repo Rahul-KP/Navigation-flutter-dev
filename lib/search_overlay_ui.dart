@@ -1,7 +1,5 @@
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_res.dart';
-import 'package:AmbiNav/shared_data.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {

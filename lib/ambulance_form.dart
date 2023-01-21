@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'package:AmbiNav/shared_data.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:location/location.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -92,21 +90,20 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
-                      SharedData.ref =
+                      Services.ref =
                           FirebaseDatabase.instance.ref("Bookings");
-                      LocationData ld = await SharedData.locationData.first;
                       //call to hashing function
                       String hashvalue = AmbulanceForm().generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
-                      SharedData.ref.update({
+                      Services.ref.update({
                         hashvalue: {
                           "patient_name": patient_name.text,
                           "age": age.text,
                           "preferred_hospital": preferred_hosp.text,
                           "gender": gender,
                           "user_location": {
-                            "lat": ld.latitude,
-                            "lon": ld.longitude,
+                            "lat": Services.userLocation.latitude,
+                            "lon": Services.userLocation.longitude,
                           }
                         }
                       });

@@ -2,17 +2,13 @@ import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/services.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'package:location/location.dart';
 import 'package:intl/intl.dart';
 
 class SearchRes {
