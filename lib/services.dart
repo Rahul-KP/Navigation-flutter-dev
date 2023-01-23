@@ -9,6 +9,7 @@ class Services {
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   static late String usertype;
+  static late String username;
   static late BuildContext mapContext;
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
