@@ -23,7 +23,9 @@ class Services {
           core.GeoCoordinates(location_.latitude!, location_.longitude!);
       locationIndicator
           .updateLocation(core.Location.withCoordinates(userLocation));
-      _broadcastLoc();
+      if (usertype == 'driver') {
+        _broadcastLoc();
+      }
     }
   }
 

@@ -10,7 +10,7 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+  DatabaseReference ref = FirebaseDatabase.instance.ref('routes/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -69,7 +69,9 @@ class Routing {
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         _showRouteOnMap(route);
-        _broadcastRoute(route);
+        if (Services.usertype == 'driver') {
+          _broadcastRoute(route);
+        }
       } else {
         var error = routingError.toString();
         Fluttertoast.showToast(msg: error);
@@ -85,10 +87,10 @@ class Routing {
   }
 
   void _broadcastRoute(here.Route route) {
-    List sendList = [];
+    List route_ = [];
     for (var element in route.geometry.vertices) {
-      sendList.add({"lat": element.latitude, "lon": element.longitude});
+      route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.set({"amb1" : sendList.toString()});
+    ref.update({'route' : route_.toString()});
   }
 }
