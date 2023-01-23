@@ -23,7 +23,15 @@ class Services {
           core.GeoCoordinates(location_.latitude!, location_.longitude!);
       locationIndicator
           .updateLocation(core.Location.withCoordinates(userLocation));
+      _broadcastLoc();
     }
+  }
+
+  static void _broadcastLoc() async {
+    ref
+        .child('routes/' + username + '/current_loc')
+        .ref
+        .update({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 
   static Future<void> getPermissions() async {

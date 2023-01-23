@@ -37,6 +37,7 @@ void alreadyLoggedin() {
 
     if (newuser == false) {
       Services.usertype = value.getString('usertype')!;
+      Services.username = value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AppScreen(),
