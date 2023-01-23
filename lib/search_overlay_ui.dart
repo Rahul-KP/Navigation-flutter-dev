@@ -19,7 +19,7 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
 
-  late SearchRes search;
+  SearchRes search = SearchRes();
 
   @override
   Widget build(BuildContext context) {
