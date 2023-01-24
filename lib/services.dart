@@ -17,19 +17,20 @@ class Services {
   static late DataSnapshot formDetails;
 
   static void setLoc() async {
-    await for (final location_ in Location().onLocationChanged) {
-      // Stream of data containing user's current location
-      userLocation =
-          core.GeoCoordinates(location_.latitude!, location_.longitude!);
-      
+    Location().onLocationChanged.listen((LocationData currentLocation) {
+      userLocation = core.GeoCoordinates(
+          currentLocation.latitude!, currentLocation.longitude!);
+
       core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
-      cameraLoc_.bearingInDegrees = location_.heading; // Degrees of the horizontal direction the user is facing
+      cameraLoc_.bearingInDegrees = currentLocation
+          .heading; // Degrees of the horizontal direction the user is facing
       locationIndicator.updateLocation(cameraLoc_);
-      
-      if (usertype == 'driver') { // broadcast the location if the ambulance driver is using the app
+
+      if (usertype == 'driver') {
+        // broadcast the location if the ambulance driver is using the app
         _broadcastLoc();
       }
-    }
+    });
   }
 
   static void _broadcastLoc() async {
