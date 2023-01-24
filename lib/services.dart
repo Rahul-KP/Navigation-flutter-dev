@@ -21,9 +21,12 @@ class Services {
       // Stream of data containing user's current location
       userLocation =
           core.GeoCoordinates(location_.latitude!, location_.longitude!);
-      locationIndicator
-          .updateLocation(core.Location.withCoordinates(userLocation));
-      if (usertype == 'driver') {
+      
+      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
+      cameraLoc_.bearingInDegrees = location_.heading; // Degrees of the horizontal direction the user is facing
+      locationIndicator.updateLocation(cameraLoc_);
+      
+      if (usertype == 'driver') { // broadcast the location if the ambulance driver is using the app
         _broadcastLoc();
       }
     }

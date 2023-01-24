@@ -28,7 +28,7 @@ class MapWidget extends StatelessWidget {
 
     Services.mapController = hereMapController;
     _addLocationIndicator(
-        Services.userLocation, LocationIndicatorIndicatorStyle.values.first);
+        Services.userLocation, LocationIndicatorIndicatorStyle.navigation);
   }
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
