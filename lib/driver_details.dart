@@ -113,11 +113,6 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setString('usertype', 'driver');
                         Services.usertype = 'driver';
                         Services.username = username;
-                        DatabaseReference ref =
-                            FirebaseDatabase.instance.ref('routes');
-                        ref.update({
-                          username: {'current_loc': ''}
-                        });
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(

@@ -131,13 +131,6 @@ class SearchRes {
           setStateMarkerDetailsCard((){
             DisplayMarkerInfo.isVisible = true;
           });
-
-          DateTime now = DateTime.now();
-          String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
-          await Services.ref.set({
-            "Time:" :formattedDate,
-            "Text" : "Hello"
-          });
           return;
         }
       }

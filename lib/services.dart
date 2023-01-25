@@ -13,7 +13,9 @@ class Services {
   static late BuildContext mapContext;
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
-  static DatabaseReference ref = FirebaseDatabase.instance.ref();
+  static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+  static DatabaseReference currentLocRef =
+      FirebaseDatabase.instance.ref('current_loc/' + username);
   static late DataSnapshot formDetails;
 
   static void setLoc() async {
@@ -34,10 +36,8 @@ class Services {
   }
 
   static void _broadcastLoc() async {
-    ref
-        .child('routes/' + username + '/current_loc')
-        .ref
-        .update({'lat': userLocation.latitude, 'lon': userLocation.longitude});
+    currentLocRef
+        .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 
   static Future<void> getPermissions() async {
