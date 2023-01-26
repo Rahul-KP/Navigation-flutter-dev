@@ -68,8 +68,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeHERESDK(); // initialise the HERE SDK
   await Services.getPermissions(); // wait for permissions
-  alreadyLoggedin(); // check if user is already logged in
-  Services.setLoc(); // start streaming the location
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -89,4 +88,6 @@ void main() async {
     }
   }
   checkLoginStatus();
+  alreadyLoggedin(); // check if user is already logged in
+  Services.setLoc(); // start streaming the location
 }
