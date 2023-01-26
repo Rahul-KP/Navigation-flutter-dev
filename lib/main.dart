@@ -16,6 +16,9 @@ Future<void> _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
+  // Clear the cache occupied by a previous instance.
+  await SDKNativeEngine.sharedInstance?.dispose();
+
   //loading the .env file
   await dotenv.load(fileName: "credentials.env");
   // Set your credentials for the HERE SDK.
@@ -63,8 +66,8 @@ void checkLoginStatus() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Services.getPermissions(); // wait for permissions
   await _initializeHERESDK(); // initialise the HERE SDK
+  await Services.getPermissions(); // wait for permissions
   alreadyLoggedin(); // check if user is already logged in
   Services.setLoc(); // start streaming the location
   await Firebase.initializeApp(
@@ -86,6 +89,4 @@ void main() async {
     }
   }
   checkLoginStatus();
-  _initializeHERESDK();
-  alreadyLoggedin();
 }

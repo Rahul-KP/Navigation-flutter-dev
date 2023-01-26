@@ -17,15 +17,17 @@ class Services {
   static DatabaseReference currentLocRef =
       FirebaseDatabase.instance.ref('current_loc/' + username);
   static late DataSnapshot formDetails;
+  static bool flag = false;
 
   static void setLoc() async {
     Location().onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
-
+      flag = true;
       core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
+          print(cameraLoc_.bearingInDegrees);
       locationIndicator.updateLocation(cameraLoc_);
 
       if (usertype == 'driver') {
@@ -61,5 +63,7 @@ class Services {
         return;
       }
     }
+    LocationData temp = await location.getLocation();
+    Services.userLocation = core.GeoCoordinates(temp.latitude!,temp.longitude!);
   }
 }
