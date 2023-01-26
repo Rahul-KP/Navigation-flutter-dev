@@ -20,14 +20,16 @@ class Services {
   static bool flag = false;
 
   static void setLoc() async {
-    Location().onLocationChanged.listen((LocationData currentLocation) {
+    Location location = await Location();
+    location.changeSettings(accuracy: LocationAccuracy.high,interval: 5000,distanceFilter: 1);
+    location.onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
       flag = true;
       core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
-          print(cameraLoc_.bearingInDegrees);
+          print("degrees"+cameraLoc_.bearingInDegrees.toString());
       locationIndicator.updateLocation(cameraLoc_);
 
       if (usertype == 'driver') {
