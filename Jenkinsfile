@@ -1,13 +1,13 @@
 pipeline {
     agent { docker { 
         image 'am271/flutter-apk-builder'
-        args '-v $HOME:/app'
+        args '-v $HOME:/app --entrypoint=\'\''
         }
     }
     stages {
         stage('build') {
             steps {
-                sh 'ls'
+                sh 'flutter build apk --debug'
             }
         }
     }
