@@ -1,9 +1,11 @@
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
 import 'package:AmbiNav/starter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:here_sdk/core.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -88,13 +90,27 @@ class MapScreenRes {
   }
 
   static void listenToRequest() async {
+    Routing routing = Routing();
     DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
     ref.onChildChanged.listen((event) {
       DataSnapshot d  = event.snapshot;
       for(var i in d.children) {
         i.child('/route');
         print(i.hasChild('route'));
-        Fluttertoast.showToast(msg: i.value.toString());
+        Fluttertoast.showToast(msg: i.children.length.toString());
+        //make a Geoordinates list
+        List<GeoCoordinates> patientPath = [];
+        for(var j in i.children) {
+          try {
+            GeoCoordinates geoCoordinates = GeoCoordinates(double.parse(j.child('lat').toString()), double.parse(j.child('lon').toString()));
+            patientPath.add(geoCoordinates);
+          }
+          catch(e) {
+            Fluttertoast.showToast(msg: e.toString());
+            break;
+          }
+          routing.showRouteOnMap(GeoPolyline(patientPath));
+        }
       }
     });
   }
