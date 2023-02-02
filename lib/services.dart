@@ -14,6 +14,9 @@ class Services {
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+  //this current_loc is used for driver's current location
+  //NOTE: not setting this in  driver_profile key of rtdb because this has to be used by IoT device
+  //and the IoT device is slow in handling nested data
   static DatabaseReference currentLocRef =
       FirebaseDatabase.instance.ref('current_loc/' + username);
   static late DataSnapshot formDetails;
