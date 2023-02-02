@@ -92,8 +92,9 @@ class MapScreenRes {
     ref.onChildChanged.listen((event) {
       DataSnapshot d  = event.snapshot;
       for(var i in d.children) {
+        i.child('/route');
         print(i.hasChild('route'));
-        Fluttertoast.showToast(msg: i.hasChild('route').toString());
+        Fluttertoast.showToast(msg: i.value.toString());
       }
     });
   }
