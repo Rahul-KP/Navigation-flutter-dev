@@ -86,11 +86,13 @@ class Routing {
     _mapPolylines.clear();
   }
 
+  //add route to database
   void _broadcastRoute(here.Route route) {
     List route_ = [];
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route' : route_.toString()});
+    Services.pathToBeShared = route_;
   }
 }

@@ -18,6 +18,7 @@ class Services {
       FirebaseDatabase.instance.ref('current_loc/' + username);
   static late DataSnapshot formDetails;
   static bool flag = false;
+  static late List pathToBeShared;
 
   static void setLoc() async {
     Location location = await Location();
