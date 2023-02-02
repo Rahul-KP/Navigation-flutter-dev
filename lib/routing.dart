@@ -1,6 +1,8 @@
+import 'package:AmbiNav/RDP.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:AmbiNav/what3words_impl.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart';
@@ -10,7 +12,8 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref('routes/' + Services.username);
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref('routes/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -68,7 +71,7 @@ class Routing {
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
-        _showRouteOnMap(route);
+        // _showRouteOnMap(route);
         if (Services.usertype == 'driver') {
           _broadcastRoute(route);
         }
@@ -86,11 +89,33 @@ class Routing {
     _mapPolylines.clear();
   }
 
-  void _broadcastRoute(here.Route route) {
+  Future<Uint8List> _loadFileAsUint8List(String assetPathToFile) async {
+    // The path refers to the assets directory as specified in pubspec.yaml.
+    ByteData fileData = await rootBundle.load(assetPathToFile);
+    return Uint8List.view(fileData.buffer);
+  }
+
+  void _broadcastRoute(here.Route route) async {
+    W3Words obj = W3Words();
+    await obj.init();
     List route_ = [];
+    MapImage mapImage;
+    Uint8List imagePixelData = await _loadFileAsUint8List('assets/poi.png');
+    mapImage =
+        MapImage.withPixelDataAndImageFormat(imagePixelData, ImageFormat.png);
     for (var element in route.geometry.vertices) {
+      Services.mapController.mapScene
+          .addMapMarker(MapMarker(element, mapImage));
+      // String wordTriplet = await obj.convertToWords(element);
       route_.add({"lat": element.latitude, "lon": element.longitude});
+      // route_.add(wordTriplet);
     }
-    ref.update({'route' : route_.toString()});
+    Fluttertoast.showToast(
+        msg: 'Original length: ' +
+            route_.length.toString() +
+            'New: ' +
+            RDP.simplifyRDP(route.geometry.vertices, 5).length.toString());
+    // print(FourierSeries.toFourierSeriesFunction(route.geometry.vertices, 100));
+    ref.update({'route': route_.toString()});
   }
 }
