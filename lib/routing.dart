@@ -10,7 +10,8 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref('routes/' + Services.username);
+  
+  DatabaseReference ref = FirebaseDatabase.instance.ref('Drivers/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -45,15 +46,16 @@ class Routing {
     Fluttertoast.showToast(msg: routeDetails);
   }
 
-  _showRouteOnMap(here.Route route) {
+  showRouteOnMap(GeoPolyline routeGeoPolyline) {
     // Show route as polyline.
-    GeoPolyline routeGeoPolyline = route.geometry;
     double widthInPixels = 20;
     MapPolyline routeMapPolyline = MapPolyline(
         routeGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
     Services.mapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapPolylines.add(routeMapPolyline);
   }
+
+  
 
   Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
@@ -68,7 +70,7 @@ class Routing {
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
-        _showRouteOnMap(route);
+        showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
           _broadcastRoute(route);
         }
@@ -92,7 +94,7 @@ class Routing {
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.update({'route' : route_.toString()});
+    ref.update({'route' : route_});
     Services.pathToBeShared = route_;
   }
 }

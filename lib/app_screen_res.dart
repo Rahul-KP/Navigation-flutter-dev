@@ -3,6 +3,7 @@ import 'package:AmbiNav/search_overlay_ui.dart';
 import 'package:AmbiNav/starter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -84,5 +85,16 @@ class MapScreenRes {
       return NavigationNotif();
     }
     return null;
+  }
+
+  static void listenToRequest() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
+    ref.onChildChanged.listen((event) {
+      DataSnapshot d  = event.snapshot;
+      for(var i in d.children) {
+        print(i.hasChild('route'));
+        Fluttertoast.showToast(msg: i.hasChild('route').toString());
+      }
+    });
   }
 }
