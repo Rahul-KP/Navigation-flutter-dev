@@ -1,4 +1,5 @@
-import 'package:AmbiNav/grid.dart';
+import 'dart:convert';
+
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -7,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.errors.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -123,29 +125,52 @@ class MapScreenRes {
     return null;
   }
 
+  static _parse(String dataString) {
+    // Remove the square brackets at the beginning and end of the string
+    dataString = dataString.substring(1, dataString.length - 1);
+
+    // Split the string into separate coordinate objects
+    List<String> coordinateStrings = dataString.split("},{");
+
+    // Loop through each coordinate object string and extract the latitude and longitude
+    List<GeoCoordinates> coordinates = [];
+    for (String coordinateString in coordinateStrings) {
+      // Remove the curly braces at the beginning and end of the coordinate string
+      coordinateString =
+          coordinateString.replaceAll("{", "").replaceAll("}", "");
+
+      // Split the coordinate string into separate latitude and longitude values
+      List<String> values = coordinateString.split(", ");
+
+      // Extract the latitude and longitude values and add them to the list of coordinates
+      double lon = double.parse(values[0].split(": ")[1]);
+      double lat = double.parse(values[1].split(": ")[1]);
+      coordinates.add(GeoCoordinates(lat, lon));
+    }
+    GeoPolyline geoPolyline;
+    try {
+      geoPolyline = GeoPolyline(coordinates);
+      return geoPolyline;
+    } on InstantiationException {
+      // Thrown when less than two vertices.
+      print("Oh shit!");
+      return null;
+    }
+  }
+
   static void listenToRequest() async {
     Routing routing = Routing();
     DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
+    Routing rt = Routing();
+    rt.initRoutingEngine();
     ref.onChildChanged.listen((event) {
       DataSnapshot d = event.snapshot;
       for (var i in d.children) {
-        i.child('/route');
         print(i.hasChild('route'));
-        Fluttertoast.showToast(msg: i.children.length.toString());
-        //make a Geoordinates list
-        List<GeoCoordinates> patientPath = [];
-        for (var j in i.children) {
-          try {
-            GeoCoordinates geoCoordinates = GeoCoordinates(
-                double.parse(j.child('lat').toString()),
-                double.parse(j.child('lon').toString()));
-            patientPath.add(geoCoordinates);
-          } catch (e) {
-            Fluttertoast.showToast(msg: e.toString());
-            break;
-          }
-          routing.showRouteOnMap(GeoPolyline(patientPath));
-        }
+        // Fluttertoast.showToast(msg: i.value.toString());
+        Fluttertoast.showToast(msg: i.value.toString());
+        print(i.value.runtimeType.toString());
+        rt.showRouteOnMap(_parse(i.value.toString()));
       }
     });
   }
