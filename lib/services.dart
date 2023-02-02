@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart' as core;
@@ -15,10 +17,14 @@ class Services {
   static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
-  //NOTE: not setting this in  driver_profile key of rtdb because this has to be used by IoT device
+  //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
-  static DatabaseReference currentLocRef =
-      FirebaseDatabase.instance.ref('current_loc/' + username);
+  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + username);
+  //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
+  static DatabaseReference driverProfiles = FirebaseDatabase.instance.ref('All Drivers/' + username);
+  //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
+  //after the trip is complete , resubscribe to bookings listener
+  static late StreamSubscription<DatabaseEvent> listen;
   static late DataSnapshot formDetails;
   static bool flag = false;
   static late List pathToBeShared;

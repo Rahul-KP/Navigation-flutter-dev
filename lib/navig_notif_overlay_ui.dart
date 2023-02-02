@@ -40,6 +40,8 @@ class _NavigationNotifState extends State<NavigationNotif> {
                     .value
                     .toString()));
             rt.addRoute(Services.userLocation, patientLoc);
+            //after the formhas been accepted by the driver , stop listening to other forms
+            Services.listen.cancel();
           },
           child: CountDownTimer()),
       visible: NavigationNotif.isVisible,

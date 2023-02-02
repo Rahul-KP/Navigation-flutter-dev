@@ -65,9 +65,9 @@ class MapScreenRes {
     return drawerButtonList;
   }
 
-  static void listenToBookings() {
+  static void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    ref.onChildAdded.listen((event) {
+    Services.listen = ref.onChildAdded.listen((event) {
       Services.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
