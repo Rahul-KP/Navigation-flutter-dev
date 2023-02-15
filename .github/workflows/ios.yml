@@ -40,6 +40,14 @@ jobs:
         uses: subosito/flutter-action@v2.8.0
         with:
           channel: 'stable'
+      
+      - name: Extract SDK and prepare for building
+        run: |
+          curl -o heresdk-explore-flutter.tar.gz https://dl.dropboxusercontent.com/s/2rgack3gpf0j5kp/heresdk-explore-flutter-4.13.0.0.3315.tar.gz?dl=0
+          echo "${{ secrets.HereCreds }}" > credentials.env
+          mkdir -p plugins/here_sdk
+          tar xzf heresdk-explore-flutter.tar.gz -C plugins/here_sdk
+        shell: bash
           
       - name: build ipa file
         run:
