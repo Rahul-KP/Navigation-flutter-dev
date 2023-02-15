@@ -35,5 +35,24 @@ jobs:
           # apply provisioning profile
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
-
-      
+          
+      - name: Flutter Setup
+        uses: subosito/flutter-action@v2.8.0
+        with:
+          channel: 'stable'
+          
+      - name: build ipa file
+        run:
+          flutter build ipa
+          
+      - name: export ipa as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Navigation Debug IPA
+          path: build/app/outputs/flutter-ipa/app.ipa
+          
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
