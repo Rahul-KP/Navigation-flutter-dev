@@ -10,8 +10,9 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  
-  DatabaseReference ref = FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref('Drivers/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -55,30 +56,15 @@ class Routing {
     _mapPolylines.add(routeMapPolyline);
   }
 
-  
-
-  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
-    var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
-    var destinationWaypoint =
-        here.Waypoint.withDefaults(destinationGeoCoordinates);
-
-    List<here.Waypoint> waypoints = [startWaypoint, destinationWaypoint];
-
-    _routingEngine.calculateCarRoute(waypoints, here.CarOptions(),
-        (here.RoutingError? routingError, List<here.Route>? routeList) async {
-      if (routingError == null) {
-        // When error is null, then the list guaranteed to be not null.
-        here.Route route = routeList!.first;
-        _showRouteDetails(route);
-        showRouteOnMap(route.geometry);
-        if (Services.usertype == 'driver') {
-          _broadcastRoute(route);
-        }
-      } else {
-        var error = routingError.toString();
-        Fluttertoast.showToast(msg: error);
-      }
-    });
+  Future<void> addRoute(GeoCoordinates startGeoCoordinates,
+      GeoCoordinates destinationGeoCoordinates) async {
+    // _showRouteDetails(route);
+    // showRouteOnMap(route.geometry);
+    // if (Services.usertype == 'driver') {
+    //   _broadcastRoute(route);
+    // }
+    startGeoCoordinates.latitude;
+    
   }
 
   void clearMap() {
@@ -94,7 +80,7 @@ class Routing {
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.update({'route' : route_});
+    ref.update({'route': route_});
     Services.pathToBeShared = route_;
   }
 }
