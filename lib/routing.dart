@@ -106,11 +106,15 @@ class Routing {
     }
     List<GeoCoordinates> route = [];
     for (var i in response.split('\n')) {
-      // print(i);
       List<String> coordinates = i.split(',');
-      print(coordinates);
-      route.add(GeoCoordinates(
-          double.parse(coordinates[0]), double.parse(coordinates[1])));
+      if (coordinates.length == 2) {
+        double? lat = double.tryParse(coordinates[0]);
+        double? lon = double.tryParse(coordinates[1]);
+
+        if (lat != Null && lon != Null) {
+          route.add(GeoCoordinates(lat!, lon!));
+        }
+      }
     }
     showRouteOnMap(GeoPolyline(route));
   }
