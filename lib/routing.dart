@@ -6,6 +6,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
+import 'package:http/http.dart' as http;
 
 class Routing {
   late here.RoutingEngine _routingEngine;
@@ -56,6 +57,20 @@ class Routing {
     _mapPolylines.add(routeMapPolyline);
   }
 
+  Future<String> getRoute(String lat1,String lon1, String lat2, String lon2) async {
+    final response = await http.get(Uri.parse('http://192.168.1.4:5566/?lat1='+lat1+'&lon1='+lon1+'&lat2='+lat2+'&lon2='+lon2));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      // return Album.fromJson(jsonDecode(response.body));
+      return response.body;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      Fluttertoast.showToast(msg: 'Failed to get response');
+      throw Exception('Failed to load album');
+    }
+  }
   Future<void> addRoute(GeoCoordinates startGeoCoordinates,
       GeoCoordinates destinationGeoCoordinates) async {
     // _showRouteDetails(route);
@@ -63,7 +78,11 @@ class Routing {
     // if (Services.usertype == 'driver') {
     //   _broadcastRoute(route);
     // }
-    startGeoCoordinates.latitude;
+    String response = '';
+    response = await getRoute(startGeoCoordinates.latitude.toString(), startGeoCoordinates.longitude.toString(), destinationGeoCoordinates.latitude.toString(), destinationGeoCoordinates.longitude.toString());
+    if(response!='') {
+      Fluttertoast.showToast(msg:response.substring(1, 10));
+    }
     
   }
 

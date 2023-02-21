@@ -126,7 +126,7 @@ class SearchRes {
 
           Routing obj = Routing();
           obj.initRoutingEngine();
-          await obj.addRoute(Services.userLocation, searchResultMetadata.searchResult.geoCoordinates);
+          await obj.addRoute(Services.userLocation, searchResultMetadata.searchResult.geoCoordinates!);
 
           setStateMarkerDetailsCard((){
             DisplayMarkerInfo.isVisible = true;
