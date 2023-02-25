@@ -15,9 +15,6 @@ Future<void> _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
-  // Clear the cache occupied by a previous instance.
-  await SDKNativeEngine.sharedInstance?.dispose();
-
   // Set your credentials for the HERE SDK.
   String accessKeyId = Services.getSecret("here.access.key.id")!;
   String accessKeySecret = Services.getSecret("here.access.key.secret")!;
@@ -63,7 +60,9 @@ void checkLoginStatus() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Services.loadCreds();
+  await Services.getPermissions(); // wait for permissions
+  Services.setLoc(); // start streaming the location
+  Services.loadCreds();
   await _initializeHERESDK(); // initialise the HERE SDK
   await Services.getPermissions(); // wait for permissions
 
