@@ -78,10 +78,12 @@ class Routing {
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
           Stopwatch stopwatch = Stopwatch()..start();
-          _broadcastRoute(route, apiKey);
+          await _broadcastRoute(route, apiKey);
           stopwatch..stop();
           print('Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
-          Fluttertoast.showToast(msg: 'Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
+          Fluttertoast.showToast(
+              msg:
+                  'Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
         }
       } else {
         var error = routingError.toString();
@@ -98,7 +100,7 @@ class Routing {
   }
 
   //add route to database
-  void _broadcastRoute(here.Route route, String apiKey) async {
+  Future<void> _broadcastRoute(here.Route route, String apiKey) async {
     List route_ = [];
     var api = What3WordsV3(apiKey);
 
@@ -107,6 +109,9 @@ class Routing {
           .convertTo3wa(Coordinates(element.latitude, element.longitude))
           .language('en')
           .execute();
+      if (!words.isSuccessful()) {
+        Fluttertoast.showToast(msg: words.error()!.message!);
+      }
       route_.add(words.data()!.words);
     }
     ref.update({'route': route_});
