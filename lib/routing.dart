@@ -63,28 +63,6 @@ class Routing {
     await dotenv.load(fileName: "credentials.env");
     String apiKey = dotenv.env["what3words.api.key"]!;
 
-    var api = What3WordsV3(apiKey);
-
-    //what3words api request for start coordinates
-    var words = await api
-        .convertTo3wa(Coordinates(
-            startGeoCoordinates.latitude, startGeoCoordinates.longitude))
-        .language('en')
-        .execute();
-    print('Words: ${words.data()?.toJson()}');
-    Fluttertoast.showToast(msg: 'Words: ${words.data()?.toJson()}')
-        .timeout(const Duration(seconds: 4));
-
-    //what3words api request for destination coordinates
-    var words1 = await api
-        .convertTo3wa(Coordinates(destinationGeoCoordinates.latitude,
-            destinationGeoCoordinates.longitude))
-        .language('en')
-        .execute();
-    print('Words: ${words1.data()?.toJson()}');
-    Fluttertoast.showToast(msg: 'Words: ${words1.data()?.toJson()}')
-        .timeout(const Duration(seconds: 4));
-
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
@@ -99,7 +77,7 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
-          _broadcastRoute(route);
+          _broadcastRoute(route, apiKey);
         }
       } else {
         var error = routingError.toString();
@@ -116,10 +94,16 @@ class Routing {
   }
 
   //add route to database
-  void _broadcastRoute(here.Route route) {
+  void _broadcastRoute(here.Route route, String apiKey) async {
     List route_ = [];
+    var api = What3WordsV3(apiKey);
+
     for (var element in route.geometry.vertices) {
-      route_.add({"lat": element.latitude, "lon": element.longitude});
+      var words = await api
+          .convertTo3wa(Coordinates(element.latitude, element.longitude))
+          .language('en')
+          .execute();
+      route_.add(words.data()!.words);
     }
     ref.update({'route': route_});
     Services.pathToBeShared = route_;

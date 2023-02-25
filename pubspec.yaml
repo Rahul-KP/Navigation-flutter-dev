@@ -50,6 +50,7 @@ dependencies:
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9
   firebase_auth: ^4.2.2
+  what3words: ^3.1.0
 
 dev_dependencies:
   flutter_test:
