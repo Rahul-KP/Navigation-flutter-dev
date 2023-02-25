@@ -7,7 +7,6 @@ import 'app_screen_ui.dart';
 import 'package:here_sdk/core.engine.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling InstantiationException while initializing sdk
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,11 +15,9 @@ Future<void> _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
-  //loading the .env file
-  await dotenv.load(fileName: "credentials.env");
   // Set your credentials for the HERE SDK.
-  String accessKeyId = dotenv.env["here.access.key.id"]!;
-  String accessKeySecret = dotenv.env["here.access.key.secret"]!;
+  String accessKeyId = Services.getSecret("here.access.key.id")!;
+  String accessKeySecret = Services.getSecret("here.access.key.secret")!;
   SDKOptions sdkOptions =
       SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
 
@@ -64,6 +61,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Services.getPermissions(); // wait for permissions
   Services.setLoc(); // start streaming the location
+  Services.loadCreds();
   await _initializeHERESDK(); // initialise the HERE SDK
   alreadyLoggedin(); // check if user is already logged in
   await Firebase.initializeApp(

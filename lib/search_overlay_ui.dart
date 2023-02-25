@@ -1,8 +1,5 @@
-import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_res.dart';
-import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
