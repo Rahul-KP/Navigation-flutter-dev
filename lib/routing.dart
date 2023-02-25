@@ -77,7 +77,11 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
+          Stopwatch stopwatch = Stopwatch()..start();
           _broadcastRoute(route, apiKey);
+          stopwatch..stop();
+          print('Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
+          Fluttertoast.showToast(msg: 'Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
         }
       } else {
         var error = routingError.toString();
