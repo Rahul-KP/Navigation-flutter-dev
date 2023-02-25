@@ -36,13 +36,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
-  chopper:
-    dependency: transitive
-    description:
-      name: chopper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.6"
   clock:
     dependency: transitive
     description:
@@ -247,13 +240,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   matcher:
     dependency: transitive
     description:
@@ -289,13 +275,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.0"
-  os_detect:
-    dependency: transitive
-    description:
-      name: os_detect
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   path:
     dependency: transitive
     description:
@@ -490,13 +469,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
-  what3words:
-    dependency: "direct main"
-    description:
-      name: what3words
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
   win32:
     dependency: transitive
     description:
