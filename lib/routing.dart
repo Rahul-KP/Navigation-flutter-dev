@@ -1,17 +1,20 @@
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
+import 'package:what3words/what3words.dart';
 
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  
-  DatabaseReference ref = FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref('Drivers/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -55,9 +58,9 @@ class Routing {
     _mapPolylines.add(routeMapPolyline);
   }
 
-  
-
   Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
+    await dotenv.load(fileName: "credentials.env");
+    String apiKey = dotenv.env["what3words.api.key"]!;
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
@@ -94,7 +97,7 @@ class Routing {
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.update({'route' : route_});
+    ref.update({'route': route_});
     Services.pathToBeShared = route_;
   }
 }
