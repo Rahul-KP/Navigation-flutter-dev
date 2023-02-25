@@ -58,9 +58,33 @@ class Routing {
     _mapPolylines.add(routeMapPolyline);
   }
 
-  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
+  Future<void> addRoute(GeoCoordinates startGeoCoordinates,
+      GeoCoordinates destinationGeoCoordinates) async {
     await dotenv.load(fileName: "credentials.env");
     String apiKey = dotenv.env["what3words.api.key"]!;
+
+    var api = What3WordsV3(apiKey);
+
+    //what3words api request for start coordinates
+    var words = await api
+        .convertTo3wa(Coordinates(
+            startGeoCoordinates.latitude, startGeoCoordinates.longitude))
+        .language('en')
+        .execute();
+    print('Words: ${words.data()?.toJson()}');
+    Fluttertoast.showToast(msg: 'Words: ${words.data()?.toJson()}')
+        .timeout(const Duration(seconds: 4));
+
+    //what3words api request for destination coordinates
+    var words1 = await api
+        .convertTo3wa(Coordinates(destinationGeoCoordinates.latitude,
+            destinationGeoCoordinates.longitude))
+        .language('en')
+        .execute();
+    print('Words: ${words1.data()?.toJson()}');
+    Fluttertoast.showToast(msg: 'Words: ${words1.data()?.toJson()}')
+        .timeout(const Duration(seconds: 4));
+
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
