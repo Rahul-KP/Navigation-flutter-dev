@@ -41,6 +41,7 @@ class Routing {
   void _showRouteDetails(here.Route route) {
     int estimatedTravelTimeInSeconds = route.duration.inSeconds;
     int lengthInMeters = route.lengthInMeters;
+    ref.update({'distance' : lengthInMeters});
 
     String routeDetails = 'Travel Time: ' +
         _formatTime(estimatedTravelTimeInSeconds) +
@@ -84,6 +85,7 @@ class Routing {
           Fluttertoast.showToast(
               msg:
                   'Elapsed time: ${stopwatch.elapsedMilliseconds} milliseconds');
+          ref.update({'elapsed time': stopwatch.elapsedMilliseconds});
         }
       } else {
         var error = routingError.toString();
