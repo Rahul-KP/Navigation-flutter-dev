@@ -104,17 +104,8 @@ class Routing {
   //add route to database
   Future<void> _broadcastRoute(here.Route route, String apiKey) async {
     List route_ = [];
-    var api = What3WordsV3(apiKey);
-
     for (var element in route.geometry.vertices) {
-      var words = await api
-          .convertTo3wa(Coordinates(element.latitude, element.longitude))
-          .language('en')
-          .execute();
-      if (!words.isSuccessful()) {
-        Fluttertoast.showToast(msg: words.error()!.message!);
-      }
-      route_.add(words.data()!.words);
+      route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route': route_});
     Services.pathToBeShared = route_;
