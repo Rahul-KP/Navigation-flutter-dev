@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/mapview.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -19,49 +22,75 @@ class MapScreenRes {
     Services.mapController.camera.lookAtPoint(Services.userLocation);
   }
 
-  static List<List<double>> getBoundingBox(double latitude, double longitude) {
-    // Earth radius in meters
-    const EARTH_RADIUS = 6378137.0;
+  static List<List<double>> getBoundingBox(double lat, double lon) {
+    const EARTH_RADIUS = 6371.0088; // in km
+    double diagonal = 2.0; // diagonal length in km
 
-    // Convert latitude and longitude to radians
-    double latRad = latitude * pi / 180;
-    double lonRad = longitude * pi / 180;
+    double halfDiagonal = diagonal / sqrt(2);
+    double latOffset = halfDiagonal / EARTH_RADIUS * 180 / pi;
+    double lonOffset = latOffset / cos(lat * pi / 180);
 
-    // Calculate the distance in meters between the center of the square and its corner
-    double distance = sqrt(2) * 2000;
+    // calculate diagonal coordinates
+    double diagonalLat1 = lat + latOffset;
+    double diagonalLon1 = lon + lonOffset;
+    double diagonalLat2 = lat - latOffset;
+    double diagonalLon2 = lon - lonOffset;
 
-    // Calculate the latitude and longitude of the diagonal points
-    double lat1 = asin(sin(latRad) * cos(distance / EARTH_RADIUS) +
-        cos(latRad) * sin(distance / EARTH_RADIUS) * cos(pi / 4));
-    double lon1 = lonRad +
-        atan2(sin(pi / 4) * sin(distance / EARTH_RADIUS) * cos(latRad),
-            cos(distance / EARTH_RADIUS) - sin(latRad) * sin(lat1));
-
-    double lat2 = asin(sin(latRad) * cos(distance / EARTH_RADIUS) +
-        cos(latRad) * sin(distance / EARTH_RADIUS) * cos(5 * pi / 4));
-    double lon2 = lonRad +
-        atan2(sin(5 * pi / 4) * sin(distance / EARTH_RADIUS) * cos(latRad),
-            cos(distance / EARTH_RADIUS) - sin(latRad) * sin(lat2));
-
-    // Convert latitude and longitude back to degrees
-    lat1 = lat1 * 180 / pi;
-    lon1 = lon1 * 180 / pi;
-    lat2 = lat2 * 180 / pi;
-    lon2 = lon2 * 180 / pi;
-
-    // Return the coordinates of the diagonal points
     return [
-      [lat1, lon1],
-      [lat2, lon2]
+      [diagonalLat1, diagonalLon1],
+      [diagonalLat2, diagonalLon2]
     ];
   }
 
   static Future<void> displayGrid() async {
+    // Center to user's current location
     goToUserLoc();
-    var url = Uri.https('api.what3words.com', 'v3/grid-section?key=&bounding-box=&format=json');
+    // Calculate bouding box
     List<List<double>> box = getBoundingBox(
         Services.userLocation.latitude, Services.userLocation.longitude);
-    
+    String boxString = box[0][0].toString() +
+        ',' +
+        box[0][1].toString() +
+        ',' +
+        box[1][0].toString() +
+        ',' +
+        box[1][1].toString();
+    var url = Uri.https('api.what3words.com', 'v3/grid-section', {
+      'key': Services.getSecret('what3words.api.key')!,
+      'bounding-box': boxString,
+      'format': 'json'
+    });
+    // Making the request
+    var response = await http.get(url);
+    Fluttertoast.showToast(msg: 'Request Made!');
+    print('Request Made!');
+
+    try {
+      Map<String, dynamic> parsed =
+          jsonDecode(response.body).cast<String, dynamic>();
+      List<GeoCoordinates> coordinates = [];
+
+      if (parsed.containsKey('lines')) {
+        print('Request OK');
+        List lines = parsed['lines'];
+        for (Map element in lines) {
+          coordinates.add(
+              GeoCoordinates(element['start']['lat'], element['start']['lng']));
+          coordinates.add(
+              GeoCoordinates(element['end']['lat'], element['end']['lng']));
+        }
+        GeoPolyline gridGeoPolyline = GeoPolyline(coordinates);
+        double widthInPixels = 2;
+        MapPolyline gridMapPolyline = MapPolyline(
+            gridGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
+        Services.mapController.mapScene.addMapPolyline(gridMapPolyline);
+      } else
+        print(parsed['error']);
+    } catch (e) {
+      print(e);
+    }
+
+    // Fluttertoast.showToast(msg: response.body);
   }
 
   static List<Widget> getActionButtonList() {
@@ -70,9 +99,7 @@ class MapScreenRes {
         padding: const EdgeInsets.only(right: 15.0),
         child: IconButton(
             icon: Icon(Icons.grid_4x4_rounded),
-            onPressed: ((() async {
-              await displayGrid();
-            })))));
+            onPressed: ((() async => await displayGrid())))));
     if (Services.usertype == 'user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
