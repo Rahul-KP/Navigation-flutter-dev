@@ -63,7 +63,6 @@ void checkLoginStatus() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Services.setLoc(); // start streaming the location
   await Services.loadCreds();
   await _initializeHERESDK(); // initialise the HERE SDK
   await Services.getPermissions(); // wait for permissions
