@@ -30,7 +30,7 @@ class Services {
   static bool flag = false;
   static late List pathToBeShared;
 
-  static void loadCreds() async {
+  static Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
   }
