@@ -20,6 +20,9 @@ class _AppScreenState extends State<AppScreen> {
     if(Services.usertype=="driver") {
       MapScreenRes.listenToBookings();
     }
+    if(Services.usertype=="user") {
+      MapScreenRes.listenToRequest();
+    }
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)

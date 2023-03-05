@@ -28,7 +28,7 @@ class MapWidget extends StatelessWidget {
 
     Services.mapController = hereMapController;
     _addLocationIndicator(
-        Services.userLocation, LocationIndicatorIndicatorStyle.values.first);
+        Services.userLocation, LocationIndicatorIndicatorStyle.navigation);
   }
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
@@ -39,11 +39,12 @@ class MapWidget extends StatelessWidget {
     // including a bearing direction.
     // For testing purposes, we create a Location object. Usually, you may want to get this from
     // a GPS sensor instead.
-    // Location location = Location.withCoordinates(geoCoordinates);
+    Location location = Location.withCoordinates(Services.userLocation);
+    location.horizontalAccuracyInMeters = 1.0;
     // location.time = DateTime.now();
     // // location.bearingInDegrees = _getRandom(0, 360);
 
-    // Services.locationIndicator.updateLocation(location);
+    Services.locationIndicator.updateLocation(location);
 
     // A LocationIndicator listens to the lifecycle of the map view,
     // therefore, for example, it will get destroyed when the map view gets destroyed.

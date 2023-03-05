@@ -34,6 +34,7 @@ void alreadyLoggedin() {
 
     if (newuser == false) {
       Services.usertype = value.getString('usertype')!;
+      Services.username = value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AppScreen(),
@@ -59,11 +60,9 @@ void checkLoginStatus() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Services.getPermissions(); // wait for permissions
-  Services.setLoc(); // start streaming the location
-  Services.loadCreds();
   await _initializeHERESDK(); // initialise the HERE SDK
-  alreadyLoggedin(); // check if user is already logged in
+  await Services.getPermissions(); // wait for permissions
+  
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -83,6 +82,6 @@ void main() async {
     }
   }
   checkLoginStatus();
-  _initializeHERESDK();
-  alreadyLoggedin();
+  alreadyLoggedin(); // check if user is already logged in
+  Services.setLoc(); // start streaming the location
 }

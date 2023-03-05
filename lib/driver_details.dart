@@ -1,5 +1,6 @@
 import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -111,6 +112,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
                         Services.usertype = 'driver';
+                        Services.username = username;
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(

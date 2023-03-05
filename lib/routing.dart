@@ -10,7 +10,8 @@ import 'package:here_sdk/routing.dart' as here;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+  
+  DatabaseReference ref = FirebaseDatabase.instance.ref('Drivers/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -45,15 +46,16 @@ class Routing {
     Fluttertoast.showToast(msg: routeDetails);
   }
 
-  _showRouteOnMap(here.Route route) {
+  showRouteOnMap(GeoPolyline routeGeoPolyline) {
     // Show route as polyline.
-    GeoPolyline routeGeoPolyline = route.geometry;
     double widthInPixels = 20;
     MapPolyline routeMapPolyline = MapPolyline(
         routeGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
     Services.mapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapPolylines.add(routeMapPolyline);
   }
+
+  
 
   Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
@@ -68,8 +70,10 @@ class Routing {
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
-        _showRouteOnMap(route);
-        _broadcastRoute(route);
+        showRouteOnMap(route.geometry);
+        if (Services.usertype == 'driver') {
+          _broadcastRoute(route);
+        }
       } else {
         var error = routingError.toString();
         Fluttertoast.showToast(msg: error);
@@ -84,11 +88,13 @@ class Routing {
     _mapPolylines.clear();
   }
 
+  //add route to database
   void _broadcastRoute(here.Route route) {
-    List sendList = [];
+    List route_ = [];
     for (var element in route.geometry.vertices) {
-      sendList.add({"lat": element.latitude, "lon": element.longitude});
+      route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.set({"amb1" : sendList.toString()});
+    ref.update({'route' : route_});
+    Services.pathToBeShared = route_;
   }
 }

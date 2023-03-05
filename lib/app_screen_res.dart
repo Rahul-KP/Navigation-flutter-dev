@@ -1,8 +1,14 @@
+import 'dart:convert';
+
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
 import 'package:AmbiNav/starter.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:here_sdk/core.dart';
+import 'package:here_sdk/core.errors.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -65,9 +71,9 @@ class MapScreenRes {
     return drawerButtonList;
   }
 
-  static void listenToBookings() {
+  static void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    ref.onChildAdded.listen((event) {
+    Services.listen = ref.onChildAdded.listen((event) {
       Services.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
@@ -84,5 +90,60 @@ class MapScreenRes {
       return NavigationNotif();
     }
     return null;
+  }
+
+  static _parse(String dataString) {
+    // print(dataString);
+
+    // Remove the square brackets at the beginning and end of the string
+    dataString = dataString.substring(1, dataString.length - 1);
+
+    // Split the string into separate coordinate objects
+    List<String> coordinateStrings = dataString.split("}, {");
+
+    // Loop through each coordinate object string and extract the latitude and longitude
+    List<GeoCoordinates> coordinates = [];
+    for (String coordinateString in coordinateStrings) {
+      // Remove the curly braces at the beginning and end of the coordinate string
+      coordinateString =
+          coordinateString.replaceAll("{", "").replaceAll("}", "");
+
+      // Split the coordinate string into separate latitude and longitude values
+      List<String> values = coordinateString.split(", ");
+
+      // Extract the latitude and longitude values and add them to the list of coordinates
+      double lon = double.parse(values[0].split(": ")[1]);
+      double lat = double.parse(values[1].split(": ")[1]);
+      coordinates.add(GeoCoordinates(lat, lon));
+    }
+    print("Length: " + coordinates.length.toString());
+    GeoPolyline geoPolyline;
+    try {
+      geoPolyline = GeoPolyline(coordinates);
+      return geoPolyline;
+    } catch (e) {
+      // Thrown when less than two vertices.
+      print("Oh shit!");
+      print(e);
+      return null;
+    }
+  }
+
+  static void listenToRequest() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
+    Routing rt = Routing();
+    rt.initRoutingEngine();
+    ref.onChildChanged.listen((event) {
+      DataSnapshot d = event.snapshot;
+      for (var i in d.children) {
+        // Fluttertoast.showToast(msg: i.value.toString());
+        // print(i.value.toString());
+        // print(i.value.runtimeType.toString());
+        if (i.value.runtimeType == List<Object?>) {
+          rt.showRouteOnMap(_parse(i.value.toString()));
+        }
+        // rt.showRouteOnMap(_parse(i.value.toString()));
+      }
+    });
   }
 }

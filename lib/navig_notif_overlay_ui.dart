@@ -30,7 +30,7 @@ class _NavigationNotifState extends State<NavigationNotif> {
     return Visibility(
       child: GestureDetector(
           onTap: () async {
-            GeoCoordinates userLoc = GeoCoordinates(
+            GeoCoordinates patientLoc = GeoCoordinates(
                 double.parse(Services.formDetails
                     .child('user_location/lat')
                     .value
@@ -39,7 +39,9 @@ class _NavigationNotifState extends State<NavigationNotif> {
                     .child('user_location/lon')
                     .value
                     .toString()));
-            rt.addRoute(Services.userLocation, userLoc);
+            rt.addRoute(Services.userLocation, patientLoc);
+            //after the formhas been accepted by the driver , stop listening to other forms
+            Services.listen.cancel();
           },
           child: CountDownTimer()),
       visible: NavigationNotif.isVisible,
