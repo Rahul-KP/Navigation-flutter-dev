@@ -93,11 +93,13 @@ class MapScreenRes {
   }
 
   static _parse(String dataString) {
+    // print(dataString);
+
     // Remove the square brackets at the beginning and end of the string
     dataString = dataString.substring(1, dataString.length - 1);
 
     // Split the string into separate coordinate objects
-    List<String> coordinateStrings = dataString.split("},{");
+    List<String> coordinateStrings = dataString.split("}, {");
 
     // Loop through each coordinate object string and extract the latitude and longitude
     List<GeoCoordinates> coordinates = [];
@@ -114,13 +116,15 @@ class MapScreenRes {
       double lat = double.parse(values[1].split(": ")[1]);
       coordinates.add(GeoCoordinates(lat, lon));
     }
+    print("Length: " + coordinates.length.toString());
     GeoPolyline geoPolyline;
     try {
       geoPolyline = GeoPolyline(coordinates);
       return geoPolyline;
-    } on InstantiationException {
+    } catch (e) {
       // Thrown when less than two vertices.
       print("Oh shit!");
+      print(e);
       return null;
     }
   }
@@ -132,11 +136,13 @@ class MapScreenRes {
     ref.onChildChanged.listen((event) {
       DataSnapshot d = event.snapshot;
       for (var i in d.children) {
-        print(i.hasChild('route'));
         // Fluttertoast.showToast(msg: i.value.toString());
-        Fluttertoast.showToast(msg: i.value.toString());
-        print(i.value.runtimeType.toString());
-        rt.showRouteOnMap(_parse(i.value.toString()));
+        // print(i.value.toString());
+        // print(i.value.runtimeType.toString());
+        if (i.value.runtimeType == List<Object?>) {
+          rt.showRouteOnMap(_parse(i.value.toString()));
+        }
+        // rt.showRouteOnMap(_parse(i.value.toString()));
       }
     });
   }
