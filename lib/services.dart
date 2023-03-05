@@ -39,16 +39,6 @@ class Services {
     //here.access.key.id
   }
 
-  static void loadCreds() async {
-    //loading the .env file
-    await dotenv.load(fileName: "credentials.env");
-  }
-
-  static String? getSecret(String key) {
-    return dotenv.env[key];
-    //here.access.key.id
-  }
-
   static void setLoc() async {
     Location location = await Location();
     location.changeSettings(accuracy: LocationAccuracy.high,interval: 5000,distanceFilter: 1);
