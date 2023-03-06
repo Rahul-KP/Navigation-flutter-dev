@@ -9,10 +9,12 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'whoami'
-                sh 'pwd'
-                sh 'flutter version'
-                sh 'flutter pub get'
+                sh '''
+                    whoami
+                    pwd
+                    flutter version
+                    flutter pub get
+                '''
             }
         }
     }
