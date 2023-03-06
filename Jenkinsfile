@@ -11,8 +11,8 @@ pipeline {
                 sh '''
                     pwd
                     ls
-                    flutter version
                     flutter pub get
+                    flutter build apk --debug
                 '''
             }
         }
