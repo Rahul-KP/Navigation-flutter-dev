@@ -4,8 +4,8 @@ pipeline {
         docker {
             image 'am271/flutter-apk-builder'
             args '-u builder'
-            }
         }
+    }
     stages {
         stage('build') {
             steps {
