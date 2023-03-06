@@ -2,6 +2,7 @@
 node {
     stage('Build') {
         docker.image('am271/flutter-apk-builder').inside {
+            sh 'flutter version'
             sh 'flutter pub get'
         }
     }
