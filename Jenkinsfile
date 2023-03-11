@@ -6,6 +6,14 @@ pipeline {
         }
     }
     stages {
+        stage('extract-sdk') {
+            steps {
+                sh '''
+                    mkdir -p plugins/here_sdk
+                    tar xzf /app/heresdk-explore-flutter.tar.gz -C plugins/here_sdk
+                '''
+            }
+        }
         stage('build') {
             environment {
                 CREDS = credentials('navigation-credentials')
@@ -13,8 +21,6 @@ pipeline {
             }
             steps {
                 sh '''
-                    mkdir -p plugins/here_sdk
-                    tar xzf /app/heresdk-explore-flutter.tar.gz -C plugins/here_sdk
                     cat ${CREDS} > credentials.env
                     cat ${FIREBASE_CREDS} > lib/firebase_options.dart
                     flutter pub get
