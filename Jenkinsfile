@@ -9,7 +9,7 @@ pipeline {
         stage('extract-sdk') {
             steps {
                 sh '''
-                    chown.sh
+                    sudo chown $UID:$GID -R $(pwd)
                     mkdir -p plugins/here_sdk
                     tar xzf /app/heresdk-explore-flutter.tar.gz -C plugins/here_sdk
                 '''
