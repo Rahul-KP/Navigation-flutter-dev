@@ -21,7 +21,7 @@ pipeline {
                 FIREBASE_CREDS = credentials('navigation-firebase-options')
             }
             steps {
-                cache(maxCacheSize: 250, caches: [
+                cache(maxCacheSize: 3072, caches: [
                     arbitraryFileCache(path: 'build', cacheValidityDecidingFile: 'pubspec.yaml'),
                     arbitraryFileCache(path: '.dart_tools', cacheValidityDecidingFile: 'pubspec.yaml'),
                     arbitraryFileCache(path: '.packages/', cacheValidityDecidingFile: 'pubspec.yaml')
