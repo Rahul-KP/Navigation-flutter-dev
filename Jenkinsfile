@@ -11,8 +11,7 @@ pipeline {
                 sh '''
                     sudo chown $UID:$GID -R $(pwd)
                     mkdir -p plugins/here_sdk
-                    find / -name heresdk-explore-flutter.tar.gz
-                    tar xzf heresdk-explore-flutter.tar.gz -C plugins/here_sdk
+                    tar xzf /home/developer/heresdk-explore-flutter.tar.gz -C plugins/here_sdk
                 '''
             }
         }
