@@ -21,12 +21,18 @@ pipeline {
                 FIREBASE_CREDS = credentials('navigation-firebase-options')
             }
             steps {
-                sh '''
-                    cat ${CREDS} > credentials.env
-                    cat ${FIREBASE_CREDS} > lib/firebase_options.dart
-                    flutter pub get
-                    flutter build apk --debug
-                '''
+                cache(maxCacheSize: 250, caches: [
+                    arbitraryFileCache(path: 'build', cacheValidityDecidingFile: 'pubspec.yaml'),
+                    arbitraryFileCache(path: '.dart_tools', cacheValidityDecidingFile: 'pubspec.yaml'),
+                    arbitraryFileCache(path: '.packages/', cacheValidityDecidingFile: 'pubspec.yaml')
+                ]) {
+                    sh '''
+                        cat ${CREDS} > credentials.env
+                        cat ${FIREBASE_CREDS} > lib/firebase_options.dart
+                        flutter pub get
+                        flutter build apk --debug
+                    '''
+                }
             }
         }
     }
