@@ -22,19 +22,13 @@ pipeline {
                 FILENAME = "b6518b0e.apk"
             }
             steps {
-                cache(maxCacheSize: 3072, caches: [
-                    arbitraryFileCache(path: 'build', cacheValidityDecidingFile: 'pubspec.yaml'),
-                    arbitraryFileCache(path: '.dart_tools', cacheValidityDecidingFile: 'pubspec.yaml'),
-                    arbitraryFileCache(path: '.packages/', cacheValidityDecidingFile: 'pubspec.yaml')
-                ]) {
-                    sh '''
-                        cat ${CREDS} > credentials.env
-                        cat ${FIREBASE_CREDS} > lib/firebase_options.dart
-                        flutter pub get
-                        flutter build apk --debug
-                        cp build/app/outputs/flutter-apk/app-debug.apk ./$FILENAME
-                    '''
-                }
+                sh '''
+                    cat ${CREDS} > credentials.env
+                    cat ${FIREBASE_CREDS} > lib/firebase_options.dart
+                    flutter pub get
+                    flutter build apk --debug
+                    cp build/app/outputs/flutter-apk/app-debug.apk ./$FILENAME
+                '''
             }
         }
         stage('upload-apk') {
@@ -42,10 +36,11 @@ pipeline {
                 APITOKEN = credentials('navigation-api-token')
                 NGROK_URL = "https://a107-106-51-242-245.in.ngrok.io"
                 FILENAME = "b6518b0e.apk"
+                RELEASE_NOTES = "Testing with w3w"
             }
             steps {
                 sh '''
-                    curl -X POST -H "Content-Type: application/json" -H "X-Access-Token: $APITOKEN" -d "{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"test 1 w3w grid\", \"date\" : \"$(date '+%d-%m-%Y')\", \"filename\" : \"$FILENAME\", \"release_notes\" : \"Test 1 w3w with Hive\"}" $NGROK_URL/newindex
+                    curl -X POST -H "Content-Type: application/json" -H "X-Access-Token: $APITOKEN" -d "{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"$(date '+%d-%m-%Y')\", \"filename\" : \"$FILENAME\", \"release_notes\" : \"$RELEASE_NOTES\"}" $NGROK_URL/newindex
                     curl -X POST -H "Content-Type: multipart/form-data" -H "X-Access-Token: $APITOKEN" -F apk=@$FILENAME $NGROK_URL/newbuild
                 '''
             }
