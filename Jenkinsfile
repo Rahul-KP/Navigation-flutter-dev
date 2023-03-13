@@ -19,15 +19,10 @@ pipeline {
         stage('build') {
             environment {
                 CREDS = credentials('navigation-credentials')
-                APITOKEN = credentials('navigation-api-token')
                 FIREBASE_CREDS = credentials('navigation-firebase-options')
                 FILENAME = "b6518b0e.apk"
-                NGROK_URL = "https://fa27-106-51-242-245.in.ngrok.io"
-                RELEASE_NOTES = "\"Testing with w3w\""
             }
             steps {
-                sh 'DATE=$(date \'+%d-%m-%Y\')'
-                sh 'curl -X POST --url "${NGROK_URL}/newindex" -H "Content-Type: application/json" -H "X-Access-Token: ${APITOKEN}" -d "{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"${DATE}\", \"filename\" : \"${FILENAME}\", \"release_notes\" : \"${RELEASE_NOTES}\"}"'
                 sh '''
                     cat ${CREDS} > credentials.env
                     cat ${FIREBASE_CREDS} > lib/firebase_options.dart
@@ -40,14 +35,14 @@ pipeline {
         stage('upload-apk') {
             environment {
                 APITOKEN = credentials('navigation-api-token')
-                NGROK_URL = "https://fa27-106-51-242-245.in.ngrok.io"
+                NGROK_URL = "https://6bd9-106-51-242-245.in.ngrok.io"
                 FILENAME = "b6518b0e.apk"
                 RELEASE_NOTES = "\"Testing with w3w\""
             }
             steps {
-                sh '''
-                    curl -X POST -H "Content-Type: multipart/form-data" -H "X-Access-Token: $APITOKEN" -F apk=@$FILENAME $NGROK_URL/newbuild
-                '''
+                sh 'DATE=$(date \'+%d-%m-%Y\')'
+                sh 'curl -X POST --url "${NGROK_URL}/newindex" -H "Content-Type: application/json" -H "X-Access-Token: ${APITOKEN}" -d "{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"${DATE}\", \"filename\" : \"${FILENAME}\", \"release_notes\" : \"${RELEASE_NOTES}\"}"'
+                sh 'curl -X POST --url "${NGROK_URL}/newbuild" -H "Content-Type: multipart/form-data" -H "X-Access-Token: ${APITOKEN}" -F apk=@${FILENAME}'
             }
         }
     }
