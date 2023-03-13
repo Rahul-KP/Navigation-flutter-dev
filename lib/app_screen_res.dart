@@ -37,8 +37,8 @@ class MapScreenRes {
     double diagonalLon2 = lon - lonOffset;
 
     return [
-      [diagonalLat1, diagonalLon1],
-      [diagonalLat2, diagonalLon2]
+      [12.92202089277569, 77.56011388563326],
+      [12.923371673001283, 77.55897771299814]
     ];
   }
 
@@ -78,12 +78,13 @@ class MapScreenRes {
               GeoCoordinates(element['start']['lat'], element['start']['lng']));
           coordinates.add(
               GeoCoordinates(element['end']['lat'], element['end']['lng']));
+          GeoPolyline gridGeoPolyline = GeoPolyline(coordinates);
+          double widthInPixels = 2;
+          MapPolyline gridMapPolyline = MapPolyline(
+              gridGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
+          Services.mapController.mapScene.addMapPolyline(gridMapPolyline);
+          coordinates.clear();
         }
-        GeoPolyline gridGeoPolyline = GeoPolyline(coordinates);
-        double widthInPixels = 2;
-        MapPolyline gridMapPolyline = MapPolyline(
-            gridGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
-        Services.mapController.mapScene.addMapPolyline(gridMapPolyline);
       } else
         print(parsed['error']);
     } catch (e) {
