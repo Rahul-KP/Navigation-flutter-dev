@@ -15,9 +15,6 @@ Future<void> _initializeHERESDK() async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
-  // Clear the cache occupied by a previous instance.
-  await SDKNativeEngine.sharedInstance?.dispose();
-
   // Set your credentials for the HERE SDK.
   String accessKeyId = Services.getSecret("here.access.key.id")!;
   String accessKeySecret = Services.getSecret("here.access.key.secret")!;
