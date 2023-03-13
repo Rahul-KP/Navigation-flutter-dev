@@ -19,6 +19,7 @@ pipeline {
         stage('build') {
             environment {
                 CREDS = credentials('navigation-credentials')
+                APITOKEN = credentials('navigation-api-token')
                 FIREBASE_CREDS = credentials('navigation-firebase-options')
                 FILENAME = "b6518b0e.apk"
                 NGROK_URL = "https://fa27-106-51-242-245.in.ngrok.io"
