@@ -37,8 +37,8 @@ class MapScreenRes {
     double diagonalLon2 = lon - lonOffset;
 
     return [
-      [12.92202089277569, 77.56011388563326],
-      [12.923371673001283, 77.55897771299814]
+      [diagonalLat1, diagonalLon1],
+      [diagonalLat2, diagonalLon2]
     ];
   }
 
@@ -69,6 +69,7 @@ class MapScreenRes {
       Map<String, dynamic> parsed =
           jsonDecode(response.body).cast<String, dynamic>();
       List<GeoCoordinates> coordinates = [];
+      double widthInPixels = 2;
 
       if (parsed.containsKey('lines')) {
         print('Request OK');
@@ -78,10 +79,8 @@ class MapScreenRes {
               GeoCoordinates(element['start']['lat'], element['start']['lng']));
           coordinates.add(
               GeoCoordinates(element['end']['lat'], element['end']['lng']));
-          GeoPolyline gridGeoPolyline = GeoPolyline(coordinates);
-          double widthInPixels = 2;
-          MapPolyline gridMapPolyline = MapPolyline(
-              gridGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
+          MapPolyline gridMapPolyline = MapPolyline(GeoPolyline(coordinates),
+              widthInPixels, Color.fromARGB(255, 49, 214, 203));
           Services.mapController.mapScene.addMapPolyline(gridMapPolyline);
           coordinates.clear();
         }
