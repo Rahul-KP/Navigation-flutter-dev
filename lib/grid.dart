@@ -7,11 +7,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Grid {
-  static List<MapPolyline> w3wGrid = [];
   static bool w3wGridDisplayed = false;
+  static var w3wBox = null;
+
+  static void init() async {
+    await Hive.initFlutter(); // Initialize hive
+    w3wBox = await Hive.openBox('w3wgrid'); // Opening a box
+  }
 
   static List<List<double>> getBoundingBox(double lat, double lon) {
     const EARTH_RADIUS = 6371.0088; // in km
@@ -59,21 +65,10 @@ class Grid {
     try {
       Map<String, dynamic> parsed =
           jsonDecode(response.body).cast<String, dynamic>();
-      List<GeoCoordinates> coordinates = [];
-      double widthInPixels = 2;
 
       if (parsed.containsKey('lines')) {
         print('Request OK');
-        List lines = parsed['lines'];
-        for (Map element in lines) {
-          coordinates.add(
-              GeoCoordinates(element['start']['lat'], element['start']['lng']));
-          coordinates.add(
-              GeoCoordinates(element['end']['lat'], element['end']['lng']));
-          w3wGrid.add(MapPolyline(GeoPolyline(coordinates), widthInPixels,
-              Color.fromARGB(255, 49, 214, 203)));
-          coordinates.clear();
-        }
+        w3wBox.put('grid', parsed['lines']);
       } else
         print(parsed['error']);
     } catch (e) {
@@ -83,32 +78,53 @@ class Grid {
     // Set listener for zoom panning
     Services.mapController.gestures.pinchRotateListener =
         PinchRotateListener(((p0, p1, p2, p3, p4) {
-      print("zommed out");
-      Fluttertoast.showToast(msg: "zoomed out");
       if (Services.mapController.camera.state.zoomLevel >= 20.768 &&
           !w3wGridDisplayed) {
-        // _displayGrid();
-        print("zommed in");
-        Fluttertoast.showToast(msg: "zoomed in");
-      } else if (Services.mapController.camera.state.zoomLevel < 20.768) {
-        // _removeGrid();
+        _displayGrid();
+      } else if (Services.mapController.camera.state.zoomLevel < 20.768 &&
+          w3wGridDisplayed) {
+        _removeGrid();
       }
     }));
 
     // Fluttertoast.showToast(msg: response.body);
   }
 
-  static void _displayGrid() {
-    w3wGridDisplayed = true;
-    for (MapPolyline polyline in w3wGrid) {
-      Services.mapController.mapScene.addMapPolyline(polyline);
+  static void _displayGrid() async {
+    List<GeoCoordinates> coordinates = [];
+    double widthInPixels = 2;
+    List lines = w3wBox.get('grid');
+    print("i ran");
+    for (Map element in lines) {
+      coordinates.add(
+          GeoCoordinates(element['start']['lat'], element['start']['lng']));
+      coordinates
+          .add(GeoCoordinates(element['end']['lat'], element['end']['lng']));
+      Services.mapController.mapScene.addMapPolyline(MapPolyline(
+          GeoPolyline(coordinates),
+          widthInPixels,
+          Color.fromARGB(255, 49, 214, 203)));
+      coordinates.clear();
     }
+    w3wGridDisplayed = true;
   }
 
-  static void _removeGrid() {
-    w3wGridDisplayed = false;
-    for (MapPolyline polyline in w3wGrid) {
-      Services.mapController.mapScene.removeMapPolyline(polyline);
+  static void _removeGrid() async {
+    List<GeoCoordinates> coordinates = [];
+    double widthInPixels = 2;
+    List lines = w3wBox.get('grid');
+    print("i did ran");
+    for (Map element in lines) {
+      coordinates.add(
+          GeoCoordinates(element['start']['lat'], element['start']['lng']));
+      coordinates
+          .add(GeoCoordinates(element['end']['lat'], element['end']['lng']));
+      Services.mapController.mapScene.removeMapPolyline(MapPolyline(
+          GeoPolyline(coordinates),
+          widthInPixels,
+          Color.fromARGB(255, 49, 214, 203)));
+      coordinates.clear();
     }
+    w3wGridDisplayed = false;
   }
 }

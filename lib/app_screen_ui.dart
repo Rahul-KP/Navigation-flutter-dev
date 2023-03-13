@@ -24,6 +24,7 @@ class _AppScreenState extends State<AppScreen> {
     if(Services.usertype=="user") {
       MapScreenRes.listenToRequest();
     }
+    Grid.init();
     Grid.obtainGrid();
   }
 
