@@ -146,7 +146,6 @@ class MapScreenRes {
     ref.onChildChanged.listen((event) {
       DataSnapshot d = event.snapshot;
       for (var i in d.children) {
-<<<<<<< HEAD
         i.child('/route');
         print(i.hasChild('route'));
         Fluttertoast.showToast(msg: i.children.length.toString());
@@ -164,15 +163,6 @@ class MapScreenRes {
           }
           routing.showRouteOnMap(GeoPolyline(patientPath));
         }
-=======
-        // Fluttertoast.showToast(msg: i.value.toString());
-        // print(i.value.toString());
-        // print(i.value.runtimeType.toString());
-        if (i.value.runtimeType == List<Object?>) {
-          rt.showRouteOnMap(_parse(i.value.toString()));
-        }
-        // rt.showRouteOnMap(_parse(i.value.toString()));
->>>>>>> jenkins-ci
       }
     });
   }
