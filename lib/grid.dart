@@ -21,7 +21,7 @@ class Grid {
 
   static List<List<double>> getBoundingBox(double lat, double lon) {
     const EARTH_RADIUS = 6371.0088; // in km
-    double diagonal = 2.0; // diagonal length in km
+    double diagonal = 0.5; // diagonal length in km
 
     double halfDiagonal = diagonal / sqrt(2);
     double latOffset = halfDiagonal / EARTH_RADIUS * 180 / pi;
@@ -97,9 +97,9 @@ class Grid {
     print("i ran");
     for (Map element in lines) {
       coordinates.add(
-          GeoCoordinates(element['start']['lat'], element['start']['lng']));
+          GeoCoordinates(element['start']['lat'].toDouble(), element['start']['lng'].toDouble()));
       coordinates
-          .add(GeoCoordinates(element['end']['lat'], element['end']['lng']));
+          .add(GeoCoordinates(element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
       Services.mapController.mapScene.addMapPolyline(MapPolyline(
           GeoPolyline(coordinates),
           widthInPixels,
@@ -116,9 +116,9 @@ class Grid {
     print("i did ran");
     for (Map element in lines) {
       coordinates.add(
-          GeoCoordinates(element['start']['lat'], element['start']['lng']));
+          GeoCoordinates(element['start']['lat'].toDouble(), element['start']['lng'].toDouble()));
       coordinates
-          .add(GeoCoordinates(element['end']['lat'], element['end']['lng']));
+          .add(GeoCoordinates(element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
       Services.mapController.mapScene.removeMapPolyline(MapPolyline(
           GeoPolyline(coordinates),
           widthInPixels,
