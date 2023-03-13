@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -8,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +16,9 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 class MapScreenRes {
+  static List<MapPolyline> w3wGrid = [];
+  static bool w3wGridDisplayed = false;
+
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -42,7 +45,7 @@ class MapScreenRes {
     ];
   }
 
-  static Future<void> displayGrid() async {
+  static Future<void> obtainGrid() async {
     // Center to user's current location
     goToUserLoc();
     // Calculate bouding box
@@ -79,9 +82,8 @@ class MapScreenRes {
               GeoCoordinates(element['start']['lat'], element['start']['lng']));
           coordinates.add(
               GeoCoordinates(element['end']['lat'], element['end']['lng']));
-          MapPolyline gridMapPolyline = MapPolyline(GeoPolyline(coordinates),
-              widthInPixels, Color.fromARGB(255, 49, 214, 203));
-          Services.mapController.mapScene.addMapPolyline(gridMapPolyline);
+          w3wGrid.add(MapPolyline(GeoPolyline(coordinates), widthInPixels,
+              Color.fromARGB(255, 49, 214, 203)));
           coordinates.clear();
         }
       } else
@@ -90,7 +92,36 @@ class MapScreenRes {
       print(e);
     }
 
+    // Set listener for zoom panning
+    Services.mapController.gestures.pinchRotateListener =
+        PinchRotateListener(((p0, p1, p2, p3, p4) {
+      print("zommed out");
+      Fluttertoast.showToast(msg: "zoomed out");
+      if (Services.mapController.camera.state.zoomLevel >= 20.768 &&
+          !w3wGridDisplayed) {
+        // _displayGrid();
+        print("zommed in");
+        Fluttertoast.showToast(msg: "zoomed in");
+      } else if (Services.mapController.camera.state.zoomLevel < 20.768) {
+        // _removeGrid();
+      }
+    }));
+
     // Fluttertoast.showToast(msg: response.body);
+  }
+
+  static void _displayGrid() {
+    w3wGridDisplayed = true;
+    for (MapPolyline polyline in w3wGrid) {
+      Services.mapController.mapScene.addMapPolyline(polyline);
+    }
+  }
+
+  static void _removeGrid() {
+    w3wGridDisplayed = false;
+    for (MapPolyline polyline in w3wGrid) {
+      Services.mapController.mapScene.removeMapPolyline(polyline);
+    }
   }
 
   static List<Widget> getActionButtonList() {
@@ -99,7 +130,14 @@ class MapScreenRes {
         padding: const EdgeInsets.only(right: 15.0),
         child: IconButton(
             icon: Icon(Icons.grid_4x4_rounded),
-            onPressed: ((() async => await displayGrid())))));
+            onPressed: ((() async => await obtainGrid())))));
+    actionButtonList.add(Padding(
+        padding: const EdgeInsets.only(right: 15.0),
+        child: IconButton(
+            icon: Icon(Icons.zoom_out_map_rounded),
+            onPressed: ((() async => Fluttertoast.showToast(
+                msg: Services.mapController.camera.state.zoomLevel
+                    .toString()))))));
     if (Services.usertype == 'user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
