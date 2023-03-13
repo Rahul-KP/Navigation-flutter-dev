@@ -170,13 +170,23 @@ class MapScreenRes {
     ref.onChildChanged.listen((event) {
       DataSnapshot d = event.snapshot;
       for (var i in d.children) {
-        // Fluttertoast.showToast(msg: i.value.toString());
-        // print(i.value.toString());
-        // print(i.value.runtimeType.toString());
-        if (i.value.runtimeType == List<Object?>) {
-          rt.showRouteOnMap(_parse(i.value.toString()));
+        i.child('/route');
+        print(i.hasChild('route'));
+        Fluttertoast.showToast(msg: i.children.length.toString());
+        //make a Geoordinates list
+        List<GeoCoordinates> patientPath = [];
+        for (var j in i.children) {
+          try {
+            GeoCoordinates geoCoordinates = GeoCoordinates(
+                double.parse(j.child('lat').toString()),
+                double.parse(j.child('lon').toString()));
+            patientPath.add(geoCoordinates);
+          } catch (e) {
+            Fluttertoast.showToast(msg: e.toString());
+            break;
+          }
+          routing.showRouteOnMap(GeoPolyline(patientPath));
         }
-        // rt.showRouteOnMap(_parse(i.value.toString()));
       }
     });
   }
