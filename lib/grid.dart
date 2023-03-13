@@ -135,6 +135,28 @@ class Grid {
       GeoCoordinates geoCoordinates = Services.mapController.viewToGeoCoordinates(touchPoint)!;
       print('Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
       Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
+      
+      //code to get 3 word address onTap of a particular location
+      var url = Uri.https('api.what3words.com','v3/convert-to-3wa?', {
+        'key': Services.getSecret('what3words.api.key'),
+        'coordinates':geoCoordinates.latitude.toString()+'%2C-'+geoCoordinates.longitude.toString(),
+      });
+      var response = await http.get(url);
+      try {
+      Map<String, dynamic> parsed =
+          jsonDecode(response.body).cast<String, dynamic>();
+          if(parsed.containsKey('words')){
+            print('3word request successful');
+            Fluttertoast.showToast(msg: parsed['words']);
+            print(parsed['words']);
+          }
+          else {
+            print('something went worng');
+          }
+      }
+      catch(e){
+        print(e);
+      }
     });
   }
 }
