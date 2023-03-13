@@ -65,10 +65,11 @@ class Grid {
     try {
       Map<String, dynamic> parsed =
           jsonDecode(response.body).cast<String, dynamic>();
-
+        
       if (parsed.containsKey('lines')) {
         print('Request OK');
         w3wBox.put('grid', parsed['lines']);
+        _setTapGestureHandler();
       } else
         print(parsed['error']);
     } catch (e) {
@@ -126,5 +127,14 @@ class Grid {
       coordinates.clear();
     }
     w3wGridDisplayed = false;
+  }
+
+  static void _setTapGestureHandler() {
+    Services.mapController.gestures.tapListener =
+        TapListener((Point2D touchPoint) async {
+      GeoCoordinates geoCoordinates = Services.mapController.viewToGeoCoordinates(touchPoint)!;
+      print('Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
+      Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
+    });
   }
 }
