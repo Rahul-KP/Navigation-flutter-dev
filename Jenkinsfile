@@ -29,7 +29,7 @@ pipeline {
                 sh '''
                     cat ${CREDS} > credentials.env
                     cat ${FIREBASE_CREDS} > lib/firebase_options.dart
-                    curl -X POST --url $NGROK_URL/newindex -H "Content-Type: application/json" -H "X-Access-Token: $APITOKEN" -d "\'{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"$(date '+%d-%m-%Y')\", \"filename\" : \"$FILENAME\", \"release_notes\" : \"$RELEASE_NOTES\"}\'"
+                    curl -X POST --url $NGROK_URL/newindex -H "Content-Type: application/json" -H "X-Access-Token: $APITOKEN" -d "{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"$(date '+%d-%m-%Y')\", \"filename\" : \"$FILENAME\", \"release_notes\" : \"$RELEASE_NOTES\"}"
                     flutter pub get
                     flutter build apk --debug
                     cp build/app/outputs/flutter-apk/app-debug.apk ./$FILENAME
