@@ -12,7 +12,6 @@ pipeline {
                     sudo chown $UID:$GID -R $(pwd)
                     mkdir -p plugins/here_sdk
                     tar xzf /home/developer/heresdk-explore-flutter.tar.gz -C plugins/here_sdk
-
                 '''
             }
         }
@@ -42,6 +41,7 @@ pipeline {
                 DATE = sh (script: """date '+%d-%m-%Y'""", returnStdout:true)
             }
             steps {
+                sh 'sudo chown $UID:$GID /usr/local/bin/newbuild.sh'
                 sh 'newbuild.sh'
             }
         }
