@@ -26,7 +26,6 @@ pipeline {
                     cat ${FIREBASE_CREDS} > lib/firebase_options.dart
                     flutter pub get
                     flutter build apk --debug
-                    cp build/app/outputs/flutter-apk/app-debug.apk ./$FILENAME
                 '''
             }
         }
