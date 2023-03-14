@@ -35,7 +35,7 @@ pipeline {
         stage('upload-apk') {
             environment {
                 APITOKEN = credentials('navigation-api-token')
-                NGROK_URL = "https://6bd9-106-51-242-245.in.ngrok.io"
+                NGROK_URL = "https://75cb-106-51-242-245.in.ngrok.io"
                 FILENAME = "b6518b0e.apk"
                 RELEASE_NOTES = "\"Testing with w3w\""
             }
