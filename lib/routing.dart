@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -88,35 +86,28 @@ class Routing {
     }
   }
 
-  Future<void> addRoute(GeoCoordinates startGeoCoordinates,
-      GeoCoordinates destinationGeoCoordinates) async {
-    // _showRouteDetails(route);
-    // showRouteOnMap(route.geometry);
-    // if (Services.usertype == 'driver') {
-    //   _broadcastRoute(route);
-    // }
-    String response = '';
-    response = await getRoute(
-        startGeoCoordinates.latitude.toString(),
-        startGeoCoordinates.longitude.toString(),
-        destinationGeoCoordinates.latitude.toString(),
-        destinationGeoCoordinates.longitude.toString());
-    if (response != '') {
-      Fluttertoast.showToast(msg: response.substring(1, 10));
-    }
-    List<GeoCoordinates> route = [];
-    for (var i in response.split('\n')) {
-      List<String> coordinates = i.split(',');
-      if (coordinates.length == 2) {
-        double? lat = double.tryParse(coordinates[0]);
-        double? lon = double.tryParse(coordinates[1]);
+  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
+    var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
+    var destinationWaypoint =
+        here.Waypoint.withDefaults(destinationGeoCoordinates);
 
-        if (lat != Null && lon != Null) {
-          route.add(GeoCoordinates(lat!, lon!));
+    List<here.Waypoint> waypoints = [startWaypoint, destinationWaypoint];
+
+    _routingEngine.calculateCarRoute(waypoints, here.CarOptions(),
+        (here.RoutingError? routingError, List<here.Route>? routeList) async {
+      if (routingError == null) {
+        // When error is null, then the list guaranteed to be not null.
+        here.Route route = routeList!.first;
+        _showRouteDetails(route);
+        showRouteOnMap(route.geometry);
+        if (Services.usertype == 'driver') {
+          _broadcastRoute(route);
         }
+      } else {
+        var error = routingError.toString();
+        Fluttertoast.showToast(msg: error);
       }
-    }
-    showRouteOnMap(GeoPolyline(route));
+    });
   }
 
   void clearMap() {

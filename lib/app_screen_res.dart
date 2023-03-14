@@ -17,8 +17,6 @@ class MapScreenRes {
     Services.mapController.camera.lookAtPoint(Services.userLocation);
   }
 
-  
-
   static List<Widget> getActionButtonList() {
     List<Widget> actionButtonList = [];
     actionButtonList.add(Padding(
