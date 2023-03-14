@@ -35,8 +35,7 @@ pipeline {
             environment {
                 APITOKEN = credentials('navigation-api-token')
                 NGROK_URL = "https://75cb-106-51-242-245.in.ngrok.io"
-                FILENAME_PART = sh (script: """git log -n 1 --pretty=format:\"%H\" | cut -c 1-8""", returnStdout:true)
-                FILENAME = sh (script: """${FILENAME_PART}.apk""", returnStdout:true)
+                FILENAME = sh (script: """git log -n 1 --pretty=format:\"%H\" | cut -c 1-8 | sed 's/\$/.apk/'""", returnStdout:true)
                 RELEASE_NOTES = "\"Testing with w3w\""
                 COMMIT_HASH = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
                 COMMIT_MSG = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
