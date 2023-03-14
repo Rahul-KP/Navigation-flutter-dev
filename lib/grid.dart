@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:AmbiNav/app_screen_res.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
@@ -13,10 +15,15 @@ import 'package:http/http.dart' as http;
 class Grid {
   static bool w3wGridDisplayed = false;
   static var w3wBox = null;
+  static GeoCoordinates? target = null;
+  static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
+  static Routing obj = Routing();
+  static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
 
   static void init() async {
     await Hive.initFlutter(); // Initialize hive
     w3wBox = await Hive.openBox('w3wgrid'); // Opening a box
+    obj.initRoutingEngine();
   }
 
   static List<List<double>> getBoundingBox(double lat, double lon) {
@@ -65,7 +72,7 @@ class Grid {
     try {
       Map<String, dynamic> parsed =
           jsonDecode(response.body).cast<String, dynamic>();
-        
+
       if (parsed.containsKey('lines')) {
         print('Request OK');
         w3wBox.put('grid', parsed['lines']);
@@ -79,10 +86,10 @@ class Grid {
     // Set listener for zoom panning
     Services.mapController.gestures.pinchRotateListener =
         PinchRotateListener(((p0, p1, p2, p3, p4) {
-      if (Services.mapController.camera.state.zoomLevel >= 20.768 &&
+      if (Services.mapController.camera.state.zoomLevel >= 19.768 &&
           !w3wGridDisplayed) {
         _displayGrid();
-      } else if (Services.mapController.camera.state.zoomLevel < 20.768 &&
+      } else if (Services.mapController.camera.state.zoomLevel < 19.768 &&
           w3wGridDisplayed) {
         _removeGrid();
       }
@@ -97,10 +104,10 @@ class Grid {
     List lines = w3wBox.get('grid');
     print("i ran");
     for (Map element in lines) {
-      coordinates.add(
-          GeoCoordinates(element['start']['lat'].toDouble(), element['start']['lng'].toDouble()));
-      coordinates
-          .add(GeoCoordinates(element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
+      coordinates.add(GeoCoordinates(element['start']['lat'].toDouble(),
+          element['start']['lng'].toDouble()));
+      coordinates.add(GeoCoordinates(
+          element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
       Services.mapController.mapScene.addMapPolyline(MapPolyline(
           GeoPolyline(coordinates),
           widthInPixels,
@@ -116,10 +123,10 @@ class Grid {
     List lines = w3wBox.get('grid');
     print("i did ran");
     for (Map element in lines) {
-      coordinates.add(
-          GeoCoordinates(element['start']['lat'].toDouble(), element['start']['lng'].toDouble()));
-      coordinates
-          .add(GeoCoordinates(element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
+      coordinates.add(GeoCoordinates(element['start']['lat'].toDouble(),
+          element['start']['lng'].toDouble()));
+      coordinates.add(GeoCoordinates(
+          element['end']['lat'].toDouble(), element['end']['lng'].toDouble()));
       Services.mapController.mapScene.removeMapPolyline(MapPolyline(
           GeoPolyline(coordinates),
           widthInPixels,
@@ -132,29 +139,35 @@ class Grid {
   static void _setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
-      GeoCoordinates geoCoordinates = Services.mapController.viewToGeoCoordinates(touchPoint)!;
-      print('Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
-      Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
-      
+      GeoCoordinates geoCoordinates =
+          Services.mapController.viewToGeoCoordinates(touchPoint)!;
+      print('Tap at: ' +
+          geoCoordinates.latitude.toString() +
+          '\n' +
+          geoCoordinates.longitude.toString());
+      // Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
+
       //code to get 3 word address onTap of a particular location
-      var url = Uri.https('api.what3words.com','v3/convert-to-3wa', {
+      var url = Uri.https('api.what3words.com', 'v3/convert-to-3wa', {
         'key': Services.getSecret('what3words.api.key')!,
-        'coordinates':geoCoordinates.latitude.toString()+','+geoCoordinates.longitude.toString(),
+        'coordinates': geoCoordinates.latitude.toString() +
+            ',' +
+            geoCoordinates.longitude.toString(),
       });
       var response = await http.get(url);
       try {
-      Map<String, dynamic> parsed =
-          jsonDecode(response.body).cast<String, dynamic>();
-          if(parsed.containsKey('words')){
-            print('3word request successful');
-            Fluttertoast.showToast(msg: parsed['words']);
-            print(parsed['words']);
-          }
-          else {
-            print(parsed);
-          }
-      }
-      catch(e){
+        Map<String, dynamic> parsed =
+            jsonDecode(response.body).cast<String, dynamic>();
+        if (parsed.containsKey('words')) {
+          print('3word request successful');
+          Fluttertoast.showToast(msg: parsed['words']);
+          print(parsed['words']);
+          target =
+              GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
+        } else {
+          print(parsed);
+        }
+      } catch (e) {
         print(e);
       }
     });

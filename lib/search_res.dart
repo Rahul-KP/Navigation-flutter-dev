@@ -9,7 +9,6 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'package:intl/intl.dart';
 
 class SearchRes {
   MapImage? _poiMapImage;

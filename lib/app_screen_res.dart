@@ -1,3 +1,4 @@
+import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -45,6 +46,31 @@ class MapScreenRes {
     return actionButtonList;
   }
 
+  static List<Widget> _getDrawerOptionsW3w() {
+    List<Widget> w3wButtonList = [];
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Clear all routes'),
+        leading: Icon(Icons.clear_all_rounded),
+      ),
+      onTap: () {
+        Grid.obj.clearMap();
+      },
+    ));
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Plot path to square'), // Button 2 - plot path from clg to square u select
+        leading: Icon(Icons.task),
+      ),
+      onTap: () {
+        if(Grid.target != null) {
+          Grid.obj.addRoute(Grid.source, Grid.target!);
+        }
+      },
+    ));
+    return w3wButtonList;
+  }
+
   static List<Widget> getDrawerOptions(BuildContext context) {
     List<Widget> drawerButtonList = [];
     drawerButtonList.add(GestureDetector(
@@ -62,6 +88,7 @@ class MapScreenRes {
             context, MaterialPageRoute(builder: ((context) => loginpg())));
       },
     ));
+    drawerButtonList.addAll(_getDrawerOptionsW3w());
     if (Services.usertype == 'user') {
       drawerButtonList.add(GestureDetector(
         child: ListTile(

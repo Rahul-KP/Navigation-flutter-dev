@@ -13,8 +13,9 @@ class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
 
-  DatabaseReference ref =
-      FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+  // DatabaseReference ref =
+  //     FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+  DatabaseReference ref = FirebaseDatabase.instance.ref('results');
 
   void initRoutingEngine() {
     try {
@@ -46,6 +47,7 @@ class Routing {
         _formatTime(estimatedTravelTimeInSeconds) +
         ', Length: ' +
         _formatLength(lengthInMeters);
+    ref.update({"0" : routeDetails});
     Fluttertoast.showToast(msg: routeDetails);
   }
 
@@ -101,7 +103,7 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
-          _broadcastRoute(route);
+          // _broadcastRoute(route);
         }
       } else {
         var error = routingError.toString();
