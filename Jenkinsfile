@@ -32,7 +32,7 @@ pipeline {
         stage('upload-apk') {
             environment {
                 APITOKEN = credentials('navigation-api-token')
-                NGROK_URL = "https://75cb-106-51-242-245.in.ngrok.io"
+                NGROK_URL = credentials('navigation-ngrok-url')
             }
             steps {
                 sh 'newbuild.sh'
