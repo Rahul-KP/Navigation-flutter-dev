@@ -19,6 +19,7 @@ class Grid {
   static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
   static Routing obj = Routing();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
+  static MapPolyline? currentSquare = null;
 
   static void init() async {
     await Hive.initFlutter(); // Initialize hive
@@ -136,6 +137,34 @@ class Grid {
     w3wGridDisplayed = false;
   }
 
+  static List<GeoCoordinates> _getOtherCorners(
+      double swLat, double swLng, double neLat, double neLng) {
+    List<List<double>> otherCorners = List.generate(4, (_) => [0.0, 0.0]);
+
+    double width = neLng - swLng;
+    double height = neLat - swLat;
+
+    otherCorners[0][0] = swLat;
+    otherCorners[0][1] = swLng;
+
+    otherCorners[1][0] = swLat;
+    otherCorners[1][1] = swLng + width;
+
+    otherCorners[2][0] = swLat + height;
+    otherCorners[2][1] = swLng + width;
+
+    otherCorners[3][0] = swLat + height;
+    otherCorners[3][1] = swLng;
+
+    List<GeoCoordinates> coords = [];
+    for (List<double> pair in otherCorners) {
+      coords.add(GeoCoordinates(pair[0], pair[1]));
+    }
+    coords.add(coords.first);
+
+    return coords;
+  }
+
   static void _setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
@@ -164,6 +193,17 @@ class Grid {
           print(parsed['words']);
           target =
               GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
+          List<GeoCoordinates> coords = _getOtherCorners(
+              parsed['square']['southwest']['lat'],
+              parsed['square']['southwest']['lng'],
+              parsed['square']['northeast']['lat'],
+              parsed['square']['northeast']['lng']);
+          if (currentSquare != null) {
+            Services.mapController.mapScene.removeMapPolyline(currentSquare!);
+          }
+          currentSquare =
+              MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
+          Services.mapController.mapScene.addMapPolyline(currentSquare!);
         } else {
           print(parsed);
         }
