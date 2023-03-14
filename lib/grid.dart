@@ -20,6 +20,8 @@ class Grid {
   static Routing obj = Routing();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
   static MapPolyline? currentSquare = null;
+  static MapPolyline? addSquare = null;
+  static bool choose2Squares = false;
 
   static void init() async {
     await Hive.initFlutter(); // Initialize hive
@@ -198,11 +200,21 @@ class Grid {
               parsed['square']['southwest']['lng'],
               parsed['square']['northeast']['lat'],
               parsed['square']['northeast']['lng']);
+          if(choose2Squares) {
+            if(addSquare != null) {
+              Services.mapController.mapScene.removeMapPolyline(addSquare!);
+            }
+            addSquare = MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
+            Services.mapController.mapScene.addMapPolyline(addSquare!);
+            obj.addRoute(geoCoordinates, target!);
+          }
+          else {
+            currentSquare =
+              MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
+          }
           if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
           }
-          currentSquare =
-              MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
           Services.mapController.mapScene.addMapPolyline(currentSquare!);
         } else {
           print(parsed);

@@ -68,6 +68,17 @@ class MapScreenRes {
         }
       },
     ));
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
+        leading: Icon(Icons.square_sharp),
+      ),
+      onTap: () {
+        //allow to squares to be selected
+        Grid.choose2Squares = !Grid.choose2Squares;
+        Fluttertoast.showToast(msg: 'tapped');
+      },
+    ));
     return w3wButtonList;
   }
 
