@@ -36,13 +36,14 @@ pipeline {
             environment {
                 APITOKEN = credentials('navigation-api-token')
                 NGROK_URL = "https://75cb-106-51-242-245.in.ngrok.io"
-                FILENAME = "b6518b0e.apk"
+                FILENAME = sh (script: """${env.WORKSPACE}/$(git log -n 1 --pretty=format:\"%H\" | cut -c 1-8).apk""")
                 RELEASE_NOTES = "\"Testing with w3w\""
+                COMMIT_HASH = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
+                COMMIT_MSG = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
+                DATE = sh (script: """date '+%d-%m-%Y'""", returnStdout:true)
             }
             steps {
-                sh 'export DATE=$(date \'+%d-%m-%Y\')'
-                sh 'curl -X POST --url "${NGROK_URL}/newindex" -H "Content-Type: application/json" -H "X-Access-Token: ${APITOKEN}" -d \'"{\"commit_hash\" : \"b6518b0e5d4e332048abf75f74904778db2132a3\", \"commit_msg\" : \"none\", \"date\" : \"${DATE}\", \"filename\" : \"${FILENAME}\", \"release_notes\" : ${RELEASE_NOTES}}"\''
-                sh 'curl -X POST --url "${NGROK_URL}/newbuild" -H "Content-Type: multipart/form-data" -H "X-Access-Token: ${APITOKEN}" -F apk=@${FILENAME}'
+                sh newbuild.sh
             }
         }
     }
