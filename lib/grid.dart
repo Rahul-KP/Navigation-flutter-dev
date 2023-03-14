@@ -193,8 +193,7 @@ class Grid {
           print('3word request successful');
           Fluttertoast.showToast(msg: parsed['words']);
           print(parsed['words']);
-          target =
-              GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
+          
           List<GeoCoordinates> coords = _getOtherCorners(
               parsed['square']['southwest']['lat'],
               parsed['square']['southwest']['lng'],
@@ -211,6 +210,8 @@ class Grid {
           else {
             currentSquare =
               MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
+              target =
+              GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
           }
           if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
