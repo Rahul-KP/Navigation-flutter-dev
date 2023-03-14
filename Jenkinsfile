@@ -41,7 +41,7 @@ pipeline {
                 DATE = sh (script: """date '+%d-%m-%Y'""", returnStdout:true)
             }
             steps {
-                sh 'sudo chown $UID:$GID /usr/local/bin/newbuild.sh'
+                // sh 'sudo chown $UID:$GID /usr/local/bin/newbuild.sh'
                 sh 'newbuild.sh'
             }
         }
