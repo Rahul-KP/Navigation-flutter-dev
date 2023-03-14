@@ -34,14 +34,8 @@ pipeline {
             environment {
                 APITOKEN = credentials('navigation-api-token')
                 NGROK_URL = "https://75cb-106-51-242-245.in.ngrok.io"
-                FILENAME = sh (script: """git log -n 1 --pretty=format:\"%H\" | cut -c 1-8 | sed 's/\$/.apk/'""", returnStdout:true)
-                RELEASE_NOTES = sh (script: """cat release-notes.txt""", returnStdout:true)
-                COMMIT_HASH = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
-                COMMIT_MSG = sh (script: """git log -n 1 --pretty=format:\"%H\"""", returnStdout:true)
-                DATE = sh (script: """date '+%d-%m-%Y'""", returnStdout:true)
             }
             steps {
-                // sh 'sudo chown $UID:$GID /usr/local/bin/newbuild.sh'
                 sh 'newbuild.sh'
             }
         }
