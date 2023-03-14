@@ -42,7 +42,7 @@ pipeline {
                 DATE = sh (script: """date '+%d-%m-%Y'""", returnStdout:true)
             }
             steps {
-                sh newbuild.sh
+                sh 'newbuild.sh'
             }
         }
     }
