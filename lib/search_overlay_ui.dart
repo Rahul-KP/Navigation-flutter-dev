@@ -1,4 +1,5 @@
 import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -16,8 +17,6 @@ class SearchWidget extends StatefulWidget {
 
 class _SearchWidgetState extends State<SearchWidget> {
 
-  SearchRes search = SearchRes();
-
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -34,7 +33,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                   ),
                   onSubmitted: (
                     (value) {
-                      search.search(value);
+                      Services.search.obj.initRoutingEngine();
+                      Services.search.search(value);
                       SearchWidget.toggleVisibility();
                     } 
                   ),

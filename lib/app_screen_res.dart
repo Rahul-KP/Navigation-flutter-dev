@@ -55,6 +55,7 @@ class MapScreenRes {
       ),
       onTap: () {
         Grid.obj.clearMap();
+        Services.search.clearMap();
       },
     ));
     w3wButtonList.add(GestureDetector(

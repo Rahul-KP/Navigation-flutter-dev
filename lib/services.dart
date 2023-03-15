@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,6 +9,7 @@ import 'package:location/location.dart';
 
 class Services {
   static late HereMapController mapController;
+  static SearchRes search = SearchRes();
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   static late String usertype;
