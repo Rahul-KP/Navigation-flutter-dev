@@ -1,4 +1,4 @@
-import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +9,11 @@ class SearchWidget extends StatefulWidget {
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
   static void toggleVisibility() {
     isVisible = !isVisible;
+    if(isVisible == false) {
+      Grid.setTapGestureHandler();
+    } else {
+      Services.search.setTapGestureHandler();
+    }
   }
 
   @override
@@ -35,7 +40,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     (value) {
                       Services.search.obj.initRoutingEngine();
                       Services.search.search(value);
-                      SearchWidget.toggleVisibility();
+                      // SearchWidget.toggleVisibility();
                     } 
                   ),
                 ),

@@ -65,7 +65,7 @@ class MapScreenRes {
       ),
       onTap: () {
         if(Grid.target != null) {
-          Grid.obj.addRoute(Grid.source, Grid.target!);
+          Grid.obj.addRoute(Grid.target!, Grid.source);
         }
       },
     ));

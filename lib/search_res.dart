@@ -57,8 +57,6 @@ class SearchRes {
       throw Exception("Initialization of SearchEngine failed.");
     }
 
-    _setTapGestureHandler();
-
     SearchOptions searchOptions = SearchOptions();
     searchOptions.languageCode = core.LanguageCode.enUs;
     searchOptions.maxItems = 30;
@@ -124,9 +122,10 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          await obj.addRoute(Services.userLocation, searchResultMetadata.searchResult.geoCoordinates!);
+          await obj.addRoute(Services.userLocation,
+              searchResultMetadata.searchResult.geoCoordinates!);
 
-          setStateMarkerDetailsCard((){
+          setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
           });
           return;
@@ -138,7 +137,7 @@ class SearchRes {
     });
   }
 
-  void _setTapGestureHandler() {
+  void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((core.Point2D touchPoint) {
       _pickMapMarker(touchPoint);

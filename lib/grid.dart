@@ -80,7 +80,7 @@ class Grid {
       if (parsed.containsKey('lines')) {
         print('Request OK');
         w3wBox.put('grid', parsed['lines']);
-        _setTapGestureHandler();
+        setTapGestureHandler();
       } else
         print(parsed['error']);
     } catch (e) {
@@ -168,11 +168,12 @@ class Grid {
     return coords;
   }
 
-  static void _setTapGestureHandler() {
+  static void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
       GeoCoordinates geoCoordinates =
           Services.mapController.viewToGeoCoordinates(touchPoint)!;
+      Fluttertoast.showToast(msg: "Tapped!");
       print('Tap at: ' +
           geoCoordinates.latitude.toString() +
           '\n' +
