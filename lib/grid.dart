@@ -16,7 +16,8 @@ class Grid {
   static bool w3wGridDisplayed = false;
   static var w3wBox = null;
   static GeoCoordinates? target = null;
-  static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
+  // static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
+  static GeoCoordinates source = GeoCoordinates(12.959614,77.649804);// manipal hospital madivala road
   static Routing obj = Routing();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
   static MapPolyline? currentSquare = null;
