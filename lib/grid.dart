@@ -17,7 +17,9 @@ class Grid {
   static var w3wBox = null;
   static GeoCoordinates? target = null;
   // static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
-  static GeoCoordinates source = GeoCoordinates(12.959614,77.649804);// manipal hospital madivala road
+  //static GeoCoordinates source = GeoCoordinates(12.959614,77.649804);// manipal hospital madivala road
+  //static GeoCoordinates source = GeoCoordinates(13.028151,77.569873); //Ramiah Memorial Hospital
+  static GeoCoordinates source = GeoCoordinates(12.896116, 77.598554);//apollo hospital
   static Routing obj = Routing();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
   static MapPolyline? currentSquare = null;
@@ -195,25 +197,25 @@ class Grid {
           print('3word request successful');
           Fluttertoast.showToast(msg: parsed['words']);
           print(parsed['words']);
-          
+
           List<GeoCoordinates> coords = _getOtherCorners(
               parsed['square']['southwest']['lat'],
               parsed['square']['southwest']['lng'],
               parsed['square']['northeast']['lat'],
               parsed['square']['northeast']['lng']);
-          if(choose2Squares) {
-            if(addSquare != null) {
+          if (choose2Squares) {
+            if (addSquare != null) {
               Services.mapController.mapScene.removeMapPolyline(addSquare!);
             }
-            addSquare = MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
+            addSquare =
+                MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
             Services.mapController.mapScene.addMapPolyline(addSquare!);
             obj.addRoute(geoCoordinates, target!);
-          }
-          else {
+          } else {
             currentSquare =
-              MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
-              target =
-              GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
+                MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
+            target = GeoCoordinates(
+                geoCoordinates.latitude, geoCoordinates.longitude);
           }
           if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
