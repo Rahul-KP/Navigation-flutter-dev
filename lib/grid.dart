@@ -19,7 +19,8 @@ class Grid {
   // static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
   //static GeoCoordinates source = GeoCoordinates(12.959614,77.649804);// manipal hospital madivala road
   //static GeoCoordinates source = GeoCoordinates(13.028151,77.569873); //Ramiah Memorial Hospital
-  static GeoCoordinates source = GeoCoordinates(12.896116, 77.598554);//apollo hospital
+  // static GeoCoordinates source = GeoCoordinates(12.896116, 77.598554);//apollo hospital
+  static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static Routing obj = Routing();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
   static MapPolyline? currentSquare = null;
