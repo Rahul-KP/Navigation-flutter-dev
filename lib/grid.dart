@@ -55,7 +55,7 @@ class Grid {
 
   static Future<void> obtainGrid() async {
     // Center to user's current location
-    MapScreenRes.goToUserLoc();
+    MapScreenRes().goToUserLoc();
     // Calculate bouding box
     List<List<double>> box = getBoundingBox(
         Services.userLocation.latitude, Services.userLocation.longitude);

@@ -14,15 +14,17 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
+  MapScreenRes mapScreenObj = MapScreenRes();
+
   @override
   void initState() {
     super.initState();
     Services.mapContext = this.context;
     if(Services.usertype=="driver") {
-      MapScreenRes.listenToBookings();
+      mapScreenObj.listenToBookings();
     }
     if(Services.usertype=="user") {
-      MapScreenRes.listenToRequest();
+      mapScreenObj.listenToRequest();
     }
     Grid.init();
     Grid.obtainGrid();
@@ -40,7 +42,7 @@ class _AppScreenState extends State<AppScreen> {
       drawer: Drawer(
         child: SafeArea(
           child: Column(
-            children: MapScreenRes.getDrawerOptions(context)
+            children: mapScreenObj.getDrawerOptions(context)
           ),
         ),
       ),
@@ -57,7 +59,7 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: MapScreenRes.getActionButtonList()),
+          actions: mapScreenObj.getActionButtonList()),
       body: Stack(
         children: <Widget>[
           // MapWidget
@@ -67,7 +69,7 @@ class _AppScreenState extends State<AppScreen> {
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             Services.setStateOverlay = setState;
-            return MapScreenRes.chooseOverlayWidget()!;
+            return mapScreenObj.chooseOverlayWidget()!;
           })),
 
           StatefulBuilder(builder: ((context, setState) {
@@ -78,7 +80,7 @@ class _AppScreenState extends State<AppScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button
-          onPressed: (MapScreenRes.goToUserLoc),
+          onPressed: (mapScreenObj.goToUserLoc),
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,
