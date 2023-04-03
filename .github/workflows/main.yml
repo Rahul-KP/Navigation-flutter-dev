@@ -13,6 +13,8 @@ jobs:
       env:
         NGROK_URL: ${{ secrets.URL }}
         APITOKEN: ${{ secrets.APITOKEN }}
+        CREDS: ${{ secrets.CREDS }}
+        FIREBASE_CREDS: ${{ secrets.FIREBASE_CREDS }}
       options: --cpus 2 --user root
     steps:
       - name: Checkout action
@@ -24,8 +26,8 @@ jobs:
         shell: bash
       - name: Build Debug APK
         run: |
-          echo "${{ secrets.CREDS }}" > credentials.env
-          echo "${{ secrets.FIREBASE_CREDS }}" > lib/firebase_options.dart
+          echo "$CREDS" > credentials.env
+          echo "$FIREBASE_CREDS" > lib/firebase_options.dart
           flutter pub get
           flutter build apk --debug
         shell: bash
