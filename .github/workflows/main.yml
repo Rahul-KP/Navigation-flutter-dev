@@ -13,7 +13,7 @@ jobs:
       env:
         NGROK_URL: ${{ secrets.URL }}
         APITOKEN: ${{ secrets.APITOKEN }}
-      options: --cpus 4
+      options: --cpus 2
     steps:
       - name: Extract Here Maps SDK
         run: |
