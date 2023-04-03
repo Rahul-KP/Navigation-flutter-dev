@@ -1,6 +1,6 @@
 What3words grid is displayed.
 Search works.
 Booking ambulance partially works.
-After booking ambulance on opening path for the first time, it is not shown on the booker's screen and other user's screens.
+After booking ambulance on opening path for the first time, it is not shown on the booker's screen and other user's screens. Shown only on driver's screen.
 Subsequent bookings will show ambulance path to everyone.
 App is somewhat laggy.
