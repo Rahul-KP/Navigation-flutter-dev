@@ -1,17 +1,21 @@
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
+import 'package:http/http.dart' as http;
 
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
-  
-  DatabaseReference ref = FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+
+  // DatabaseReference ref =
+  //     FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+  DatabaseReference ref = FirebaseDatabase.instance.ref('results');
 
   void initRoutingEngine() {
     try {
@@ -43,6 +47,7 @@ class Routing {
         _formatTime(estimatedTravelTimeInSeconds) +
         ', Length: ' +
         _formatLength(lengthInMeters);
+    ref.update({"0" : routeDetails});
     Fluttertoast.showToast(msg: routeDetails);
   }
 
@@ -55,7 +60,33 @@ class Routing {
     _mapPolylines.add(routeMapPolyline);
   }
 
-  
+  Future<String> getRoute(
+      String lat1, String lon1, String lat2, String lon2) async {
+    await dotenv.load(fileName: "credentials.env");
+
+    final response = await http.get(Uri.parse('http://' +
+        dotenv.env["ip"]! +
+        ':5566/?lat1=' +
+        lat1 +
+        '&lon1=' +
+        lon1 +
+        '&lat2=' +
+        lat2 +
+        '&lon2=' +
+        lon2));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      // return Album.fromJson(jsonDecode(response.body));
+      print("Successful api call");
+      return response.body;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      Fluttertoast.showToast(msg: 'Failed to get response');
+      throw Exception('Failed to load album');
+    }
+  }
 
   Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
@@ -72,7 +103,7 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
-          _broadcastRoute(route);
+          // _broadcastRoute(route);
         }
       } else {
         var error = routingError.toString();
@@ -94,7 +125,7 @@ class Routing {
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.update({'route' : route_});
+    ref.update({'route': route_});
     Services.pathToBeShared = route_;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/services.dart';
@@ -23,6 +24,8 @@ class _AppScreenState extends State<AppScreen> {
     if(Services.usertype=="user") {
       MapScreenRes.listenToRequest();
     }
+    Grid.init();
+    Grid.obtainGrid();
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)

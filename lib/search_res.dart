@@ -9,7 +9,6 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'package:intl/intl.dart';
 
 class SearchRes {
   MapImage? _poiMapImage;
@@ -17,6 +16,7 @@ class SearchRes {
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String vicinity = "";
+  Routing obj = Routing();
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -48,7 +48,7 @@ class SearchRes {
   void search(String queryString) async {
     // Code to implement search functionality
     //clear map markers before every search
-    _clearMap();
+    clearMap();
     //instantiate search engine
     late SearchEngine _searchEngine;
     try {
@@ -56,8 +56,6 @@ class SearchRes {
     } on InstantiationException {
       throw Exception("Initialization of SearchEngine failed.");
     }
-
-    _setTapGestureHandler();
 
     SearchOptions searchOptions = SearchOptions();
     searchOptions.languageCode = core.LanguageCode.enUs;
@@ -124,11 +122,10 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          Routing obj = Routing();
-          obj.initRoutingEngine();
-          await obj.addRoute(Services.userLocation, searchResultMetadata.searchResult.geoCoordinates);
+          await obj.addRoute(Services.userLocation,
+              searchResultMetadata.searchResult.geoCoordinates!);
 
-          setStateMarkerDetailsCard((){
+          setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
           });
           return;
@@ -140,17 +137,18 @@ class SearchRes {
     });
   }
 
-  void _setTapGestureHandler() {
+  void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((core.Point2D touchPoint) {
       _pickMapMarker(touchPoint);
     });
   }
 
-  void _clearMap() {
+  void clearMap() {
     _mapMarkerList.forEach((mapMarker) {
       Services.mapController.mapScene.removeMapMarker(mapMarker);
     });
     _mapMarkerList.clear();
+    obj.clearMap();
   }
 }

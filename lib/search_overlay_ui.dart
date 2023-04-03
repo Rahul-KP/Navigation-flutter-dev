@@ -1,8 +1,6 @@
-import 'package:AmbiNav/routing.dart';
-import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
@@ -11,6 +9,11 @@ class SearchWidget extends StatefulWidget {
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
   static void toggleVisibility() {
     isVisible = !isVisible;
+    if(isVisible == false) {
+      Grid.setTapGestureHandler();
+    } else {
+      Services.search.setTapGestureHandler();
+    }
   }
 
   @override
@@ -18,8 +21,6 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-
-  SearchRes search = SearchRes();
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +38,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                   ),
                   onSubmitted: (
                     (value) {
-                      search.search(value);
-                      SearchWidget.toggleVisibility();
+                      Services.search.obj.initRoutingEngine();
+                      Services.search.search(value);
+                      // SearchWidget.toggleVisibility();
                     } 
                   ),
                 ),

@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -8,7 +7,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
-import 'package:here_sdk/core.errors.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -22,6 +20,13 @@ class MapScreenRes {
 
   static List<Widget> getActionButtonList() {
     List<Widget> actionButtonList = [];
+    actionButtonList.add(Padding(
+        padding: const EdgeInsets.only(right: 15.0),
+        child: IconButton(
+            icon: Icon(Icons.zoom_out_map_rounded),
+            onPressed: ((() async => Fluttertoast.showToast(
+                msg: Services.mapController.camera.state.zoomLevel
+                    .toString()))))));
     if (Services.usertype == 'user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
@@ -41,6 +46,43 @@ class MapScreenRes {
     return actionButtonList;
   }
 
+  static List<Widget> _getDrawerOptionsW3w() {
+    List<Widget> w3wButtonList = [];
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Clear all routes'),
+        leading: Icon(Icons.clear_all_rounded),
+      ),
+      onTap: () {
+        Grid.obj.clearMap();
+        Services.search.clearMap();
+      },
+    ));
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Plot path to square'), // Button 2 - plot path from clg to square u select
+        leading: Icon(Icons.task),
+      ),
+      onTap: () {
+        if(Grid.target != null) {
+          Grid.obj.addRoute(Grid.target!, Grid.source);
+        }
+      },
+    ));
+    w3wButtonList.add(GestureDetector(
+      child: ListTile(
+        title: const Text('Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
+        leading: Icon(Icons.square_sharp),
+      ),
+      onTap: () {
+        //allow to squares to be selected
+        Grid.choose2Squares = !Grid.choose2Squares;
+        Fluttertoast.showToast(msg: 'tapped');
+      },
+    ));
+    return w3wButtonList;
+  }
+
   static List<Widget> getDrawerOptions(BuildContext context) {
     List<Widget> drawerButtonList = [];
     drawerButtonList.add(GestureDetector(
@@ -58,6 +100,7 @@ class MapScreenRes {
             context, MaterialPageRoute(builder: ((context) => loginpg())));
       },
     ));
+    drawerButtonList.addAll(_getDrawerOptionsW3w());
     if (Services.usertype == 'user') {
       drawerButtonList.add(GestureDetector(
         child: ListTile(

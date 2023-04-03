@@ -1,13 +1,15 @@
 import 'dart:async';
-
+import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/mapview.dart';
 import 'package:location/location.dart';
 
 class Services {
   static late HereMapController mapController;
+  static SearchRes search = SearchRes();
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   static late String usertype;
@@ -28,6 +30,16 @@ class Services {
   static late DataSnapshot formDetails;
   static bool flag = false;
   static late List pathToBeShared;
+
+  static Future<void> loadCreds() async {
+    //loading the .env file
+    await dotenv.load(fileName: "credentials.env");
+  }
+
+  static String? getSecret(String key) {
+    return dotenv.env[key];
+    //here.access.key.id
+  }
 
   static void setLoc() async {
     Location location = await Location();
