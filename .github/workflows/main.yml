@@ -23,8 +23,8 @@ jobs:
         shell: bash
       - name: Build Debug APK
         run: |
-          cat ${{ secrets.CREDS }} > credentials.env
-          cat ${{ secrets.FIREBASE_CREDS }} > lib/firebase_options.dart
+          echo "${{ secrets.CREDS }}" > credentials.env
+          echo "${{ secrets.FIREBASE_CREDS }}" > lib/firebase_options.dart
           flutter pub get
           flutter build apk --debug
         shell: bash
