@@ -13,11 +13,9 @@ jobs:
       env:
         NGROK_URL: ${{ secrets.URL }}
         APITOKEN: ${{ secrets.APITOKEN }}
-      options: --cpus 2
+      options: --cpus 2 --user root
     steps:
-      - name: Grant permissions for CWD
-        run: sudo chown $UID:$GID -R $(pwd)
-      - name: Checkout
+      - name: Checkout action
         uses: actions/checkout@v3
       - name: Extract Here Maps SDK
         run: |
