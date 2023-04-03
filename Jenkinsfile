@@ -35,6 +35,7 @@ pipeline {
                 NGROK_URL = credentials('navigation-ngrok-url')
             }
             steps {
+                sh 'curl $NGROK_URL/ping'
                 sh 'newbuild.sh'
             }
         }
