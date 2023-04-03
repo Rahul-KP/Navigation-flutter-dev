@@ -1,1 +1,6 @@
-Now the form response event is listened to , and the details can be seen on the console when a form is submitted
+What3words grid is displayed.
+Search works.
+Booking ambulance partially works.
+After booking ambulance on opening path for the first time, it is not shown on the booker's screen and other user's screens.
+Subsequent bookings will show ambulance path to everyone.
+App is somewhat laggy.
