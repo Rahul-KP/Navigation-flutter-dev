@@ -66,7 +66,7 @@ class Routing {
 
     final response = await http.get(Uri.parse('http://' +
         dotenv.env["ip"]! +
-        ':5566/?lat1=' +
+        ':5566/getroute?lat1=' +
         lat1 +
         '&lon1=' +
         lon1 +
