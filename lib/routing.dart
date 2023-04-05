@@ -15,8 +15,8 @@ class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
 
-  DatabaseReference ref =
-      FirebaseDatabase.instance.ref('Drivers/' + Services.username);
+  // DatabaseReference ref =
+  //     FirebaseDatabase.instance.ref('Drivers/' + Services.username);
 
   void initRoutingEngine() {
     try {
@@ -105,16 +105,12 @@ class Routing {
       Fluttertoast.showToast(msg: response.substring(1, 10));
     }
     List<GeoCoordinates> route = [];
-    for (var i in response.split('\n')) {
-      List<String> coordinates = i.split(',');
-      if (coordinates.length == 2) {
-        double? lat = double.tryParse(coordinates[0]);
-        double? lon = double.tryParse(coordinates[1]);
+    List<String> pairs = response.replaceAll("[", "").replaceAll("]", "").split(",");
 
-        if (lat != Null && lon != Null) {
-          route.add(GeoCoordinates(lat!, lon!));
-        }
-      }
+    for (int i = 0; i < pairs.length; i += 2) {
+      double latitude = double.parse(pairs[i]);
+      double longitude = double.parse(pairs[i + 1]);
+      route.add(GeoCoordinates(latitude, longitude));
     }
     showRouteOnMap(GeoPolyline(route));
   }
@@ -132,7 +128,7 @@ class Routing {
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
-    ref.update({'route': route_});
+    // ref.update({'route': route_});
     Services.pathToBeShared = route_;
   }
 }
