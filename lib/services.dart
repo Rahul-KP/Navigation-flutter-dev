@@ -28,10 +28,9 @@ class Services {
   //after the trip is complete , resubscribe to bookings listener
   static late StreamSubscription<DatabaseEvent> listen;
   static late DataSnapshot formDetails;
-  static bool flag = false;
   static late List pathToBeShared;
 
-  static Future<void> loadCreds() async {
+  Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
   }
@@ -41,13 +40,12 @@ class Services {
     //here.access.key.id
   }
 
-  static void setLoc() async {
+  void setLoc() async {
     Location location = await Location();
     location.changeSettings(accuracy: LocationAccuracy.high,interval: 5000,distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
-      flag = true;
       core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
@@ -61,12 +59,12 @@ class Services {
     });
   }
 
-  static void _broadcastLoc() async {
+  void _broadcastLoc() async {
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 
-  static Future<void> getPermissions() async {
+  Future<void> getPermissions() async {
     Location location = Location();
 
     bool _serviceEnabled;
