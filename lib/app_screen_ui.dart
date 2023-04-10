@@ -14,15 +14,16 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
+  MapScreenRes mobj = MapScreenRes();
   @override
   void initState() {
     super.initState();
     Services.mapContext = this.context;
     if(Services.usertype=="driver") {
-      MapScreenRes.listenToBookings();
+      mobj.listenToBookings();
     }
     if(Services.usertype=="user") {
-      MapScreenRes.listenToRequest();
+      mobj.listenToRequest();
     }
     Grid gobj = Grid();
     gobj.init();
@@ -41,7 +42,7 @@ class _AppScreenState extends State<AppScreen> {
       drawer: Drawer(
         child: SafeArea(
           child: Column(
-            children: MapScreenRes.getDrawerOptions(context)
+            children: mobj.getDrawerOptions(context)
           ),
         ),
       ),
@@ -58,7 +59,7 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: MapScreenRes.getActionButtonList()),
+          actions: mobj.getActionButtonList()),
       body: Stack(
         children: <Widget>[
           // MapWidget
@@ -68,7 +69,7 @@ class _AppScreenState extends State<AppScreen> {
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             Services.setStateOverlay = setState;
-            return MapScreenRes.chooseOverlayWidget()!;
+            return mobj.chooseOverlayWidget()!;
           })),
 
           StatefulBuilder(builder: ((context, setState) {
@@ -79,7 +80,7 @@ class _AppScreenState extends State<AppScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button
-          onPressed: (MapScreenRes.goToUserLoc),
+          onPressed: (mobj.goToUserLoc),
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,

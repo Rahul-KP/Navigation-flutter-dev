@@ -12,13 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
 
 class MapScreenRes {
-  static void goToUserLoc() async {
+  void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
     Services.mapController.camera.lookAtPoint(Services.userLocation);
   }
 
-  static List<Widget> getActionButtonList() {
+  List<Widget> getActionButtonList() {
     List<Widget> actionButtonList = [];
     actionButtonList.add(Padding(
         padding: const EdgeInsets.only(right: 15.0),
@@ -84,7 +84,7 @@ class MapScreenRes {
     return w3wButtonList;
   }
 
-  static List<Widget> getDrawerOptions(BuildContext context) {
+  List<Widget> getDrawerOptions(BuildContext context) {
     List<Widget> drawerButtonList = [];
     drawerButtonList.add(GestureDetector(
       child: ListTile(
@@ -115,7 +115,7 @@ class MapScreenRes {
     return drawerButtonList;
   }
 
-  static void listenToBookings() async {
+  void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     Services.listen = ref.onChildAdded.listen((event) {
       Services.formDetails = event.snapshot;
@@ -127,7 +127,7 @@ class MapScreenRes {
     // Code to implement search functionality
   }
 
-  static Widget? chooseOverlayWidget() {
+  Widget? chooseOverlayWidget() {
     if (Services.usertype == 'user') {
       return SearchWidget();
     } else if (Services.usertype == 'driver') {
@@ -136,7 +136,7 @@ class MapScreenRes {
     return null;
   }
 
-  static void listenToRequest() async {
+  void listenToRequest() async {
     Routing routing = Routing();
     DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
     ref.onChildChanged.listen((event) {

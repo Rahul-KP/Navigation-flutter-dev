@@ -14,6 +14,7 @@ import 'package:http/http.dart' as http;
 
 class Grid {
   Services sobj = Services();
+  MapScreenRes mobj = MapScreenRes();
   bool w3wGridDisplayed = false;
   var w3wBox = null;
   GeoCoordinates? target = null;
@@ -56,7 +57,7 @@ class Grid {
 
   Future<void> obtainGrid() async {
     // Center to user's current location
-    MapScreenRes.goToUserLoc();
+    mobj.goToUserLoc();
     // Calculate bouding box
     List<List<double>> box = getBoundingBox(
         Services.userLocation.latitude, Services.userLocation.longitude);
