@@ -18,7 +18,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
-    Services.mapContext = this.context;
+    // Services.mapContext = this.context;
     if(Services.usertype=="driver") {
       mobj.listenToBookings();
     }

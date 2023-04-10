@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/mapview.dart';
@@ -14,7 +14,7 @@ class Services {
   static late var setStateOverlay;
   static late String usertype;
   static late String username;
-  static late BuildContext mapContext;
+  // late BuildContext mapContext;
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
