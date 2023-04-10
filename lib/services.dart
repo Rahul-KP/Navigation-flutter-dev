@@ -35,7 +35,7 @@ class Services {
     await dotenv.load(fileName: "credentials.env");
   }
 
-  static String? getSecret(String key) {
+  String? getSecret(String key) {
     return dotenv.env[key];
     //here.access.key.id
   }

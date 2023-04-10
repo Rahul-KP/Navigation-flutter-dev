@@ -11,7 +11,7 @@ import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> _initializeHERESDK() async {
+Future<void> _initializeHERESDK(Services sobj) async {
   // Needs to be called before accessing SDKOptions to load necessary libraries.
   SdkContext.init(IsolateOrigin.main);
 
@@ -19,8 +19,8 @@ Future<void> _initializeHERESDK() async {
   await SDKNativeEngine.sharedInstance?.dispose();
 
   // Set your credentials for the HERE SDK.
-  String accessKeyId = Services.getSecret("here.access.key.id")!;
-  String accessKeySecret = Services.getSecret("here.access.key.secret")!;
+  String accessKeyId = sobj.getSecret("here.access.key.id")!;
+  String accessKeySecret = sobj.getSecret("here.access.key.secret")!;
   SDKOptions sdkOptions =
       SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
 
@@ -65,7 +65,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Services sobj = Services();
   await sobj.loadCreds();
-  await _initializeHERESDK(); // initialise the HERE SDK
+  await _initializeHERESDK(sobj); // initialise the HERE SDK
   await sobj.getPermissions(); // wait for permissions
 
   await Firebase.initializeApp(

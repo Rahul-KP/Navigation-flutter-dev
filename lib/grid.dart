@@ -13,6 +13,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Grid {
+  static Services sobj = Services();
   static bool w3wGridDisplayed = false;
   static var w3wBox = null;
   static GeoCoordinates? target = null;
@@ -67,7 +68,7 @@ class Grid {
         ',' +
         box[1][1].toString();
     var url = Uri.https('api.what3words.com', 'v3/grid-section', {
-      'key': Services.getSecret('what3words.api.key')!,
+      'key': sobj.getSecret('what3words.api.key')!,
       'bounding-box': boxString,
       'format': 'json'
     });
@@ -185,7 +186,7 @@ class Grid {
 
       //code to get 3 word address onTap of a particular location
       var url = Uri.https('api.what3words.com', 'v3/convert-to-3wa', {
-        'key': Services.getSecret('what3words.api.key')!,
+        'key': sobj.getSecret('what3words.api.key')!,
         'coordinates': geoCoordinates.latitude.toString() +
             ',' +
             geoCoordinates.longitude.toString(),
