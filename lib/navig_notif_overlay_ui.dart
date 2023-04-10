@@ -1,4 +1,3 @@
-import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/countdown_timer.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
@@ -19,7 +18,7 @@ class NavigationNotif extends StatefulWidget {
 
 class _NavigationNotifState extends State<NavigationNotif> {
   Routing rt = Routing();
-  MapScreenRes mobj = MapScreenRes();
+
   @override
   void initState() {
     super.initState();
@@ -32,17 +31,17 @@ class _NavigationNotifState extends State<NavigationNotif> {
       child: GestureDetector(
           onTap: () async {
             GeoCoordinates patientLoc = GeoCoordinates(
-                double.parse(mobj.formDetails
+                double.parse(Services.formDetails
                     .child('user_location/lat')
                     .value
                     .toString()),
-                double.parse(mobj.formDetails
+                double.parse(Services.formDetails
                     .child('user_location/lon')
                     .value
                     .toString()));
             rt.addRoute(Services.userLocation, patientLoc);
             //after the formhas been accepted by the driver , stop listening to other forms
-            mobj.listen.cancel();
+            Services.listen.cancel();
           },
           child: CountDownTimer()),
       visible: NavigationNotif.isVisible,

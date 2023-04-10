@@ -21,9 +21,13 @@ class Services {
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
-  DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + username);
+  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + username);
   //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
-  // late DatabaseReference driverProfiles;
+  static late DatabaseReference driverProfiles;
+  //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
+  //after the trip is complete , resubscribe to bookings listener
+  static late StreamSubscription<DatabaseEvent> listen;
+  static late DataSnapshot formDetails;
   static late List pathToBeShared;
 
   Future<void> loadCreds() async {
