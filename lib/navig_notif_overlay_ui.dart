@@ -11,7 +11,7 @@ class NavigationNotif extends StatefulWidget {
   @override
   State<NavigationNotif> createState() => _NavigationNotifState();
 
-  static void toggleVisibility() {
+  void toggleVisibility() {
     isVisible = !isVisible;
   }
 }

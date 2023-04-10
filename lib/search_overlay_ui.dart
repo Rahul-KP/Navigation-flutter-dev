@@ -8,7 +8,7 @@ class SearchWidget extends StatefulWidget {
   static bool isVisible = false;
   static final Grid gobj = Grid();
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
-  static void toggleVisibility() {
+  void toggleVisibility() {
     isVisible = !isVisible;
     if(isVisible == false) {
       gobj.setTapGestureHandler();

@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
 
 class MapScreenRes {
+  NavigationNotif nobj = NavigationNotif();
   void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -28,19 +29,20 @@ class MapScreenRes {
                 msg: Services.mapController.camera.state.zoomLevel
                     .toString()))))));
     if (Services.usertype == 'user') {
+      SearchWidget sobj = SearchWidget();
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.search),
               onPressed: (() => Services.setStateOverlay(
-                  () => SearchWidget.toggleVisibility())))));
+                  () => sobj.toggleVisibility())))));
     } else if (Services.usertype == 'driver') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.navigation),
               onPressed: (() => Services.setStateOverlay(
-                  () => NavigationNotif.toggleVisibility())))));
+                  () => nobj.toggleVisibility())))));
     }
 
     return actionButtonList;
@@ -119,7 +121,7 @@ class MapScreenRes {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     Services.listen = ref.onChildAdded.listen((event) {
       Services.formDetails = event.snapshot;
-      Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
+      Services.setStateOverlay(() => nobj.toggleVisibility());
     });
   }
 

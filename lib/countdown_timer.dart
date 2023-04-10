@@ -11,7 +11,7 @@ class CountDownTimer extends StatefulWidget {
 class _CountDownTimerState extends State<CountDownTimer>
     with TickerProviderStateMixin {
   late AnimationController controller;
-
+  NavigationNotif nobj = NavigationNotif();
   String get seconds {
     Duration duration = controller.duration!;
     return (duration.inSeconds % 60).toString();
@@ -28,7 +28,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         Services.setStateOverlay(() {
-          NavigationNotif.toggleVisibility();
+          nobj.toggleVisibility();
         });
       }
     });
