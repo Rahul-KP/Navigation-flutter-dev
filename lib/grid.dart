@@ -13,28 +13,28 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 class Grid {
-  static Services sobj = Services();
-  static bool w3wGridDisplayed = false;
-  static var w3wBox = null;
-  static GeoCoordinates? target = null;
+  Services sobj = Services();
+  bool w3wGridDisplayed = false;
+  var w3wBox = null;
+  GeoCoordinates? target = null;
   // static GeoCoordinates source = GeoCoordinates(12.887407, 77.641313);
   //static GeoCoordinates source = GeoCoordinates(12.959614,77.649804);// manipal hospital madivala road
   //static GeoCoordinates source = GeoCoordinates(13.028151,77.569873); //Ramiah Memorial Hospital
   // static GeoCoordinates source = GeoCoordinates(12.896116, 77.598554);//apollo hospital
-  static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
-  static Routing obj = Routing();
-  static DatabaseReference ref = FirebaseDatabase.instance.ref('results');
-  static MapPolyline? currentSquare = null;
-  static MapPolyline? addSquare = null;
-  static bool choose2Squares = false;
+  GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
+  Routing obj = Routing();
+  DatabaseReference ref = FirebaseDatabase.instance.ref('results');
+  MapPolyline? currentSquare = null;
+  MapPolyline? addSquare = null;
+  bool choose2Squares = false;
 
-  static void init() async {
+  void init() async {
     await Hive.initFlutter(); // Initialize hive
     w3wBox = await Hive.openBox('w3wgrid'); // Opening a box
     obj.initRoutingEngine();
   }
 
-  static List<List<double>> getBoundingBox(double lat, double lon) {
+  List<List<double>> getBoundingBox(double lat, double lon) {
     const EARTH_RADIUS = 6371.0088; // in km
     double diagonal = 0.5; // diagonal length in km
 
@@ -54,7 +54,7 @@ class Grid {
     ];
   }
 
-  static Future<void> obtainGrid() async {
+  Future<void> obtainGrid() async {
     // Center to user's current location
     MapScreenRes.goToUserLoc();
     // Calculate bouding box
@@ -106,7 +106,7 @@ class Grid {
     // Fluttertoast.showToast(msg: response.body);
   }
 
-  static void _displayGrid() async {
+  void _displayGrid() async {
     List<GeoCoordinates> coordinates = [];
     double widthInPixels = 2;
     List lines = w3wBox.get('grid');
@@ -125,7 +125,7 @@ class Grid {
     w3wGridDisplayed = true;
   }
 
-  static void _removeGrid() async {
+  void _removeGrid() async {
     List<GeoCoordinates> coordinates = [];
     double widthInPixels = 2;
     List lines = w3wBox.get('grid');
@@ -144,7 +144,7 @@ class Grid {
     w3wGridDisplayed = false;
   }
 
-  static List<GeoCoordinates> _getOtherCorners(
+  List<GeoCoordinates> _getOtherCorners(
       double swLat, double swLng, double neLat, double neLng) {
     List<List<double>> otherCorners = List.generate(4, (_) => [0.0, 0.0]);
 
@@ -172,7 +172,7 @@ class Grid {
     return coords;
   }
 
-  static void setTapGestureHandler() {
+  void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
       GeoCoordinates geoCoordinates =

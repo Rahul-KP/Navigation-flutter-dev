@@ -47,6 +47,7 @@ class MapScreenRes {
   }
 
   static List<Widget> _getDrawerOptionsW3w() {
+    Grid gobj = Grid();
     List<Widget> w3wButtonList = [];
     w3wButtonList.add(GestureDetector(
       child: ListTile(
@@ -54,7 +55,7 @@ class MapScreenRes {
         leading: Icon(Icons.clear_all_rounded),
       ),
       onTap: () {
-        Grid.obj.clearMap();
+        gobj.obj.clearMap();
         Services.search.clearMap();
       },
     ));
@@ -64,8 +65,8 @@ class MapScreenRes {
         leading: Icon(Icons.task),
       ),
       onTap: () {
-        if(Grid.target != null) {
-          Grid.obj.addRoute(Grid.target!, Grid.source);
+        if(gobj.target != null) {
+          gobj.obj.addRoute(gobj.target!, gobj.source);
         }
       },
     ));
@@ -76,7 +77,7 @@ class MapScreenRes {
       ),
       onTap: () {
         //allow to squares to be selected
-        Grid.choose2Squares = !Grid.choose2Squares;
+        gobj.choose2Squares = !gobj.choose2Squares;
         Fluttertoast.showToast(msg: 'tapped');
       },
     ));

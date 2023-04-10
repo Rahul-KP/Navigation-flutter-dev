@@ -24,8 +24,9 @@ class _AppScreenState extends State<AppScreen> {
     if(Services.usertype=="user") {
       MapScreenRes.listenToRequest();
     }
-    Grid.init();
-    Grid.obtainGrid();
+    Grid gobj = Grid();
+    gobj.init();
+    gobj.obtainGrid();
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
