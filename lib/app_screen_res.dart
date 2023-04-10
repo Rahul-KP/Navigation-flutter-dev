@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
@@ -13,6 +15,10 @@ import 'ambulance_form.dart';
 
 class MapScreenRes {
   NavigationNotif nobj = NavigationNotif();
+  //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
+  //after the trip is complete , resubscribe to bookings listener
+  late StreamSubscription<DatabaseEvent> listen;
+  late DataSnapshot formDetails;
   void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -119,8 +125,8 @@ class MapScreenRes {
 
   void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    Services.listen = ref.onChildAdded.listen((event) {
-      Services.formDetails = event.snapshot;
+    listen = ref.onChildAdded.listen((event) {
+      formDetails = event.snapshot;
       Services.setStateOverlay(() => nobj.toggleVisibility());
     });
   }
