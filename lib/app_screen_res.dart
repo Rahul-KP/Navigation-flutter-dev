@@ -1,4 +1,5 @@
 import 'package:AmbiNav/grid.dart';
+import 'package:AmbiNav/grid2.dart' as gd;
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -12,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
 
 class MapScreenRes {
+  static gd.Grid grid = gd.Grid();
+
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -24,9 +27,23 @@ class MapScreenRes {
         padding: const EdgeInsets.only(right: 15.0),
         child: IconButton(
             icon: Icon(Icons.zoom_out_map_rounded),
-            onPressed: ((() async => Fluttertoast.showToast(
-                msg: Services.mapController.camera.state.zoomLevel
-                    .toString()))))));
+            onPressed: ((() async {
+              Fluttertoast.showToast(
+                  msg:
+                      Services.mapController.camera.state.zoomLevel.toString());
+              grid.init();
+              grid.getGrid();
+            })))));
+    actionButtonList.add(Padding(
+        padding: const EdgeInsets.only(right: 15.0),
+        child: IconButton(
+            icon: Icon(Icons.crop_5_4_rounded),
+            onPressed: ((() async {
+              Fluttertoast.showToast(
+                  msg:
+                      Services.mapController.camera.state.zoomLevel.toString());
+              grid.removeGrid();
+            })))));
     if (Services.usertype == 'user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
@@ -60,18 +77,20 @@ class MapScreenRes {
     ));
     w3wButtonList.add(GestureDetector(
       child: ListTile(
-        title: const Text('Plot path to square'), // Button 2 - plot path from clg to square u select
+        title: const Text(
+            'Plot path to square'), // Button 2 - plot path from clg to square u select
         leading: Icon(Icons.task),
       ),
       onTap: () {
-        if(Grid.target != null) {
+        if (Grid.target != null) {
           Grid.obj.addRoute(Grid.target!, Grid.source);
         }
       },
     ));
     w3wButtonList.add(GestureDetector(
       child: ListTile(
-        title: const Text('Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
+        title: const Text(
+            'Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
         leading: Icon(Icons.square_sharp),
       ),
       onTap: () {
