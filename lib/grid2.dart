@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:what3words/what3words.dart';
 
 class Grid {
   var _api;
   List<MapPolyline> lines = [];
 
-  void init() async {
+  void init() {
     Services _sobj = Services();
-    _api = What3WordsV3(_sobj.getSecret('what3words.api.key')!);
-    await Hive.initFlutter(); 
+    _api = What3WordsV3(_sobj.getSecret('what3words.api.key')!); 
     print("Initialized W3W");
   }
 
