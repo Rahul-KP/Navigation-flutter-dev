@@ -14,10 +14,11 @@ class Grid {
   List<MapPolyline> lines = [];
   static Services sobj = Services();
   static GeoCoordinates? target = null;
-  static bool choose2Squares = false;
+  static bool marked = false;
   static MapPolyline? addSquare = null;
   static Routing obj = Routing();
   static MapPolyline? currentSquare = null;
+  static MapPolyline? prevSquare = null;
 
   void init() {
     Services _sobj = Services();
@@ -78,6 +79,14 @@ class Grid {
     return coords;
   }
 
+  bool markerState(){
+    if(marked){
+      return false;
+    }else{
+      return true;
+    }
+  }
+
   void getGrid() async {
     GeoCoordinates NEC =
         Services.mapController.camera.boundingBox!.northEastCorner;
@@ -105,6 +114,7 @@ class Grid {
       GeoCoordinates geoCoordinates =
           Services.mapController.viewToGeoCoordinates(touchPoint)!;
       Fluttertoast.showToast(msg: "Tapped!");
+      marked = markerState();
       print('Tap at: ' +
           geoCoordinates.latitude.toString() +
           '\n' +
@@ -135,26 +145,27 @@ class Grid {
           parsed['square']['northeast']['lat'],
           parsed['square']['northeast']['lng']);
 
-      if (choose2Squares) {
-        if (addSquare != null) {
-          Services.mapController.mapScene.removeMapPolyline(addSquare!);
-        }
-        addSquare = MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
-        Services.mapController.mapScene.addMapPolyline(addSquare!);
-        obj.addRoute(geoCoordinates, target!);
-      } else {
+
+      if (!marked) {
+        // Fluttertoast.showToast(msg: "removing the marker");
+         Services.mapController.mapScene.removeMapPolyline(currentSquare!);
+         currentSquare = null;
+         marked= markerState();
+      } 
         currentSquare =
             MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
         target =
             GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
-        Fluttertoast.showToast(msg: "redd marker!");
+        // Fluttertoast.showToast(msg: "redd marker!");
 
-      }
+      
 
       if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
           }
           Services.mapController.mapScene.addMapPolyline(currentSquare!);
+
+      // marked = markerState();
 
       
     });
