@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
 
+import 'app_screen_res.dart';
+
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
   @override
@@ -96,6 +98,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
+                      grid1.init();
+
                       Services.ref = FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
                       String hashvalue = AmbulanceForm().generateFormHash(
@@ -121,8 +125,12 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
+                      MapScreenRes.goToUserLoc();
+                      Services.mapController.camera.zoomTo(20);
+                      while(Services.mapController.camera.boundingBox == null){
+                        
+                      }
                       print("Grid is to be drawn after submit!");
-                      grid1.init();
                       grid1.getGrid();
                     },
                   ))

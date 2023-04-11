@@ -88,6 +88,7 @@ class Grid {
   }
 
   void getGrid() async {
+
     GeoCoordinates NEC =
         Services.mapController.camera.boundingBox!.northEastCorner;
     GeoCoordinates SWC =
@@ -158,7 +159,6 @@ class Grid {
             GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
         // Fluttertoast.showToast(msg: "redd marker!");
 
-      
 
       if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
