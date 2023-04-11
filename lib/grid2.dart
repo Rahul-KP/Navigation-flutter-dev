@@ -10,13 +10,10 @@ class Grid {
   var _api;
   List<MapPolyline> lines = [];
 
-  void init() {
+  void init() async {
     Services _sobj = Services();
     _api = What3WordsV3(_sobj.getSecret('what3words.api.key')!);
-    Hive.initFlutter().then((value) {
-      Hive.deleteBoxFromDisk('grid');
-      Hive.openBox('grid');
-    });
+    await Hive.initFlutter(); 
     print("Initialized W3W");
   }
 
@@ -24,7 +21,7 @@ class Grid {
     List<GeoCoordinates> coordinates = [];
     double widthInPixels = 2;
     print(grid.length);
-    // var box = Hive.box('grid');
+    
 
     for (Line element in grid) {
       coordinates.add(GeoCoordinates(element.start.lat, element.start.lng));
@@ -33,13 +30,12 @@ class Grid {
           widthInPixels, Color.fromARGB(255, 49, 214, 203));
       Services.mapController.mapScene.addMapPolyline(polyline);
       lines.add(polyline);
-      // box.add(polyline);
+      
       coordinates.clear();
     }
   }
 
   void removeGrid() {
-    // var box = Hive.box('grid');
     for (MapPolyline element in lines) {
       print('rmoving!');
       Services.mapController.mapScene.removeMapPolyline(element);
