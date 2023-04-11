@@ -7,14 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
 
-
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
   @override
   AmbulanceFormState createState() {
     return AmbulanceFormState();
   }
-  
+
   String generateFormHash(String name, String age, String hospital) {
     var bytes = utf8.encode(name + age + hospital);
     var hash = sha256.convert(bytes);
@@ -32,6 +31,9 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   TextEditingController age = TextEditingController();
   TextEditingController preferred_hosp = TextEditingController();
   String? gender;
+
+  glay.Grid grid1 = glay.Grid();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -94,8 +96,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
-                      Services.ref =
-                          FirebaseDatabase.instance.ref("Bookings");
+                      Services.ref = FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
                       String hashvalue = AmbulanceForm().generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
@@ -112,18 +113,16 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                         }
                       });
                       AppScreen.scaffoldKey.currentState!.closeDrawer();
-                      
-                      Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: ((context) => AppScreen())));
+
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: ((context) => AppScreen())));
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
                       print("Grid is to be drawn after submit!");
-                       glay.Grid grid1 = glay.Grid();
-                       grid1.init();
+                      grid1.init();
                       grid1.getGrid();
                     },
                   ))

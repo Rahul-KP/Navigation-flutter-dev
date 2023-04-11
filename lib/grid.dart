@@ -205,6 +205,7 @@ class Grid {
               parsed['square']['southwest']['lng'],
               parsed['square']['northeast']['lat'],
               parsed['square']['northeast']['lng']);
+
           if (choose2Squares) {
             if (addSquare != null) {
               Services.mapController.mapScene.removeMapPolyline(addSquare!);
@@ -219,6 +220,8 @@ class Grid {
             target = GeoCoordinates(
                 geoCoordinates.latitude, geoCoordinates.longitude);
           }
+
+          
           if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
           }
