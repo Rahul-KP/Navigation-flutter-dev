@@ -5,6 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
+import 'package:AmbiNav/grid2.dart' as glay;
+
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -119,6 +121,10 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
+                      print("Grid is to be drawn after submit!");
+                       glay.Grid grid1 = glay.Grid();
+                       grid1.init();
+                      grid1.getGrid();
                     },
                   ))
                 ],
