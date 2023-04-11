@@ -8,7 +8,7 @@ import 'map.dart';
 
 class AppScreen extends StatefulWidget {
   AppScreen({super.key});
-
+  static final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   State<AppScreen> createState() => _AppScreenState();
 }
@@ -33,9 +33,9 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldKey = GlobalKey<ScaffoldState>();
+    
     return Scaffold(
-      key: scaffoldKey,
+      key: AppScreen.scaffoldKey,
       drawer: Drawer(
         child: SafeArea(
           child: Column(
@@ -49,10 +49,10 @@ class _AppScreenState extends State<AppScreen> {
             //hamburger icon
             icon: Icon(Icons.menu),
             onPressed: () {
-              if (scaffoldKey.currentState!.isDrawerOpen) {
-                scaffoldKey.currentState!.closeDrawer();
+              if (AppScreen.scaffoldKey.currentState!.isDrawerOpen) {
+                AppScreen.scaffoldKey.currentState!.closeDrawer();
               } else {
-                scaffoldKey.currentState!.openDrawer();
+                AppScreen.scaffoldKey.currentState!.openDrawer();
               }
             },
           ),

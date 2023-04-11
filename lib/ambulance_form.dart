@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class AmbulanceForm extends StatefulWidget {
   AmbulanceFormState createState() {
     return AmbulanceFormState();
   }
-
+  
   String generateFormHash(String name, String age, String hospital) {
     var bytes = utf8.encode(name + age + hospital);
     var hash = sha256.convert(bytes);
@@ -24,6 +25,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   // a global key to validate form and identify widget
   final _formKey = GlobalKey<FormState>();
   final appTitle = 'Book an Ambulance';
+  final AppScreen aobj = AppScreen();
   TextEditingController patient_name = TextEditingController();
   TextEditingController age = TextEditingController();
   TextEditingController preferred_hosp = TextEditingController();
@@ -107,6 +109,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           }
                         }
                       });
+                      AppScreen.scaffoldKey.currentState!.closeDrawer();
+                      
+                      Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: ((context) => AppScreen())));
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,

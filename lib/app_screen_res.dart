@@ -14,7 +14,7 @@ import 'ambulance_form.dart';
 
 class MapScreenRes {
   static gd.Grid grid = gd.Grid();
-
+  // static AppScreen screen = AppScreen();
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
