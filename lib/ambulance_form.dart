@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'app_screen_res.dart';
 
@@ -35,7 +36,15 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   String? gender;
 
   glay.Grid grid1 = glay.Grid();
-
+  void listenForRoute() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref('results');
+    ref.onValue.listen((event) {
+      var data = event.snapshot.value;
+      print(data.toString());
+      Fluttertoast.showToast(msg: data.toString());
+      Fluttertoast.showToast(msg: "lulululululululu");
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -117,7 +126,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                         }
                       });
                       AppScreen.scaffoldKey.currentState!.closeDrawer();
-
+                      //listen to firebase to plot path on user side
+                      if(Services.usertype == 'user') {
+                        listenForRoute();
+                      }
+                      
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: ((context) => AppScreen())));
                       // ref.set({

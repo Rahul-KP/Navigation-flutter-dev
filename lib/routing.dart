@@ -103,7 +103,14 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (Services.usertype == 'driver') {
-          // _broadcastRoute(route);
+          _broadcastRoute(route);
+        }
+        if(Services.usertype == 'user') {
+          ref.onValue.listen((event) {
+            Fluttertoast.showToast(msg: "here");
+            print(event.snapshot.value.toString());
+            Fluttertoast.showToast(msg: (event.snapshot.value.runtimeType.toString()));
+          });
         }
       } else {
         var error = routingError.toString();
@@ -127,5 +134,6 @@ class Routing {
     }
     ref.update({'route': route_});
     Services.pathToBeShared = route_;
+    Fluttertoast.showToast(msg: "path now put to firebase rtdb");
   }
 }
