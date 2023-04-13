@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
-
 import 'app_screen_res.dart';
+import 'main.dart' as mm;
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -111,8 +111,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           "preferred_hospital": preferred_hosp.text,
                           "gender": gender,
                           "user_location": {
-                            "lat": Services.userLocation.latitude,
-                            "lon": Services.userLocation.longitude,
+                            "lat": mm.sobj.userLocation.latitude,
+                            "lon": mm.sobj.userLocation.longitude,
                           }
                         }
                       });

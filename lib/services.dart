@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ import 'package:location/location.dart';
   late String usertype;
   late String username;
   static late BuildContext mapContext;
-  static late core.GeoCoordinates userLocation; // user's location
+  late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
@@ -55,12 +56,12 @@ import 'package:location/location.dart';
 
       if (usertype == 'driver') {
         // broadcast the location if the ambulance driver is using the app
-        _broadcastLoc();
+        _broadcastLoc(sobj);
       }
     });
   }
 
-  void _broadcastLoc() async {
+  void _broadcastLoc(sobj) async {
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
@@ -87,6 +88,6 @@ import 'package:location/location.dart';
       }
     }
     LocationData temp = await location.getLocation();
-    Services.userLocation = core.GeoCoordinates(temp.latitude!,temp.longitude!);
+   userLocation = core.GeoCoordinates(temp.latitude!,temp.longitude!);
   }
 }

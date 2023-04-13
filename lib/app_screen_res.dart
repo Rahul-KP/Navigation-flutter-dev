@@ -20,7 +20,7 @@ class MapScreenRes {
   static void goToUserLoc() async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
-    Services.mapController.camera.lookAtPoint(Services.userLocation);
+    Services.mapController.camera.lookAtPoint(mm.sobj.userLocation);
   }
 
   static List<Widget> getActionButtonList() {

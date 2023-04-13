@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 import 'services.dart';
+import 'main.dart' as mm;
 
 class MapWidget extends StatelessWidget {
   @override
@@ -23,12 +24,12 @@ class MapWidget extends StatelessWidget {
           MapMeasure(MapMeasureKind.distance, distanceToEarthInMeters);
 
       hereMapController.camera
-          .lookAtPointWithMeasure(Services.userLocation, mapMeasureZoom);
+          .lookAtPointWithMeasure(mm.sobj.userLocation, mapMeasureZoom);
     });
 
     Services.mapController = hereMapController;
     _addLocationIndicator(
-        Services.userLocation, LocationIndicatorIndicatorStyle.navigation);
+        mm.sobj.userLocation, LocationIndicatorIndicatorStyle.navigation);
   }
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
@@ -39,7 +40,7 @@ class MapWidget extends StatelessWidget {
     // including a bearing direction.
     // For testing purposes, we create a Location object. Usually, you may want to get this from
     // a GPS sensor instead.
-    Location location = Location.withCoordinates(Services.userLocation);
+    Location location = Location.withCoordinates(mm.sobj.userLocation);
     location.horizontalAccuracyInMeters = 1.0;
     // location.time = DateTime.now();
     // // location.bearingInDegrees = _getRandom(0, 360);

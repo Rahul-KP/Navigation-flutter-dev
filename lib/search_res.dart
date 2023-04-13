@@ -9,6 +9,9 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
+import 'main.dart' as mm;
+
+
 
 class SearchRes {
   MapImage? _poiMapImage;
@@ -62,7 +65,7 @@ class SearchRes {
     searchOptions.maxItems = 30;
 
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(Services.userLocation);
+    TextQueryArea queryArea = TextQueryArea.withCenter(mm.sobj.userLocation);
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
@@ -122,7 +125,7 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          await obj.addRoute(Services.userLocation,
+          await obj.addRoute(mm.sobj.userLocation,
               searchResultMetadata.searchResult.geoCoordinates!);
 
           setStateMarkerDetailsCard(() {

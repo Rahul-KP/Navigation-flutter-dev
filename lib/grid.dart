@@ -11,6 +11,7 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'main.dart' as mm;
 
 class Grid {
   static Services sobj = Services();
@@ -59,7 +60,7 @@ class Grid {
     MapScreenRes.goToUserLoc();
     // Calculate bouding box
     List<List<double>> box = getBoundingBox(
-        Services.userLocation.latitude, Services.userLocation.longitude);
+       mm.sobj.userLocation.latitude, mm.sobj.userLocation.longitude);
     String boxString = box[0][0].toString() +
         ',' +
         box[0][1].toString() +
