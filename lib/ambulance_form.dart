@@ -38,12 +38,27 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   glay.Grid grid1 = glay.Grid();
   void listenForRoute() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref('results');
-    ref.onValue.listen((event) {
-      var data = event.snapshot.value;
+    // final snapshot = await ref.child('route').get();
+    // Fluttertoast.showToast(msg: snapshot.value.toString());
+    
+    ref.onChildAdded.listen((event) {
+      Object? data = event.snapshot.value;
       print(data.toString());
-      Fluttertoast.showToast(msg: data.toString());
-      Fluttertoast.showToast(msg: "lulululululululu");
+      Fluttertoast.showToast(msg: (data!.runtimeType.toString()));
+      List? d = data as List?;
+      print(d);
+      Fluttertoast.showToast(msg: d.toString());
+      Fluttertoast.showToast(msg: "Legend Of Zelda");
     });
+    ref.onChildChanged.listen((event) {
+      
+    });
+    // ref.onValue.listen((event) {
+    //   var data = event.snapshot.value;
+    //   print(data.toString());
+    //   Fluttertoast.showToast(msg: data.toString());
+    //   Fluttertoast.showToast(msg: "lulululululululu");
+    // });
   }
   @override
   Widget build(BuildContext context) {
