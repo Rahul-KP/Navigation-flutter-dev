@@ -14,10 +14,10 @@ import 'package:location/location.dart';
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   late String usertype;
-  late String username;
+  late String username; 
   static late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
-  static LocationIndicator locationIndicator = LocationIndicator();
+  LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
@@ -56,12 +56,12 @@ import 'package:location/location.dart';
 
       if (usertype == 'driver') {
         // broadcast the location if the ambulance driver is using the app
-        _broadcastLoc(sobj);
+        _broadcastLoc();
       }
     });
   }
 
-  void _broadcastLoc(sobj) async {
+  void _broadcastLoc() async {
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }

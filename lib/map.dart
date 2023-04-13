@@ -34,7 +34,9 @@ class MapWidget extends StatelessWidget {
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
       LocationIndicatorIndicatorStyle indicatorStyle) {
+    // mm.sobj.locationIndicator.locationIndicatorStyle = indicatorStyle;
     Services.locationIndicator.locationIndicatorStyle = indicatorStyle;
+
 
     // A LocationIndicator is intended to mark the user's current location,
     // including a bearing direction.
@@ -45,7 +47,9 @@ class MapWidget extends StatelessWidget {
     // location.time = DateTime.now();
     // // location.bearingInDegrees = _getRandom(0, 360);
 
+    // mm.sobj.locationIndicator.updateLocation(location);
     Services.locationIndicator.updateLocation(location);
+
 
     // A LocationIndicator listens to the lifecycle of the map view,
     // therefore, for example, it will get destroyed when the map view gets destroyed.
