@@ -29,7 +29,7 @@ import 'package:location/location.dart';
   //after the trip is complete , resubscribe to bookings listener
   late StreamSubscription<DatabaseEvent> listen;
   late DataSnapshot formDetails;
-  static late List pathToBeShared;
+  late List pathToBeShared;
 
 
   Future<void> loadCreds() async {

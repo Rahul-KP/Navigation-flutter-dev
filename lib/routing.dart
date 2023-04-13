@@ -127,6 +127,6 @@ class Routing {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route': route_});
-    Services.pathToBeShared = route_;
+    mm.sobj.pathToBeShared = route_;
   }
 }
