@@ -17,17 +17,17 @@ import 'package:location/location.dart';
   late String username; 
   static late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
-  LocationIndicator locationIndicator = LocationIndicator();
+  static LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
   static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
   //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
-  static late DatabaseReference driverProfiles;
+  late DatabaseReference driverProfiles;
   //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
   //after the trip is complete , resubscribe to bookings listener
-  static late StreamSubscription<DatabaseEvent> listen;
+   late StreamSubscription<DatabaseEvent> listen;
   static late DataSnapshot formDetails;
   static late List pathToBeShared;
 

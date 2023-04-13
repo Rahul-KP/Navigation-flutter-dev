@@ -138,7 +138,7 @@ class MapScreenRes {
 
   static void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    Services.listen = ref.onChildAdded.listen((event) {
+    mm.sobj.listen = ref.onChildAdded.listen((event) {
       Services.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
