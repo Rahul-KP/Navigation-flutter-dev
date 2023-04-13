@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart' as mm;
+
 
 class userDetails extends StatefulWidget {
   const userDetails({super.key});
@@ -108,7 +110,8 @@ class _userDetailsState extends State<userDetails> {
 
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'user');
-                        Services.usertype = 'user';
+                        // Services.usertype = 'user';
+                        mm.sobj.usertype='user';
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(

@@ -35,7 +35,8 @@ void alreadyLoggedin(sobj) {
   SharedPreferences.getInstance().then((value) {
     bool newuser = (value.getBool('login') ?? true);
     if (newuser == false) {
-      Services.usertype = value.getString('usertype')!;
+      // Services.usertype = value.getString('usertype')!;
+      sobj.usertype= value.getString('usertype')!;
       sobj.username=value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,

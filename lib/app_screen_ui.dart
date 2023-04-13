@@ -5,6 +5,7 @@ import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
+import 'main.dart' as mm;
 
 class AppScreen extends StatefulWidget {
   AppScreen({super.key});
@@ -14,15 +15,14 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-
   @override
   void initState() {
     super.initState();
     Services.mapContext = this.context;
-    if(Services.usertype=="driver") {
+    if (mm.sobj.usertype == 'driver') {
       MapScreenRes.listenToBookings();
     }
-    if(Services.usertype=="user") {
+    if (mm.sobj.usertype == 'user') {
       MapScreenRes.listenToRequest();
     }
   }
@@ -33,14 +33,11 @@ class _AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       key: AppScreen.scaffoldKey,
       drawer: Drawer(
         child: SafeArea(
-          child: Column(
-            children: MapScreenRes.getDrawerOptions(context)
-          ),
+          child: Column(children: MapScreenRes.getDrawerOptions(context)),
         ),
       ),
       appBar: AppBar(

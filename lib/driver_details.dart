@@ -112,7 +112,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
 
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
-                        Services.usertype = 'driver';                     
+                        // Services.usertype = 'driver';  
+                        mm.sobj.usertype='driver';                   
                         mm.sobj.username=username;
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);

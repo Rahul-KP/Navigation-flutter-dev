@@ -8,6 +8,7 @@ import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
 import 'package:http/http.dart' as http;
+import 'main.dart' as mm;
 
 class Routing {
   late here.RoutingEngine _routingEngine;
@@ -102,7 +103,7 @@ class Routing {
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
-        if (Services.usertype == 'driver') {
+        if (mm.sobj.usertype == 'driver') {
           // _broadcastRoute(route);
         }
       } else {

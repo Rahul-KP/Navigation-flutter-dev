@@ -11,6 +11,8 @@ import 'package:here_sdk/core.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
+import 'main.dart' as mm;
+
 
 class MapScreenRes {
   static gd.Grid grid = gd.Grid();
@@ -44,14 +46,15 @@ class MapScreenRes {
                       Services.mapController.camera.state.zoomLevel.toString());
               grid.removeGrid();
             })))));
-    if (Services.usertype == 'user') {
+    if (
+    mm.sobj.usertype=='user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.search),
               onPressed: (() => Services.setStateOverlay(
                   () => SearchWidget.toggleVisibility())))));
-    } else if (Services.usertype == 'driver') {
+    } else if (mm.sobj.usertype == 'driver') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
@@ -114,13 +117,13 @@ class MapScreenRes {
         logindata.setBool('login', true);
         logindata.setString('username', "");
         logindata.setString('usertype', "");
-        Services.usertype = "";
+        mm.sobj.usertype = "";
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: ((context) => loginpg())));
       },
     ));
     drawerButtonList.addAll(_getDrawerOptionsW3w());
-    if (Services.usertype == 'user') {
+    if (mm.sobj.usertype == 'user') {
       drawerButtonList.add(GestureDetector(
         child: ListTile(
           title: const Text('Book an ambulance'),
@@ -146,9 +149,9 @@ class MapScreenRes {
   }
 
   static Widget? chooseOverlayWidget() {
-    if (Services.usertype == 'user') {
+    if (mm.sobj.usertype == 'user') {
       return SearchWidget();
-    } else if (Services.usertype == 'driver') {
+    } else if (mm.sobj.usertype == 'driver') {
       return NavigationNotif();
     }
     return null;
