@@ -32,11 +32,11 @@ class _NavigationNotifState extends State<NavigationNotif> {
       child: GestureDetector(
           onTap: () async {
             GeoCoordinates patientLoc = GeoCoordinates(
-                double.parse(Services.formDetails
+                double.parse(mm.sobj.formDetails
                     .child('user_location/lat')
                     .value
                     .toString()),
-                double.parse(Services.formDetails
+                double.parse(mm.sobj.formDetails
                     .child('user_location/lon')
                     .value
                     .toString()));

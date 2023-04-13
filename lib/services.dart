@@ -27,8 +27,8 @@ import 'package:location/location.dart';
   late DatabaseReference driverProfiles;
   //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
   //after the trip is complete , resubscribe to bookings listener
-   late StreamSubscription<DatabaseEvent> listen;
-  static late DataSnapshot formDetails;
+  late StreamSubscription<DatabaseEvent> listen;
+  late DataSnapshot formDetails;
   static late List pathToBeShared;
 
 

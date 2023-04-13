@@ -139,7 +139,7 @@ class MapScreenRes {
   static void listenToBookings() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     mm.sobj.listen = ref.onChildAdded.listen((event) {
-      Services.formDetails = event.snapshot;
+      mm.sobj.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
   }
