@@ -7,13 +7,13 @@ import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/mapview.dart';
 import 'package:location/location.dart';
 
-class Services {
+ class Services {
   static late HereMapController mapController;
   static SearchRes search = SearchRes();
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   static late String usertype;
-  static late String username;
+  late String username;
   static late BuildContext mapContext;
   static late core.GeoCoordinates userLocation; // user's location
   static LocationIndicator locationIndicator = LocationIndicator();
@@ -21,7 +21,7 @@ class Services {
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
-  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + username);
+  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
   //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
   static late DatabaseReference driverProfiles;
   //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
@@ -29,6 +29,7 @@ class Services {
   static late StreamSubscription<DatabaseEvent> listen;
   static late DataSnapshot formDetails;
   static late List pathToBeShared;
+
 
   Future<void> loadCreds() async {
     //loading the .env file

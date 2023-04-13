@@ -31,13 +31,12 @@ Future<void> _initializeHERESDK(Services sobj) async {
   }
 }
 
-void alreadyLoggedin() {
+void alreadyLoggedin(sobj) {
   SharedPreferences.getInstance().then((value) {
     bool newuser = (value.getBool('login') ?? true);
-
     if (newuser == false) {
       Services.usertype = value.getString('usertype')!;
-      Services.username = value.getString('username')!;
+      sobj.username=value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: AppScreen(),
@@ -51,6 +50,8 @@ void alreadyLoggedin() {
   });
 }
 
+
+
 void checkLoginStatus() {
   FirebaseAuth.instance.idTokenChanges().listen((User? user) {
     if (user == null) {
@@ -61,9 +62,10 @@ void checkLoginStatus() {
   });
 }
 
+  Services sobj = Services();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Services sobj = Services();
   await sobj.loadCreds();
   await _initializeHERESDK(sobj); // initialise the HERE SDK
   await sobj.getPermissions(); // wait for permissions
@@ -87,6 +89,6 @@ void main() async {
     }
   }
   checkLoginStatus();
-  alreadyLoggedin(); // check if user is already logged in
+  alreadyLoggedin(sobj); // check if user is already logged in
   sobj.setLoc(); // start streaming the location
 }

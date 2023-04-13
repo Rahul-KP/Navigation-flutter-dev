@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'main.dart' as mm;
 
 class AmbiDriverDetails extends StatefulWidget {
   AmbiDriverDetails({super.key});
@@ -111,8 +112,8 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
 
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
-                        Services.usertype = 'driver';
-                        Services.username = username;
+                        Services.usertype = 'driver';                     
+                        mm.sobj.username=username;
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(
