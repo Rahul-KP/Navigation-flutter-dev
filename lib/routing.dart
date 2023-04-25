@@ -50,7 +50,7 @@ class Routing {
         _formatTime(estimatedTravelTimeInSeconds) +
         ', Length: ' +
         _formatLength(lengthInMeters);
-    ref.update({"0" : routeDetails});
+    ref.update({"0": routeDetails});
     Fluttertoast.showToast(msg: routeDetails);
   }
 
@@ -91,7 +91,8 @@ class Routing {
     }
   }
 
-  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates, Services sobj) async {
+  Future<void> addRoute(destinationGeoCoordinates) async {
+    GeoCoordinates startGeoCoordinates = sobj.userLocation;
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);

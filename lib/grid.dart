@@ -59,8 +59,8 @@ class Grid {
     // Center to user's current location
     MapScreenRes().goToUserLoc(sobj);
     // Calculate bouding box
-    List<List<double>> box = getBoundingBox(
-       sobj.userLocation.latitude, sobj.userLocation.longitude);
+    List<List<double>> box =
+        getBoundingBox(sobj.userLocation.latitude, sobj.userLocation.longitude);
     String boxString = box[0][0].toString() +
         ',' +
         box[0][1].toString() +
@@ -214,7 +214,7 @@ class Grid {
             addSquare =
                 MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
             Services.mapController.mapScene.addMapPolyline(addSquare!);
-            obj.addRoute(geoCoordinates, target!,sobj);
+            obj.addRoute(target!);
           } else {
             currentSquare =
                 MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
@@ -222,7 +222,6 @@ class Grid {
                 geoCoordinates.latitude, geoCoordinates.longitude);
           }
 
-          
           if (currentSquare != null) {
             Services.mapController.mapScene.removeMapPolyline(currentSquare!);
           }

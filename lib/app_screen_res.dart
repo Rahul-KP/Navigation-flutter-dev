@@ -14,10 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
 // import 'main.dart' as mm;
 
-
 class MapScreenRes {
   gd.Grid grid = gd.Grid();
-   void goToUserLoc(Services sobj) async {
+  void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
     Services.mapController.camera.lookAtPoint(sobj.userLocation);
@@ -46,8 +45,7 @@ class MapScreenRes {
                       Services.mapController.camera.state.zoomLevel.toString());
               grid.removeGrid();
             })))));
-    if (
-    sobj.usertype=='user') {
+    if (sobj.usertype == 'user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
@@ -86,7 +84,7 @@ class MapScreenRes {
       ),
       onTap: () {
         if (Grid.target != null) {
-          Grid.obj.addRoute(Grid.target!, Grid.source,sobj);
+          Grid.obj.addRoute(Grid.source);
         }
       },
     ));
@@ -119,7 +117,11 @@ class MapScreenRes {
         logindata.setString('usertype', "");
         sobj.usertype = "";
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: ((context) => loginpg(sobj: sobj,))));
+            context,
+            MaterialPageRoute(
+                builder: ((context) => loginpg(
+                      sobj: sobj,
+                    ))));
       },
     ));
     drawerButtonList.addAll(_getDrawerOptionsW3w());
@@ -130,7 +132,11 @@ class MapScreenRes {
           leading: Icon(Icons.edit_note_rounded),
         ),
         onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AmbulanceForm(sobj: sobj,))),
+            context,
+            MaterialPageRoute(
+                builder: (context) => AmbulanceForm(
+                      sobj: sobj,
+                    ))),
       ));
     }
     return drawerButtonList;
@@ -148,7 +154,9 @@ class MapScreenRes {
     if (sobj.usertype == 'user') {
       return SearchWidget();
     } else if (sobj.usertype == 'driver') {
-      return NavigationNotif(sobj: sobj,);
+      return NavigationNotif(
+        sobj: sobj,
+      );
     }
     return null;
   }

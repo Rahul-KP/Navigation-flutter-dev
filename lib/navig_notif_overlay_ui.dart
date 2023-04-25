@@ -41,7 +41,7 @@ class _NavigationNotifState extends State<NavigationNotif> {
                     .child('user_location/lon')
                     .value
                     .toString()));
-            rt.addRoute(sobj.userLocation, patientLoc,sobj);
+            rt.addRoute(patientLoc);
             //after the formhas been accepted by the driver , stop listening to other forms
             sobj.listen.cancel();
           },

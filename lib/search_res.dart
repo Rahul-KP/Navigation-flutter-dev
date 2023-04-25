@@ -12,8 +12,6 @@ import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
 // import 'main.dart' as mm;
 
-
-
 class SearchRes {
   MapImage? _poiMapImage;
   List<MapMarker> _mapMarkerList = [];
@@ -126,8 +124,7 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          await obj.addRoute(sobj.userLocation,
-              searchResultMetadata.searchResult.geoCoordinates!,sobj);
+          await obj.addRoute(searchResultMetadata.searchResult.geoCoordinates!);
 
           setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
@@ -144,7 +141,7 @@ class SearchRes {
   void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((core.Point2D touchPoint) {
-      _pickMapMarker(touchPoint,sobj);
+      _pickMapMarker(touchPoint, sobj);
     });
   }
 
