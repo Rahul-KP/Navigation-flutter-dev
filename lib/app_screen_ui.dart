@@ -22,13 +22,13 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
-    Services.mapContext = this.context;
+    sobj.mapContext = this.context;
     sobj.postLogin();
     if (sobj.usertype == 'driver') {
-      MapScreenRes.listenToBookings(sobj);
+      mapScreenRes.listenToBookings(sobj);
     }
     if (sobj.usertype == 'user') {
-      MapScreenRes.listenToRequest();
+      mapScreenRes.listenToRequest(); // For path broadcast
     }
   }
 

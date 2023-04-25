@@ -14,7 +14,7 @@ import 'package:location/location.dart';
   static late var setStateOverlay;
   late String usertype;
   late String username; 
-  static late BuildContext mapContext;
+  late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
   late LocationIndicator locationIndicator;
   // DatabaseReference ref = FirebaseDatabase.instance.ref('routes');

@@ -137,7 +137,7 @@ class MapScreenRes {
     return drawerButtonList;
   }
 
-  static void listenToBookings(Services sobj) async {
+  void listenToBookings(Services sobj) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     sobj.listen = ref.onChildAdded.listen((event) {
       sobj.formDetails = event.snapshot;
@@ -158,7 +158,7 @@ class MapScreenRes {
     return null;
   }
 
-  static void listenToRequest() async {
+  void listenToRequest() async {
     Routing routing = Routing();
     DatabaseReference ref = FirebaseDatabase.instance.ref("Drivers");
     ref.onChildChanged.listen((event) {
