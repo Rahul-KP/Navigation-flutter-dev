@@ -39,6 +39,7 @@ class MapWidget extends StatelessWidget {
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
       LocationIndicatorIndicatorStyle indicatorStyle) {
     // mm.sobj.locationIndicator.locationIndicatorStyle = indicatorStyle;
+    sobj.locationIndicator = LocationIndicator();
     sobj.locationIndicator.locationIndicatorStyle = indicatorStyle;
 
 

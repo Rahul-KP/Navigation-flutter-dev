@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ import 'package:location/location.dart';
   late String username; 
   static late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
-  LocationIndicator locationIndicator = LocationIndicator();
+  late LocationIndicator locationIndicator;
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
