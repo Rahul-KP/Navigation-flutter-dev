@@ -67,7 +67,7 @@ class MapScreenRes {
     return actionButtonList;
   }
 
-  static List<Widget> _getDrawerOptionsW3w() {
+  List<Widget> _getDrawerOptionsW3w() {
     List<Widget> w3wButtonList = [];
     w3wButtonList.add(GestureDetector(
       child: ListTile(
@@ -106,7 +106,7 @@ class MapScreenRes {
     return w3wButtonList;
   }
 
-  static List<Widget> getDrawerOptions(BuildContext context, Services sobj) {
+  List<Widget> getDrawerOptions(BuildContext context, Services sobj) {
     List<Widget> drawerButtonList = [];
     drawerButtonList.add(GestureDetector(
       child: ListTile(

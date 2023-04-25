@@ -42,7 +42,7 @@ class _AppScreenState extends State<AppScreen> {
       key: AppScreen.scaffoldKey,
       drawer: Drawer(
         child: SafeArea(
-          child: Column(children: MapScreenRes.getDrawerOptions(context,sobj)),
+          child: Column(children: mapScreenRes.getDrawerOptions(context,sobj)),
         ),
       ),
       appBar: AppBar(
