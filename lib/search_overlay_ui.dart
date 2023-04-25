@@ -1,4 +1,5 @@
 import 'package:AmbiNav/grid.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   onSubmitted: (
                     (value) {
                       Services.search.obj.initRoutingEngine();
-                      Services.search.search(value);
+                      Services.search.search(value,sobj);
                       // SearchWidget.toggleVisibility();
                     } 
                   ),

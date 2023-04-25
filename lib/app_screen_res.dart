@@ -1,5 +1,6 @@
 import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/grid2.dart' as gd;
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -11,19 +12,19 @@ import 'package:here_sdk/core.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 
 class MapScreenRes {
   static gd.Grid grid = gd.Grid();
   // static AppScreen screen = AppScreen();
-  static void goToUserLoc() async {
+   void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
-    Services.mapController.camera.lookAtPoint(mm.sobj.userLocation);
+    Services.mapController.camera.lookAtPoint(sobj.userLocation);
   }
 
-  static List<Widget> getActionButtonList() {
+  static List<Widget> getActionButtonList(Services sobj) {
     List<Widget> actionButtonList = [];
     actionButtonList.add(Padding(
         padding: const EdgeInsets.only(right: 15.0),
@@ -47,14 +48,14 @@ class MapScreenRes {
               grid.removeGrid();
             })))));
     if (
-    mm.sobj.usertype=='user') {
+    sobj.usertype=='user') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.search),
               onPressed: (() => Services.setStateOverlay(
                   () => SearchWidget.toggleVisibility())))));
-    } else if (mm.sobj.usertype == 'driver') {
+    } else if (sobj.usertype == 'driver') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
@@ -86,7 +87,7 @@ class MapScreenRes {
       ),
       onTap: () {
         if (Grid.target != null) {
-          Grid.obj.addRoute(Grid.target!, Grid.source);
+          Grid.obj.addRoute(Grid.target!, Grid.source,sobj);
         }
       },
     ));
@@ -105,7 +106,7 @@ class MapScreenRes {
     return w3wButtonList;
   }
 
-  static List<Widget> getDrawerOptions(BuildContext context) {
+  static List<Widget> getDrawerOptions(BuildContext context, Services sobj) {
     List<Widget> drawerButtonList = [];
     drawerButtonList.add(GestureDetector(
       child: ListTile(
@@ -117,29 +118,29 @@ class MapScreenRes {
         logindata.setBool('login', true);
         logindata.setString('username', "");
         logindata.setString('usertype', "");
-        mm.sobj.usertype = "";
+        sobj.usertype = "";
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: ((context) => loginpg())));
+            context, MaterialPageRoute(builder: ((context) => loginpg(sobj: sobj,))));
       },
     ));
     drawerButtonList.addAll(_getDrawerOptionsW3w());
-    if (mm.sobj.usertype == 'user') {
+    if (sobj.usertype == 'user') {
       drawerButtonList.add(GestureDetector(
         child: ListTile(
           title: const Text('Book an ambulance'),
           leading: Icon(Icons.edit_note_rounded),
         ),
         onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AmbulanceForm())),
+            context, MaterialPageRoute(builder: (context) => AmbulanceForm(sobj: sobj,))),
       ));
     }
     return drawerButtonList;
   }
 
-  static void listenToBookings() async {
+  static void listenToBookings(Services sobj) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
-    mm.sobj.listen = ref.onChildAdded.listen((event) {
-      mm.sobj.formDetails = event.snapshot;
+    sobj.listen = ref.onChildAdded.listen((event) {
+      sobj.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });
   }
@@ -148,11 +149,11 @@ class MapScreenRes {
     // Code to implement search functionality
   }
 
-  static Widget? chooseOverlayWidget() {
-    if (mm.sobj.usertype == 'user') {
+  static Widget? chooseOverlayWidget(Services sobj) {
+    if (sobj.usertype == 'user') {
       return SearchWidget();
-    } else if (mm.sobj.usertype == 'driver') {
-      return NavigationNotif();
+    } else if (sobj.usertype == 'driver') {
+      return NavigationNotif(sobj: sobj,);
     }
     return null;
   }

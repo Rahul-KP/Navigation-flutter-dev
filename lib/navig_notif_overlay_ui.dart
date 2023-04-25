@@ -1,12 +1,13 @@
 import 'package:AmbiNav/countdown_timer.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 class NavigationNotif extends StatefulWidget {
-  const NavigationNotif({super.key});
+  const NavigationNotif({super.key, required Services sobj});
   static bool isVisible = false;
 
   @override
@@ -32,17 +33,17 @@ class _NavigationNotifState extends State<NavigationNotif> {
       child: GestureDetector(
           onTap: () async {
             GeoCoordinates patientLoc = GeoCoordinates(
-                double.parse(mm.sobj.formDetails
+                double.parse(sobj.formDetails
                     .child('user_location/lat')
                     .value
                     .toString()),
-                double.parse(mm.sobj.formDetails
+                double.parse(sobj.formDetails
                     .child('user_location/lon')
                     .value
                     .toString()));
-            rt.addRoute(mm.sobj.userLocation, patientLoc);
+            rt.addRoute(sobj.userLocation, patientLoc,sobj);
             //after the formhas been accepted by the driver , stop listening to other forms
-            mm.sobj.listen.cancel();
+            sobj.listen.cancel();
           },
           child: CountDownTimer()),
       visible: NavigationNotif.isVisible,

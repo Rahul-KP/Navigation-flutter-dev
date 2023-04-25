@@ -1,3 +1,5 @@
+import 'package:AmbiNav/main.dart';
+import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'driver_details.dart';
 import 'user_details.dart';
@@ -7,7 +9,7 @@ import 'package:bordered_text/bordered_text.dart';
 String finalAmbulanceCode = "";
 
 class loginpg extends StatefulWidget {
-  const loginpg({super.key});
+  const loginpg({super.key, required Services sobj});
 
   @override
   State<loginpg> createState() => _loginpgState();
@@ -96,7 +98,7 @@ class _loginpgState extends State<loginpg> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AmbiDriverDetails()));
+                                builder: (context) => AmbiDriverDetails(sobj:sobj)));
                       },
                       child: const SizedBox(
                         width: 200,
@@ -128,7 +130,7 @@ class _loginpgState extends State<loginpg> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => userDetails()));
+                                builder: (context) => userDetails(sobj: sobj,)));
                         // Connect to map
                       },
                       child: const SizedBox(

@@ -1,3 +1,4 @@
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
@@ -9,7 +10,7 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 
 
@@ -48,7 +49,7 @@ class SearchRes {
     mapMarker.metadata = metadata;
   }
 
-  void search(String queryString) async {
+  void search(String queryString, Services sobj) async {
     // Code to implement search functionality
     //clear map markers before every search
     clearMap();
@@ -65,7 +66,7 @@ class SearchRes {
     searchOptions.maxItems = 30;
 
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(mm.sobj.userLocation);
+    TextQueryArea queryArea = TextQueryArea.withCenter(sobj.userLocation);
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
@@ -97,7 +98,7 @@ class SearchRes {
     });
   }
 
-  void _pickMapMarker(core.Point2D touchPoint) {
+  void _pickMapMarker(core.Point2D touchPoint, Services sobj) {
     double radiusInPixel = 2;
     Services.mapController.pickMapItems(touchPoint, radiusInPixel,
         (pickMapItemsResult) async {
@@ -125,8 +126,8 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          await obj.addRoute(mm.sobj.userLocation,
-              searchResultMetadata.searchResult.geoCoordinates!);
+          await obj.addRoute(sobj.userLocation,
+              searchResultMetadata.searchResult.geoCoordinates!,sobj);
 
           setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
@@ -143,7 +144,7 @@ class SearchRes {
   void setTapGestureHandler() {
     Services.mapController.gestures.tapListener =
         TapListener((core.Point2D touchPoint) {
-      _pickMapMarker(touchPoint);
+      _pickMapMarker(touchPoint,sobj);
     });
   }
 

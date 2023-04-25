@@ -1,4 +1,5 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +7,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 class AmbiDriverDetails extends StatefulWidget {
-  AmbiDriverDetails({super.key});
-
+  AmbiDriverDetails({super.key, required Services sobj});
   @override
   State<AmbiDriverDetails> createState() => _AmbiDriverDetailsState();
 }
@@ -113,14 +113,14 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
                         // Services.usertype = 'driver';  
-                        mm.sobj.usertype='driver';                   
-                        mm.sobj.username=username;
+                        sobj.usertype='driver';                   
+                        sobj.username=username;
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AppScreen()));
+                                builder: (context) => AppScreen(sobj: sobj)));
                       }
                     },
                     child: Container(
@@ -159,7 +159,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         onTap: () {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: ((context) => loginpg())));
+                                  builder: ((context) => loginpg(sobj: sobj,))));
                         },
                         child: Text(
                           '  Click here',

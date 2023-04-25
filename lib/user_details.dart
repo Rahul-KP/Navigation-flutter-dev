@@ -1,15 +1,16 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 
 class userDetails extends StatefulWidget {
-  const userDetails({super.key});
+  const userDetails({super.key, required Services sobj});
 
   @override
   State<userDetails> createState() => _userDetailsState();
@@ -111,13 +112,13 @@ class _userDetailsState extends State<userDetails> {
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'user');
                         // Services.usertype = 'user';
-                        mm.sobj.usertype='user';
+                        sobj.usertype='user';
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AppScreen()));
+                                builder: (context) => AppScreen(sobj: sobj,)));
                       }
                     },
                     child: Container(
@@ -156,7 +157,7 @@ class _userDetailsState extends State<userDetails> {
                         onTap: () {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: ((context) => loginpg())));
+                                  builder: ((context) => loginpg(sobj: sobj,))));
                         },
                         child: Text(
                           '  Click here',

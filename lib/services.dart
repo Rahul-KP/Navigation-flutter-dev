@@ -17,7 +17,7 @@ import 'package:location/location.dart';
   late String username; 
   static late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
-  static LocationIndicator locationIndicator = LocationIndicator();
+  LocationIndicator locationIndicator = LocationIndicator();
   static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device

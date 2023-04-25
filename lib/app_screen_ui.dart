@@ -1,28 +1,32 @@
 // import 'package:AmbiNav/grid.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'app_screen_res.dart';
 import 'map.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 class AppScreen extends StatefulWidget {
-  AppScreen({super.key});
+  AppScreen({super.key,required Services sobj});
   static final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   State<AppScreen> createState() => _AppScreenState();
 }
 
 class _AppScreenState extends State<AppScreen> {
+
+  MapScreenRes mapScreenRes = MapScreenRes();
+
   @override
   void initState() {
     super.initState();
     Services.mapContext = this.context;
-    if (mm.sobj.usertype == 'driver') {
-      MapScreenRes.listenToBookings();
+    if (sobj.usertype == 'driver') {
+      MapScreenRes.listenToBookings(sobj);
     }
-    if (mm.sobj.usertype == 'user') {
+    if (sobj.usertype == 'user') {
       MapScreenRes.listenToRequest();
     }
   }
@@ -37,7 +41,7 @@ class _AppScreenState extends State<AppScreen> {
       key: AppScreen.scaffoldKey,
       drawer: Drawer(
         child: SafeArea(
-          child: Column(children: MapScreenRes.getDrawerOptions(context)),
+          child: Column(children: MapScreenRes.getDrawerOptions(context,sobj)),
         ),
       ),
       appBar: AppBar(
@@ -53,17 +57,17 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: MapScreenRes.getActionButtonList()),
+          actions: MapScreenRes.getActionButtonList(sobj)),
       body: Stack(
         children: <Widget>[
           // MapWidget
-          MapWidget(),
+          MapWidget(sobj:sobj),
           //here the stateful builder is used to render search widget of search.dart (a card element to enter destination)
           //it renders without redrawing the entire screen
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             Services.setStateOverlay = setState;
-            return MapScreenRes.chooseOverlayWidget()!;
+            return MapScreenRes.chooseOverlayWidget(sobj)!;
           })),
 
           StatefulBuilder(builder: ((context, setState) {
@@ -74,7 +78,9 @@ class _AppScreenState extends State<AppScreen> {
       ),
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button
-          onPressed: (MapScreenRes.goToUserLoc),
+          onPressed: () async{
+            mapScreenRes.goToUserLoc(sobj);
+          },
           child: const Icon(
             Icons.add_location_alt_outlined,
             color: Colors.white,

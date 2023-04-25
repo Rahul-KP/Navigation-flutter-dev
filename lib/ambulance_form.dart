@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
 import 'app_screen_res.dart';
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
+  AmbulanceForm({super.key,required Services sobj});
   @override
   AmbulanceFormState createState() {
     return AmbulanceFormState();
@@ -28,13 +30,15 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   // a global key to validate form and identify widget
   final _formKey = GlobalKey<FormState>();
   final appTitle = 'Book an Ambulance';
-  final AppScreen aobj = AppScreen();
+  // final AppScreen aobj = AppScreen();
   TextEditingController patient_name = TextEditingController();
   TextEditingController age = TextEditingController();
   TextEditingController preferred_hosp = TextEditingController();
   String? gender;
 
   glay.Grid grid1 = glay.Grid();
+
+  MapScreenRes mapScreenRes = MapScreenRes();
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +106,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
 
                       Services.ref = FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
-                      String hashvalue = AmbulanceForm().generateFormHash(
+                      String hashvalue = AmbulanceForm(sobj: sobj,).generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
                       Services.ref.update({
                         hashvalue: {
@@ -111,21 +115,21 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           "preferred_hospital": preferred_hosp.text,
                           "gender": gender,
                           "user_location": {
-                            "lat": mm.sobj.userLocation.latitude,
-                            "lon": mm.sobj.userLocation.longitude,
+                            "lat": sobj.userLocation.latitude,
+                            "lon": sobj.userLocation.longitude,
                           }
                         }
                       });
                       AppScreen.scaffoldKey.currentState!.closeDrawer();
 
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => AppScreen())));
+                          builder: ((context) => AppScreen(sobj: sobj,))));
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
-                      MapScreenRes.goToUserLoc();
+                      mapScreenRes.goToUserLoc(sobj);
                       Services.mapController.camera.zoomTo(20);
                       while(Services.mapController.camera.boundingBox == null){
                         

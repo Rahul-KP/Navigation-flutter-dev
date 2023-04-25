@@ -11,7 +11,7 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 class Grid {
   static Services sobj = Services();
@@ -57,10 +57,10 @@ class Grid {
 
   static Future<void> obtainGrid() async {
     // Center to user's current location
-    MapScreenRes.goToUserLoc();
+    MapScreenRes().goToUserLoc(sobj);
     // Calculate bouding box
     List<List<double>> box = getBoundingBox(
-       mm.sobj.userLocation.latitude, mm.sobj.userLocation.longitude);
+       sobj.userLocation.latitude, sobj.userLocation.longitude);
     String boxString = box[0][0].toString() +
         ',' +
         box[0][1].toString() +
@@ -214,7 +214,7 @@ class Grid {
             addSquare =
                 MapPolyline(GeoPolyline(coords), 5, Colors.orange.shade800);
             Services.mapController.mapScene.addMapPolyline(addSquare!);
-            obj.addRoute(geoCoordinates, target!);
+            obj.addRoute(geoCoordinates, target!,sobj);
           } else {
             currentSquare =
                 MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);

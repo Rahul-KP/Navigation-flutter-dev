@@ -8,7 +8,7 @@ import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
 import 'package:http/http.dart' as http;
-import 'main.dart' as mm;
+// import 'main.dart' as mm;
 
 class Routing {
   late here.RoutingEngine _routingEngine;
@@ -89,7 +89,7 @@ class Routing {
     }
   }
 
-  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates) async {
+  Future<void> addRoute(startGeoCoordinates, destinationGeoCoordinates, Services sobj) async {
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
@@ -103,7 +103,7 @@ class Routing {
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
-        if (mm.sobj.usertype == 'driver') {
+        if (sobj.usertype == 'driver') {
           // _broadcastRoute(route);
         }
       } else {
@@ -121,12 +121,12 @@ class Routing {
   }
 
   //add route to database
-  void _broadcastRoute(here.Route route) {
+  void _broadcastRoute(here.Route route,Services sobj) {
     List route_ = [];
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route': route_});
-    mm.sobj.pathToBeShared = route_;
+    sobj.pathToBeShared = route_;
   }
 }

@@ -40,12 +40,12 @@ void alreadyLoggedin(sobj) {
       sobj.username=value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: AppScreen(),
+        home: AppScreen(sobj:sobj,),
       ));
     } else {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: loginpg(),
+        home: loginpg(sobj: sobj,),
       ));
     }
   });
