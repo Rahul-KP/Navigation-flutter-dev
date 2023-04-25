@@ -39,7 +39,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   ),
                   onSubmitted: (
                     (value) {
-                      Services.search.obj.initRoutingEngine();
+                      Services.search.obj.initRoutingEngine(sobj);
                       Services.search.search(value,sobj);
                       // SearchWidget.toggleVisibility();
                     } 

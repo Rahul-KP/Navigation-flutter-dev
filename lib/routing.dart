@@ -13,14 +13,16 @@ import 'package:http/http.dart' as http;
 class Routing {
   late here.RoutingEngine _routingEngine;
   List<MapPolyline> _mapPolylines = [];
+  late Services sobj;
 
-  // DatabaseReference ref =
-  //     FirebaseDatabase.instance.ref('Drivers/' + Services.username);
-  DatabaseReference ref = FirebaseDatabase.instance.ref('results');
+  late DatabaseReference ref;
+  // DatabaseReference ref = FirebaseDatabase.instance.ref('results');
 
-  void initRoutingEngine() {
+  void initRoutingEngine(Services sobj) {
     try {
       _routingEngine = here.RoutingEngine();
+      this.sobj = sobj;
+      ref = FirebaseDatabase.instance.ref('Drivers/' + sobj.username);
     } on InstantiationException {
       throw ("Initialization of RoutingEngine failed.");
     }
@@ -104,7 +106,7 @@ class Routing {
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
         if (sobj.usertype == 'driver') {
-          // _broadcastRoute(route);
+          _broadcastRoute(route);
         }
       } else {
         var error = routingError.toString();
@@ -121,12 +123,12 @@ class Routing {
   }
 
   //add route to database
-  void _broadcastRoute(here.Route route,Services sobj) {
+  void _broadcastRoute(here.Route route) {
     List route_ = [];
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route': route_});
-    sobj.pathToBeShared = route_;
+    // sobj.pathToBeShared = route_;
   }
 }

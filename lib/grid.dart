@@ -32,7 +32,7 @@ class Grid {
   static void init() async {
     await Hive.initFlutter(); // Initialize hive
     w3wBox = await Hive.openBox('w3wgrid'); // Opening a box
-    obj.initRoutingEngine();
+    obj.initRoutingEngine(sobj);
   }
 
   static List<List<double>> getBoundingBox(double lat, double lon) {

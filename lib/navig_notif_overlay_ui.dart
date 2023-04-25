@@ -24,7 +24,7 @@ class _NavigationNotifState extends State<NavigationNotif> {
   @override
   void initState() {
     super.initState();
-    rt.initRoutingEngine();
+    rt.initRoutingEngine(sobj);
   }
 
   @override
