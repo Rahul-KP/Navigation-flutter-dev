@@ -58,7 +58,7 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: MapScreenRes.getActionButtonList(sobj)),
+          actions: mapScreenRes.getActionButtonList(sobj)),
       body: Stack(
         children: <Widget>[
           // MapWidget

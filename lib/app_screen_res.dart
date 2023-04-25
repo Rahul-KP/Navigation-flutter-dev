@@ -16,7 +16,7 @@ import 'ambulance_form.dart';
 
 
 class MapScreenRes {
-  static gd.Grid grid = gd.Grid();
+  gd.Grid grid = gd.Grid();
   // static AppScreen screen = AppScreen();
    void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
@@ -24,7 +24,7 @@ class MapScreenRes {
     Services.mapController.camera.lookAtPoint(sobj.userLocation);
   }
 
-  static List<Widget> getActionButtonList(Services sobj) {
+  List<Widget> getActionButtonList(Services sobj) {
     List<Widget> actionButtonList = [];
     actionButtonList.add(Padding(
         padding: const EdgeInsets.only(right: 15.0),
