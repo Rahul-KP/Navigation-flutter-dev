@@ -68,7 +68,7 @@ class _AppScreenState extends State<AppScreen> {
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             Services.setStateOverlay = setState;
-            return MapScreenRes.chooseOverlayWidget(sobj)!;
+            return mapScreenRes.chooseOverlayWidget(sobj)!;
           })),
 
           StatefulBuilder(builder: ((context, setState) {

@@ -17,7 +17,6 @@ import 'ambulance_form.dart';
 
 class MapScreenRes {
   gd.Grid grid = gd.Grid();
-  // static AppScreen screen = AppScreen();
    void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -145,11 +144,7 @@ class MapScreenRes {
     });
   }
 
-  static void search() async {
-    // Code to implement search functionality
-  }
-
-  static Widget? chooseOverlayWidget(Services sobj) {
+  Widget? chooseOverlayWidget(Services sobj) {
     if (sobj.usertype == 'user') {
       return SearchWidget();
     } else if (sobj.usertype == 'driver') {
