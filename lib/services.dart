@@ -17,11 +17,11 @@ import 'package:location/location.dart';
   static late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
   late LocationIndicator locationIndicator;
-  static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+  // DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
-  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
+  late DatabaseReference currentLocRef ;
   //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
   late DatabaseReference driverProfiles;
   //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
@@ -34,6 +34,7 @@ import 'package:location/location.dart';
   Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
+    currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
   }
 
   String? getSecret(String key) {
@@ -61,6 +62,7 @@ import 'package:location/location.dart';
   }
 
   void _broadcastLoc() async {
+
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }

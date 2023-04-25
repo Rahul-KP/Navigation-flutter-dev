@@ -37,6 +37,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   String? gender;
 
   glay.Grid grid1 = glay.Grid();
+  DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+
 
   MapScreenRes mapScreenRes = MapScreenRes();
 
@@ -104,11 +106,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                     onPressed: () async {
                       grid1.init();
 
-                      Services.ref = FirebaseDatabase.instance.ref("Bookings");
+                      ref = FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
                       String hashvalue = AmbulanceForm(sobj: sobj,).generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
-                      Services.ref.update({
+                      ref.update({
                         hashvalue: {
                           "patient_name": patient_name.text,
                           "age": age.text,

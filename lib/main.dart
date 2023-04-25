@@ -36,22 +36,24 @@ void alreadyLoggedin(sobj) {
     bool newuser = (value.getBool('login') ?? true);
     if (newuser == false) {
       // Services.usertype = value.getString('usertype')!;
-      sobj.usertype= value.getString('usertype')!;
-      sobj.username=value.getString('username')!;
+      sobj.usertype = value.getString('usertype')!;
+      sobj.username = value.getString('username')!;
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: AppScreen(sobj:sobj,),
+        home: AppScreen(
+          sobj: sobj,
+        ),
       ));
     } else {
       runApp(MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: loginpg(sobj: sobj,),
+        home: loginpg(
+          sobj: sobj,
+        ),
       ));
     }
   });
 }
-
-
 
 void checkLoginStatus() {
   FirebaseAuth.instance.idTokenChanges().listen((User? user) {
@@ -63,17 +65,16 @@ void checkLoginStatus() {
   });
 }
 
-  Services sobj = Services();
+Services sobj = Services();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await sobj.loadCreds();
-  await _initializeHERESDK(sobj); // initialise the HERE SDK
-  await sobj.getPermissions(); // wait for permissions
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await sobj.loadCreds();
+  await _initializeHERESDK(sobj); // initialise the HERE SDK
+  await sobj.getPermissions(); // wait for permissions
 
   checkLoginStatus();
   try {
