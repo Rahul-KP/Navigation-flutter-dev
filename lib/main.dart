@@ -92,5 +92,4 @@ void main() async {
   }
   checkLoginStatus();
   alreadyLoggedin(sobj); // check if user is already logged in
-  sobj.setLoc(); // start streaming the location
 }

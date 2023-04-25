@@ -34,7 +34,11 @@ import 'package:location/location.dart';
   Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
+  }
+
+  Future<void> postLogin() async {
     currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
+    this.setLoc(); // start streaming the location
   }
 
   String? getSecret(String key) {

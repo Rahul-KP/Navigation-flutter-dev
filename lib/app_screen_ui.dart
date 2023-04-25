@@ -23,6 +23,7 @@ class _AppScreenState extends State<AppScreen> {
   void initState() {
     super.initState();
     Services.mapContext = this.context;
+    sobj.postLogin();
     if (sobj.usertype == 'driver') {
       MapScreenRes.listenToBookings(sobj);
     }
