@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart' as glay;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:here_sdk/core.dart';
 
 import 'app_screen_res.dart';
 
@@ -36,6 +38,16 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   String? gender;
 
   glay.Grid grid1 = glay.Grid();
+  _convertToPolyline(List l) {
+    List<GeoCoordinates> newlist = [];
+    l.forEach((element) { 
+        newlist.add(GeoCoordinates(element['lat'],element['lon']));
+      }
+    );
+    Routing rt = Routing();
+    rt.showRouteOnMap(GeoPolyline(newlist));
+    Fluttertoast.showToast(msg: "LIGHT");
+  }
   void listenForRoute() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref('results');
     // final snapshot = await ref.child('route').get();
@@ -45,8 +57,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
       Object? data = event.snapshot.value;
       print(data.toString());
       Fluttertoast.showToast(msg: (data!.runtimeType.toString()));
-      List? d = data as List?;
+      List d = data as List;
       print(d);
+      _convertToPolyline(d);
+      // d.forEach((element) { GeoCoordinates(element['lat'],element['lon']);});
+      
       Fluttertoast.showToast(msg: d.toString());
       Fluttertoast.showToast(msg: "Legend Of Zelda");
     });
