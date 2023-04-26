@@ -1,7 +1,8 @@
-import 'package:AmbiNav/grid.dart';
+
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
+import 'grid2.dart' as gd;
 
 class SearchWidget extends StatefulWidget {
   const SearchWidget({super.key});
@@ -11,7 +12,11 @@ class SearchWidget extends StatefulWidget {
   static void toggleVisibility() {
     isVisible = !isVisible;
     if(isVisible == false) {
-      Grid.setTapGestureHandler();
+      // Grid.setTapGestureHandler();
+       gd.Grid grid = gd.Grid();
+
+      grid.getGrid();
+
     } else {
       Services.search.setTapGestureHandler();
     }

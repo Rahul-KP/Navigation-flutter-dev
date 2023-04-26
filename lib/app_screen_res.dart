@@ -1,4 +1,4 @@
-import 'package:AmbiNav/grid.dart';
+// import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/grid2.dart' as gd;
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
@@ -72,7 +72,7 @@ class MapScreenRes {
         leading: Icon(Icons.clear_all_rounded),
       ),
       onTap: () {
-        Grid.obj.clearMap();
+        gd.Grid.obj.clearMap();
         Services.search.clearMap();
       },
     ));
@@ -83,8 +83,8 @@ class MapScreenRes {
         leading: Icon(Icons.task),
       ),
       onTap: () {
-        if (Grid.target != null) {
-          Grid.obj.addRoute(Grid.source);
+        if (gd.Grid.target != null) {
+          gd.Grid.obj.addRoute(gd.Grid.source);
         }
       },
     ));
@@ -96,7 +96,7 @@ class MapScreenRes {
       ),
       onTap: () {
         //allow to squares to be selected
-        Grid.choose2Squares = !Grid.choose2Squares;
+        gd.Grid.choose2Squares = !gd.Grid.choose2Squares;
         Fluttertoast.showToast(msg: 'tapped');
       },
     ));

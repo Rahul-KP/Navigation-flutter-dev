@@ -19,6 +19,9 @@ class Grid {
   static Routing obj = Routing();
   static MapPolyline? currentSquare = null;
   static MapPolyline? prevSquare = null;
+  static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
+  static bool choose2Squares = false;
+
 
   void init() {
     Services _sobj = Services();
