@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/booking_map.dart';
+import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'app_screen_res.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
-  BookingDetails? booking;
-  Grid? grid;
   final Services sobj;
-  AmbulanceForm(
-      {super.key, required this.sobj, required this.booking, required this.grid});
+  AmbulanceForm({super.key, required this.sobj});
   @override
   AmbulanceFormState createState() {
     return AmbulanceFormState();
@@ -102,9 +99,10 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
+                      BookingDetails booking;
                       String hashvalue = generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
-                      widget.booking = BookingDetails(
+                      booking = BookingDetails(
                           patient_name.text,
                           age.text,
                           preferred_hosp.text,
@@ -112,12 +110,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           sobj.userLocation.latitude,
                           sobj.userLocation.longitude,
                           hashvalue);
-                      AppScreen.scaffoldKey.currentState!.closeDrawer();
-
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => AppScreen(
-                                sobj: sobj,
-                              ))));
+                      // AppScreen.scaffoldKey.currentState!.closeDrawer();
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,
@@ -128,9 +121,15 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       while (
                           Services.mapController.camera.boundingBox == null) {}
                       print("Grid is to be drawn after submit!");
-                      widget.grid = Grid();
-                      await widget.grid!.getGrid();
+                      Grid grid = Grid();
+                      await grid.getGrid();
                       Fluttertoast.showToast(msg: "Something");
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: ((context) => AppScreen(
+                                sobj: sobj,
+                                booking: booking,
+                                grid: grid,
+                              ))));
                       // grid.getGrid(true);
                     },
                   ))

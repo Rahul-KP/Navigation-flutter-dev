@@ -141,8 +141,6 @@ class MapScreenRes {
             MaterialPageRoute(
                 builder: (context) => AmbulanceForm(
                       sobj: sobj,
-                      grid: this.ambGrid,
-                      booking: this.amb,
                     ))),
       ));
     }
