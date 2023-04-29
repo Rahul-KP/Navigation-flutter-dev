@@ -1,15 +1,13 @@
 import 'package:AmbiNav/app_screen_ui.dart';
-import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'starter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'main.dart' as mm;
 
 class AmbiDriverDetails extends StatefulWidget {
+  late Services sobj;
   AmbiDriverDetails({super.key, required Services sobj});
   @override
   State<AmbiDriverDetails> createState() => _AmbiDriverDetailsState();
@@ -113,14 +111,15 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
                         // Services.usertype = 'driver';  
-                        sobj.usertype='driver';                   
-                        sobj.username=username;
+                        
+                        widget.sobj.usertype='driver';                   
+                        widget.sobj.username=username;
                         Fluttertoast.showToast(msg: username);
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AppScreen(sobj: sobj)));
+                                builder: (context) => AppScreen(sobj: widget.sobj)));
                       }
                     },
                     child: Container(
@@ -159,7 +158,7 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                         onTap: () {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: ((context) => loginpg(sobj: sobj,))));
+                                  builder: ((context) => loginpg(sobj: widget.sobj,))));
                         },
                         child: Text(
                           '  Click here',

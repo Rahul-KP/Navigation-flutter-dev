@@ -1,5 +1,6 @@
 // import 'package:AmbiNav/grid.dart';
-import 'package:AmbiNav/grid2.dart' as gd;
+import 'package:AmbiNav/booking_map.dart';
+import 'package:AmbiNav/grid2.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -12,10 +13,12 @@ import 'app_screen_ui.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
-// import 'main.dart' as mm;
 
 class MapScreenRes {
-  gd.Grid grid = gd.Grid();
+  Grid grid = Grid();
+  Grid? ambGrid = null;
+  BookingDetails? amb = null;
+
   void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
     // LocationData ld = await Services.locationData.first;
@@ -32,10 +35,17 @@ class MapScreenRes {
               Fluttertoast.showToast(
                   msg:
                       Services.mapController.camera.state.zoomLevel.toString());
-              if(grid.isDisplayed) {
+              if (grid.isDisplayed) {
                 grid.removeGrid();
               } else {
-                grid.getGrid();
+                if (ambGrid != null) {
+                  Fluttertoast.showToast(msg: "Sheesh");
+                  ambGrid!.removeGrid();
+                  sobj.bookAmbulance(amb!);
+                  ambGrid = null;
+                } else {
+                  grid.getGrid();
+                }
               }
             })))));
     if (sobj.usertype == 'user') {
@@ -78,8 +88,8 @@ class MapScreenRes {
         leading: Icon(Icons.task),
       ),
       onTap: () {
-        if (gd.Grid.target != null) {
-          gd.Grid.obj.addRoute(gd.Grid.source);
+        if (Grid.target != null) {
+          Grid.obj.addRoute(Grid.source);
         }
       },
     ));
@@ -91,7 +101,7 @@ class MapScreenRes {
       ),
       onTap: () {
         //allow to squares to be selected
-        gd.Grid.choose2Squares = !gd.Grid.choose2Squares;
+        Grid.choose2Squares = !Grid.choose2Squares;
         Fluttertoast.showToast(msg: 'tapped');
       },
     ));
@@ -131,6 +141,8 @@ class MapScreenRes {
             MaterialPageRoute(
                 builder: (context) => AmbulanceForm(
                       sobj: sobj,
+                      grid: this.ambGrid,
+                      booking: this.amb,
                     ))),
       ));
     }

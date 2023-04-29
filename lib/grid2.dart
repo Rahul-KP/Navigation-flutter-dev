@@ -54,7 +54,7 @@ class Grid {
     isDisplayed = true;
   }
 
-  void removeGrid() async {
+  Future<void> removeGrid() async {
     Fluttertoast.showToast(msg: "removing");
     for (MapPolyline element in lines) {
       print('removing!');
@@ -102,7 +102,7 @@ class Grid {
     }
   }
 
-  void getGrid() async {
+  Future<void> getGrid() async {
     GeoCoordinates NEC =
         Services.mapController.camera.boundingBox!.northEastCorner;
     GeoCoordinates SWC =

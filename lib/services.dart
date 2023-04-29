@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -7,13 +8,15 @@ import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/mapview.dart';
 import 'package:location/location.dart';
 
- class Services {
+import 'booking_map.dart';
+
+class Services {
   static late HereMapController mapController;
   static SearchRes search = SearchRes();
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
   late String usertype;
-  late String username; 
+  late String username;
   late BuildContext mapContext;
   late core.GeoCoordinates userLocation; // user's location
   late LocationIndicator locationIndicator;
@@ -21,7 +24,7 @@ import 'package:location/location.dart';
   //this current_loc is used for driver's current location
   //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
   //and the IoT device is slow in handling nested data
-  late DatabaseReference currentLocRef ;
+  late DatabaseReference currentLocRef;
   //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
   late DatabaseReference driverProfiles;
   //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
@@ -30,14 +33,32 @@ import 'package:location/location.dart';
   late DataSnapshot formDetails;
   late List pathToBeShared;
 
-
   Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
   }
 
+  void bookAmbulance(BookingDetails bobj) async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
+    ref = FirebaseDatabase.instance.ref("Bookings");
+    //call to hashing function
+    ref.update({
+      bobj.hashvalue: {
+        "patient_name": bobj.patient_name,
+        "age": bobj.age,
+        "preferred_hospital": bobj.preferred_hosp,
+        "gender": bobj.gender,
+        "user_location": {
+          "lat": bobj.lat,
+          "lon": bobj.lon,
+        }
+      }
+    });
+  }
+
   Future<void> postLogin() async {
-    currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + Services().username);
+    currentLocRef =
+        FirebaseDatabase.instance.ref('current_loc/' + Services().username);
     this.setLoc(); // start streaming the location
   }
 
@@ -48,14 +69,15 @@ import 'package:location/location.dart';
 
   void setLoc() async {
     Location location = await Location();
-    location.changeSettings(accuracy: LocationAccuracy.high,interval: 5000,distanceFilter: 1);
+    location.changeSettings(
+        accuracy: LocationAccuracy.high, interval: 5000, distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
       core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
-          print("degrees"+cameraLoc_.bearingInDegrees.toString());
+      print("degrees" + cameraLoc_.bearingInDegrees.toString());
       locationIndicator.updateLocation(cameraLoc_);
 
       if (usertype == 'driver') {
@@ -66,7 +88,6 @@ import 'package:location/location.dart';
   }
 
   void _broadcastLoc() async {
-
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
@@ -93,6 +114,6 @@ import 'package:location/location.dart';
       }
     }
     LocationData temp = await location.getLocation();
-   userLocation = core.GeoCoordinates(temp.latitude!,temp.longitude!);
+    userLocation = core.GeoCoordinates(temp.latitude!, temp.longitude!);
   }
 }

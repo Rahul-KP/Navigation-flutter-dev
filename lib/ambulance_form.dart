@@ -1,27 +1,25 @@
 import 'dart:convert';
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/booking_map.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'app_screen_res.dart';
-// import 'main.dart' as mm;
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
-  AmbulanceForm({super.key,required Services sobj});
+  BookingDetails? booking;
+  Grid? grid;
+  final Services sobj;
+  AmbulanceForm(
+      {super.key, required this.sobj, required this.booking, required this.grid});
   @override
   AmbulanceFormState createState() {
     return AmbulanceFormState();
-  }
-
-  String generateFormHash(String name, String age, String hospital) {
-    var bytes = utf8.encode(name + age + hospital);
-    var hash = sha256.convert(bytes);
-    return hash.toString();
   }
 }
 
@@ -36,11 +34,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   TextEditingController preferred_hosp = TextEditingController();
   String? gender;
 
-  Grid grid = Grid();
-  DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
-
-
-  MapScreenRes mapScreenRes = MapScreenRes();
+  String generateFormHash(String name, String age, String hospital) {
+    var bytes = utf8.encode(name + age + hospital);
+    var hash = sha256.convert(bytes);
+    return hash.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,37 +102,35 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
-                      ref = FirebaseDatabase.instance.ref("Bookings");
-                      //call to hashing function
-                      String hashvalue = AmbulanceForm(sobj: sobj,).generateFormHash(
+                      String hashvalue = generateFormHash(
                           patient_name.text, age.text, preferred_hosp.text);
-                      ref.update({
-                        hashvalue: {
-                          "patient_name": patient_name.text,
-                          "age": age.text,
-                          "preferred_hospital": preferred_hosp.text,
-                          "gender": gender,
-                          "user_location": {
-                            "lat": sobj.userLocation.latitude,
-                            "lon": sobj.userLocation.longitude,
-                          }
-                        }
-                      });
+                      widget.booking = BookingDetails(
+                          patient_name.text,
+                          age.text,
+                          preferred_hosp.text,
+                          gender!,
+                          sobj.userLocation.latitude,
+                          sobj.userLocation.longitude,
+                          hashvalue);
                       AppScreen.scaffoldKey.currentState!.closeDrawer();
 
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => AppScreen(sobj: sobj,))));
+                          builder: ((context) => AppScreen(
+                                sobj: sobj,
+                              ))));
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
-                      mapScreenRes.goToUserLoc(sobj);
+                      MapScreenRes().goToUserLoc(sobj);
                       Services.mapController.camera.zoomTo(20);
-                      while(Services.mapController.camera.boundingBox == null){
-                        
-                      }
+                      while (
+                          Services.mapController.camera.boundingBox == null) {}
                       print("Grid is to be drawn after submit!");
+                      widget.grid = Grid();
+                      await widget.grid!.getGrid();
+                      Fluttertoast.showToast(msg: "Something");
                       // grid.getGrid(true);
                     },
                   ))
