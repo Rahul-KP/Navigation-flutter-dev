@@ -6,7 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
-import 'package:AmbiNav/grid2.dart' as glay;
+import 'package:AmbiNav/grid2.dart';
 import 'app_screen_res.dart';
 // import 'main.dart' as mm;
 
@@ -36,7 +36,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
   TextEditingController preferred_hosp = TextEditingController();
   String? gender;
 
-  glay.Grid grid1 = glay.Grid();
+  Grid grid = Grid();
   DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
 
 
@@ -104,8 +104,6 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
-                      grid1.init();
-
                       ref = FirebaseDatabase.instance.ref("Bookings");
                       //call to hashing function
                       String hashvalue = AmbulanceForm(sobj: sobj,).generateFormHash(
@@ -137,7 +135,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                         
                       }
                       print("Grid is to be drawn after submit!");
-                      grid1.getGrid(true);
+                      // grid.getGrid(true);
                     },
                   ))
                 ],

@@ -21,16 +21,15 @@ class Grid {
   static MapPolyline? prevSquare = null;
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static bool choose2Squares = false;
-  late MapPolyline polyline;
+  bool isDisplayed = false;
 
-
-  void init() {
+  Grid() {
     Services _sobj = Services();
     _api = What3WordsV3(_sobj.getSecret('what3words.api.key')!);
     print("Initialized W3W");
   }
 
-  void _showGrid(List<Line> grid) async {
+  void _convertGrid(List<Line> grid) {
     List<GeoCoordinates> coordinates = [];
     double widthInPixels = 2;
 
@@ -39,24 +38,32 @@ class Grid {
     for (Line element in grid) {
       coordinates.add(GeoCoordinates(element.start.lat, element.start.lng));
       coordinates.add(GeoCoordinates(element.end.lat, element.end.lng));
-      polyline = MapPolyline(GeoPolyline(coordinates),
+      MapPolyline polyline = MapPolyline(GeoPolyline(coordinates),
           widthInPixels, Color.fromARGB(255, 49, 214, 203));
-      Services.mapController.mapScene.addMapPolyline(polyline);
       lines.add(polyline);
 
       coordinates.clear();
     }
   }
 
-  void removeGrid() {
+  void _showGrid() {
+    Fluttertoast.showToast(msg: "Should show grid soon");
+    for (MapPolyline polyline in lines) {
+      Services.mapController.mapScene.addMapPolyline(polyline);
+    }
+    isDisplayed = true;
+  }
+
+  void removeGrid() async {
     Fluttertoast.showToast(msg: "removing");
-    // for (MapPolyline element in lines) {
-    //   print('removing!');
-    //   Fluttertoast.showToast(msg: "removing 2");
-    //   Services.mapController.mapScene.removeMapPolyline(element);
-    // }
-    Services.mapController.mapScene.removeMapPolyline(polyline);
+    for (MapPolyline element in lines) {
+      print('removing!');
+      Fluttertoast.showToast(msg: "removing 2");
+      Services.mapController.mapScene.removeMapPolyline(element);
+    }
+    // Services.mapController.mapScene.removeMapPolyline(polyline);
     lines.clear();
+    isDisplayed = false;
   }
 
   static List<GeoCoordinates> _getOtherCorners(
@@ -87,16 +94,15 @@ class Grid {
     return coords;
   }
 
-  bool markerState(){
-    if(marked){
+  bool markerState() {
+    if (marked) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
-  void getGrid([bool flag = false]) async {
-
+  void getGrid() async {
     GeoCoordinates NEC =
         Services.mapController.camera.boundingBox!.northEastCorner;
     GeoCoordinates SWC =
@@ -107,11 +113,12 @@ class Grid {
         Coordinates(SWC.latitude, SWC.longitude));
     Response<GridSection> grid;
     grid = await gsrb.execute();
-    Fluttertoast.showToast(msg: "Request successful grid2");
+    Fluttertoast.showToast(msg: "Request successful grid");
     print("Request successful grid2");
 
     if (grid.isSuccessful()) {
-      _showGrid(grid.data()!.lines);
+      _convertGrid(grid.data()!.lines);
+      _showGrid();
       Fluttertoast.showToast(msg: "Grid shown!");
     } else {
       print(grid.error()!.message);
@@ -154,30 +161,21 @@ class Grid {
           parsed['square']['northeast']['lat'],
           parsed['square']['northeast']['lng']);
 
-
       if (!marked) {
         // Fluttertoast.showToast(msg: "removing the marker");
-         Services.mapController.mapScene.removeMapPolyline(currentSquare!);
-         currentSquare = null;
-         marked= markerState();
-      } 
-        currentSquare =
-            MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
-        target =
-            GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
-        // Fluttertoast.showToast(msg: "redd marker!");
-
+        Services.mapController.mapScene.removeMapPolyline(currentSquare!);
+        currentSquare = null;
+        marked = markerState();
+      }
+      currentSquare = MapPolyline(GeoPolyline(coords), 5, Colors.red.shade700);
+      target =
+          GeoCoordinates(geoCoordinates.latitude, geoCoordinates.longitude);
+      // Fluttertoast.showToast(msg: "redd marker!");
 
       if (currentSquare != null) {
-            Services.mapController.mapScene.removeMapPolyline(currentSquare!);
-          }
-          Services.mapController.mapScene.addMapPolyline(currentSquare!);
-
-      // marked = markerState();
-
-      if(flag == true) {
-        this.removeGrid();
+        Services.mapController.mapScene.removeMapPolyline(currentSquare!);
       }
+      Services.mapController.mapScene.addMapPolyline(currentSquare!);
     });
   }
 }

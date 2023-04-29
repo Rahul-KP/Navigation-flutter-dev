@@ -1,3 +1,2 @@
-what3words grid can now be displayed and removed.
-Grid constraint has to be added.
-A more efficient way to store the grid should be implemented.
+what3words grid can now be displayed and removed using a toggle button.
+Ambulance booking grid should be fixed.

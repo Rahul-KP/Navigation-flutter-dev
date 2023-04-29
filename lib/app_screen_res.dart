@@ -1,6 +1,5 @@
 // import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/grid2.dart' as gd;
-import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
@@ -28,23 +27,16 @@ class MapScreenRes {
     actionButtonList.add(Padding(
         padding: const EdgeInsets.only(right: 15.0),
         child: IconButton(
-            icon: Icon(Icons.zoom_out_map_rounded),
+            icon: Icon(Icons.grid_on),
             onPressed: ((() async {
               Fluttertoast.showToast(
                   msg:
                       Services.mapController.camera.state.zoomLevel.toString());
-              grid.init();
-              grid.getGrid();
-            })))));
-    actionButtonList.add(Padding(
-        padding: const EdgeInsets.only(right: 15.0),
-        child: IconButton(
-            icon: Icon(Icons.crop_5_4_rounded),
-            onPressed: ((() async {
-              Fluttertoast.showToast(
-                  msg:
-                      Services.mapController.camera.state.zoomLevel.toString());
-              grid.removeGrid();
+              if(grid.isDisplayed) {
+                grid.removeGrid();
+              } else {
+                grid.getGrid();
+              }
             })))));
     if (sobj.usertype == 'user') {
       actionButtonList.add(Padding(
