@@ -79,30 +79,30 @@ class MapScreenRes {
         Services.search.clearMap();
       },
     ));
-    w3wButtonList.add(GestureDetector(
-      child: ListTile(
-        title: const Text(
-            'Plot path to square'), // Button 2 - plot path from clg to square u select
-        leading: Icon(Icons.task),
-      ),
-      onTap: () {
-        if (gd.Grid.target != null) {
-          gd.Grid.obj.addRoute(gd.Grid.source);
-        }
-      },
-    ));
-    w3wButtonList.add(GestureDetector(
-      child: ListTile(
-        title: const Text(
-            'Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
-        leading: Icon(Icons.square_sharp),
-      ),
-      onTap: () {
-        //allow to squares to be selected
-        gd.Grid.choose2Squares = !gd.Grid.choose2Squares;
-        Fluttertoast.showToast(msg: 'tapped');
-      },
-    ));
+    // w3wButtonList.add(GestureDetector(
+    //   child: ListTile(
+    //     title: const Text(
+    //         'Plot path to square'), // Button 2 - plot path from clg to square u select
+    //     leading: Icon(Icons.task),
+    //   ),
+    //   onTap: () {
+    //     if (gd.Grid.target != null) {
+    //       gd.Grid.obj.addRoute(gd.Grid.source);
+    //     }
+    //   },
+    // ));
+    // w3wButtonList.add(GestureDetector(
+    //   child: ListTile(
+    //     title: const Text(
+    //         'Plot path between 2 squares'), // Button 2 - plot path from clg to square u select
+    //     leading: Icon(Icons.square_sharp),
+    //   ),
+    //   onTap: () {
+    //     //allow to squares to be selected
+    //     gd.Grid.choose2Squares = !gd.Grid.choose2Squares;
+    //     Fluttertoast.showToast(msg: 'tapped');
+    //   },
+    // ));
     return w3wButtonList;
   }
 

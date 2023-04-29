@@ -15,13 +15,12 @@ class Grid {
   static Services sobj = Services();
   static GeoCoordinates? target = null;
   static bool marked = false;
-  static MapPolyline? addSquare = null;
+  // static MapPolyline? addSquare = null;
   static Routing obj = Routing();
   static MapPolyline? currentSquare = null;
-  static MapPolyline? prevSquare = null;
+  // static MapPolyline? prevSquare = null;
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
-  static bool choose2Squares = false;
-  late MapPolyline polyline;
+
 
 
   void init() {
@@ -39,7 +38,7 @@ class Grid {
     for (Line element in grid) {
       coordinates.add(GeoCoordinates(element.start.lat, element.start.lng));
       coordinates.add(GeoCoordinates(element.end.lat, element.end.lng));
-      polyline = MapPolyline(GeoPolyline(coordinates),
+      MapPolyline polyline = MapPolyline(GeoPolyline(coordinates),
           widthInPixels, Color.fromARGB(255, 49, 214, 203));
       Services.mapController.mapScene.addMapPolyline(polyline);
       lines.add(polyline);
@@ -50,12 +49,11 @@ class Grid {
 
   void removeGrid() {
     Fluttertoast.showToast(msg: "removing");
-    // for (MapPolyline element in lines) {
-    //   print('removing!');
-    //   Fluttertoast.showToast(msg: "removing 2");
-    //   Services.mapController.mapScene.removeMapPolyline(element);
-    // }
-    Services.mapController.mapScene.removeMapPolyline(polyline);
+    for (MapPolyline element in lines) {
+      print('removing!');
+      Fluttertoast.showToast(msg: "removing 2");
+      Services.mapController.mapScene.removeMapPolyline(element);
+    }
     lines.clear();
   }
 
