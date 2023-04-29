@@ -9,6 +9,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'app_screen_ui.dart';
 import 'services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'ambulance_form.dart';
@@ -72,7 +73,9 @@ class MapScreenRes {
         leading: Icon(Icons.clear_all_rounded),
       ),
       onTap: () {
-        gd.Grid.obj.clearMap();
+        // gd.Grid.obj.clearMap();
+        AppScreen.scaffoldKey.currentState!.closeDrawer();
+        grid.removeGrid();
         Services.search.clearMap();
       },
     ));

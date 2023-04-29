@@ -21,6 +21,7 @@ class Grid {
   static MapPolyline? prevSquare = null;
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static bool choose2Squares = false;
+  late MapPolyline polyline;
 
 
   void init() {
@@ -32,12 +33,13 @@ class Grid {
   void _showGrid(List<Line> grid) async {
     List<GeoCoordinates> coordinates = [];
     double widthInPixels = 2;
+
     print(grid.length);
 
     for (Line element in grid) {
       coordinates.add(GeoCoordinates(element.start.lat, element.start.lng));
       coordinates.add(GeoCoordinates(element.end.lat, element.end.lng));
-      MapPolyline polyline = MapPolyline(GeoPolyline(coordinates),
+      polyline = MapPolyline(GeoPolyline(coordinates),
           widthInPixels, Color.fromARGB(255, 49, 214, 203));
       Services.mapController.mapScene.addMapPolyline(polyline);
       lines.add(polyline);
@@ -47,10 +49,13 @@ class Grid {
   }
 
   void removeGrid() {
-    for (MapPolyline element in lines) {
-      print('rmoving!');
-      Services.mapController.mapScene.removeMapPolyline(element);
-    }
+    Fluttertoast.showToast(msg: "removing");
+    // for (MapPolyline element in lines) {
+    //   print('removing!');
+    //   Fluttertoast.showToast(msg: "removing 2");
+    //   Services.mapController.mapScene.removeMapPolyline(element);
+    // }
+    Services.mapController.mapScene.removeMapPolyline(polyline);
     lines.clear();
   }
 
@@ -90,7 +95,7 @@ class Grid {
     }
   }
 
-  void getGrid() async {
+  void getGrid([bool flag = false]) async {
 
     GeoCoordinates NEC =
         Services.mapController.camera.boundingBox!.northEastCorner;
@@ -170,7 +175,9 @@ class Grid {
 
       // marked = markerState();
 
-      
+      if(flag == true) {
+        this.removeGrid();
+      }
     });
   }
 }

@@ -137,7 +137,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                         
                       }
                       print("Grid is to be drawn after submit!");
-                      grid1.getGrid();
+                      grid1.getGrid(true);
                     },
                   ))
                 ],
