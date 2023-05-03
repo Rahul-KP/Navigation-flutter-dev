@@ -32,13 +32,14 @@ class Services {
   late StreamSubscription<DatabaseEvent> listen;
   late DataSnapshot formDetails;
   late List pathToBeShared;
+  late BookingDetails bobj;
 
   Future<void> loadCreds() async {
     //loading the .env file
     await dotenv.load(fileName: "credentials.env");
   }
 
-  void bookAmbulance(BookingDetails bobj) async {
+  void bookAmbulance() async {
     DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
     ref = FirebaseDatabase.instance.ref("Bookings");
     //call to hashing function

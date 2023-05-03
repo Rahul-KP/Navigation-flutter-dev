@@ -13,7 +13,7 @@ import 'package:http/http.dart' as http;
 class Grid {
   var _api;
   List<MapPolyline> lines = [];
-  static Services sobj = Services();
+  Services sobj = Services();
   static GeoCoordinates? target = null;
   static bool marked = false;
   static MapPolyline? addSquare = null;
@@ -23,7 +23,7 @@ class Grid {
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static bool choose2Squares = false;
   bool isDisplayed = false;
-  BookingDetails? bobj = null;
+  bool isBooking = false;
 
   Grid() {
     Services _sobj = Services();
@@ -154,10 +154,9 @@ class Grid {
         print('3word request successful');
         Fluttertoast.showToast(msg: parsed['words']);
         print(parsed['words']);
-        if (bobj != null) {
-          sobj.bookAmbulance(bobj!);
-          bobj = null;
-          removeGrid();
+        if (isBooking) {
+          sobj.bobj.lat = geoCoordinates.latitude;
+          sobj.bobj.lon = geoCoordinates.longitude;
         }
       }
 

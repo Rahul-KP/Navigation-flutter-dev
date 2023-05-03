@@ -1,92 +1,69 @@
-import 'package:AmbiNav/booking_map.dart';
 import 'package:AmbiNav/grid2.dart';
-import 'package:AmbiNav/marker_details_ui.dart';
-import 'package:AmbiNav/search_res.dart';
-import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'app_screen_res.dart';
-import 'map.dart';
 
-class AppScreen extends StatefulWidget {
-  final Services sobj;
-  final BookingDetails booking;
-  final Grid grid;
-  AppScreen(
-      {super.key,
-      required this.sobj,
-      required this.grid,
-      required this.booking});
-  static final scaffoldKey = GlobalKey<ScaffoldState>();
+class BookingWidget extends StatefulWidget {
+  Grid? grid;
+  bool isVisible;
+  BookingWidget({super.key, this.grid, required this.isVisible});
+
+  //function to toggle visibility of search overlay (essentially a card element to enter destination)
+  void toggleVisibility() {
+    isVisible = !isVisible;
+  }
+
   @override
-  State<AppScreen> createState() => _AppScreenState();
+  State<BookingWidget> createState() => _BookingWidgetState();
 }
 
-class _AppScreenState extends State<AppScreen> {
-  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
-  var setStateOverlay;
-  var setStateMarkerDetailsCard;
+class _BookingWidgetState extends State<BookingWidget> {
+  TextStyle style = TextStyle(fontSize: 16, color: Colors.white);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: AppScreen.scaffoldKey,
-      appBar: AppBar(
-          title: Text("Navigation"),
-          leading: IconButton(
-            //hamburger icon
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              if (AppScreen.scaffoldKey.currentState!.isDrawerOpen) {
-                AppScreen.scaffoldKey.currentState!.closeDrawer();
-              } else {
-                AppScreen.scaffoldKey.currentState!.openDrawer();
-              }
-            },
-          ),
-          actions: [
-            Padding(
-                padding: const EdgeInsets.only(right: 15.0),
-                child: IconButton(
-                    icon: Icon(Icons.grid_on),
-                    onPressed: ((() async {
-                      Fluttertoast.showToast(
-                          msg: Services.mapController.camera.state.zoomLevel
-                              .toString());
-                      if (widget.grid.isDisplayed) {
-                        widget.grid.removeGrid();
-                        Fluttertoast.showToast(msg: "Sheesh");
-                        widget.sobj.bookAmbulance(widget.booking);
-                      }
-                    }))))
-          ]),
-      body: Stack(
-        children: <Widget>[
-          // MapWidget
-          MapWidget(sobj: widget.sobj),
-          //here the stateful builder is used to render search widget of search.dart (a card element to enter destination)
-          //it renders without redrawing the entire screen
-          //if the below lines are not included , map will be redrawn every time the search button is toggled
-          StatefulBuilder(builder: ((context, setState) {
-            Services.setStateOverlay = setState;
-            return MapScreenRes().chooseOverlayWidget(widget.sobj)!;
-          })),
-
-          StatefulBuilder(builder: ((context, setState) {
-            SearchRes.setStateMarkerDetailsCard = setState;
-            return DisplayMarkerInfo();
-          })),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-          //this button moves the camera to user's current location - recenter button
-          onPressed: () async {
-            MapScreenRes().goToUserLoc(widget.sobj);
-          },
-          child: const Icon(
-            Icons.add_location_alt_outlined,
-            color: Colors.white,
+    return Visibility(
+      child: Container(
+          margin: EdgeInsets.all(30),
+          height: 70,
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 2)],
+              color: Colors.blue.shade400,
+              borderRadius: BorderRadius.all(Radius.circular(13))),
+          child: Padding(
+            padding: EdgeInsets.all(15),
+            child: Row(
+              children: [
+                Text("Proceed to Book?", style: style),
+                Container(
+                  width: 75,
+                ),
+                VerticalDivider(
+                  width: 30,
+                  thickness: 1.2,
+                ),
+                GestureDetector(
+                  child: Text('Yes', style: style),
+                  onTap: () {
+                    if (widget.grid != null) {
+                      widget.grid!.sobj.bookAmbulance();
+                      setState((() => widget.toggleVisibility()));
+                      widget.grid!.removeGrid();
+                    }
+                  },
+                ),
+                VerticalDivider(
+                  width: 30,
+                  thickness: 1.2,
+                ),
+                GestureDetector(
+                  child: Text('No', style: style),
+                  onTap: () {
+                    setState((() => widget.toggleVisibility()));
+                  },
+                ), // Text here
+              ],
+            ),
           )),
+      visible: widget.isVisible,
     );
   }
 }

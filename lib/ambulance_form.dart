@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/booking_map.dart';
+import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
@@ -122,11 +123,11 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           Services.mapController.camera.boundingBox == null) {}
                       print("Grid is to be drawn after submit!");
                       Grid grid = Grid();
-                      await grid.getGrid();
-                      grid.bobj = booking;
+                      grid.isBooking = true;
+                      grid.sobj.bobj = booking;
                       Fluttertoast.showToast(msg: "Something");
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => AppScreen(sobj: sobj))));
+                          builder: ((context) => AppScreen(sobj: sobj, grid: grid,))));
                       Fluttertoast.showToast(msg: "hahahah");
                       // grid.getGrid(true);
                     },
