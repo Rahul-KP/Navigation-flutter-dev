@@ -1,5 +1,4 @@
 // import 'package:AmbiNav/grid.dart';
-import 'package:AmbiNav/booking_map.dart';
 import 'package:AmbiNav/grid2.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
@@ -16,8 +15,6 @@ import 'ambulance_form.dart';
 
 class MapScreenRes {
   Grid grid = Grid();
-  Grid? ambGrid = null;
-  BookingDetails? amb = null;
 
   void goToUserLoc(Services sobj) async {
     // Code to move the camera to user's current location
@@ -38,14 +35,7 @@ class MapScreenRes {
               if (grid.isDisplayed) {
                 grid.removeGrid();
               } else {
-                if (ambGrid != null) {
-                  Fluttertoast.showToast(msg: "Sheesh");
-                  ambGrid!.removeGrid();
-                  sobj.bookAmbulance(amb!);
-                  ambGrid = null;
-                } else {
-                  grid.getGrid();
-                }
+                grid.getGrid();
               }
             })))));
     if (sobj.usertype == 'user') {

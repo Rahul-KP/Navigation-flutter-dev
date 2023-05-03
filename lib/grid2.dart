@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:AmbiNav/booking_map.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class Grid {
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static bool choose2Squares = false;
   bool isDisplayed = false;
+  BookingDetails? bobj = null;
 
   Grid() {
     Services _sobj = Services();
@@ -136,7 +138,6 @@ class Grid {
           '\n' +
           geoCoordinates.longitude.toString());
       // Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
-
       var url = Uri.https('api.what3words.com', 'v3/convert-to-3wa', {
         'key': sobj.getSecret('what3words.api.key')!,
         'coordinates': geoCoordinates.latitude.toString() +
@@ -153,6 +154,11 @@ class Grid {
         print('3word request successful');
         Fluttertoast.showToast(msg: parsed['words']);
         print(parsed['words']);
+        if (bobj != null) {
+          sobj.bookAmbulance(bobj!);
+          bobj = null;
+          removeGrid();
+        }
       }
 
       List<GeoCoordinates> coords = _getOtherCorners(
