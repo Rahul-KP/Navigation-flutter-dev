@@ -2,14 +2,17 @@ import 'dart:convert';
 import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/booking_map.dart';
-import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/main.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:AmbiNav/grid2.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:AmbiNav/grid2.dart' as glay;
+import 'package:here_sdk/core.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
@@ -36,6 +39,43 @@ class AmbulanceFormState extends State<AmbulanceForm> {
     var bytes = utf8.encode(name + age + hospital);
     var hash = sha256.convert(bytes);
     return hash.toString();
+  }
+
+  glay.Grid grid1 = glay.Grid();
+  _convertToPolyline(List l) {
+    List<GeoCoordinates> newlist = [];
+    l.forEach((element) {
+      newlist.add(GeoCoordinates(element['lat'], element['lon']));
+    });
+    Routing rt = Routing();
+    rt.showRouteOnMap(GeoPolyline(newlist));
+    // Fluttertoast.showToast(msg: "LIGHT");
+  }
+
+  void listenForRoute() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref('results');
+    // final snapshot = await ref.child('route').get();
+    // Fluttertoast.showToast(msg: snapshot.value.toString());
+
+    ref.onChildAdded.listen((event) {
+      Object? data = event.snapshot.value;
+      print(data.toString());
+      Fluttertoast.showToast(msg: (data!.runtimeType.toString()));
+      List d = data as List;
+      print(d);
+      _convertToPolyline(d);
+      // d.forEach((element) { GeoCoordinates(element['lat'],element['lon']);});
+
+      // Fluttertoast.showToast(msg: d.toString());
+      // Fluttertoast.showToast(msg: "Legend Of Zelda");
+    });
+    ref.onChildChanged.listen((event) {});
+    // ref.onValue.listen((event) {
+    //   var data = event.snapshot.value;
+    //   print(data.toString());
+    //   Fluttertoast.showToast(msg: data.toString());
+    //   Fluttertoast.showToast(msg: "lulululululululu");
+    // });
   }
 
   @override
@@ -112,6 +152,16 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                           sobj.userLocation.longitude,
                           hashvalue);
                       // AppScreen.scaffoldKey.currentState!.closeDrawer();
+                      AppScreen.scaffoldKey.currentState!.closeDrawer();
+                      //listen to firebase to plot path on user side
+                      if (sobj.usertype == 'user') {
+                        listenForRoute();
+                      }
+
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: ((context) => AppScreen(
+                                sobj: sobj,
+                              ))));
                       // ref.set({
                       //   "patient_name": patient_name.text,
                       //   "age": age.text,
@@ -127,7 +177,10 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       grid.sobj.bobj = booking;
                       Fluttertoast.showToast(msg: "Something");
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: ((context) => AppScreen(sobj: sobj, grid: grid,))));
+                          builder: ((context) => AppScreen(
+                                sobj: sobj,
+                                grid: grid,
+                              ))));
                       Fluttertoast.showToast(msg: "hahahah");
                       // grid.getGrid(true);
                     },
