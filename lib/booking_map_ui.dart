@@ -34,7 +34,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               children: [
                 Text("Proceed to Book?", style: style),
                 Container(
-                  width: 75,
+                  width: 70,
                 ),
                 VerticalDivider(
                   width: 30,
