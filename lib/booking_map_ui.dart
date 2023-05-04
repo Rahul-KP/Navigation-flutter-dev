@@ -1,5 +1,7 @@
 import 'package:AmbiNav/grid2.dart';
 import 'package:flutter/material.dart';
+import 'package:AmbiNav/grid2.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BookingWidget extends StatefulWidget {
   Grid? grid;
@@ -47,6 +49,8 @@ class _BookingWidgetState extends State<BookingWidget> {
                       widget.grid!.sobj.bookAmbulance();
                       setState((() => widget.toggleVisibility()));
                       widget.grid!.removeGrid();
+                      Fluttertoast.showToast(msg: "Your latyy is "+widget.grid!.geoCoordinates.latitude.toString());
+                      widget.grid!.addMapMarker(widget.grid!.geoCoordinates);
                     }
                   },
                 ),

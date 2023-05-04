@@ -22,6 +22,7 @@ class Grid {
   static MapPolyline? prevSquare = null;
   static GeoCoordinates source = GeoCoordinates(12.916734, 77.673736);
   static bool choose2Squares = false;
+  late GeoCoordinates geoCoordinates;
   bool isDisplayed = false;
   bool isBooking = false;
 
@@ -129,7 +130,7 @@ class Grid {
     // lat and long when screen is tapped
     Services.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
-      GeoCoordinates geoCoordinates =
+      geoCoordinates =
           Services.mapController.viewToGeoCoordinates(touchPoint)!;
       Fluttertoast.showToast(msg: "Tapped!");
       marked = markerState();
@@ -183,4 +184,13 @@ class Grid {
       Services.mapController.mapScene.addMapPolyline(currentSquare!);
     });
   }
+
+  void addMapMarker(GeoCoordinates geoCoordinates) {
+  int imageWidth = 60;
+  int imageHeight = 60;
+  MapImage mapImage = MapImage.withFilePathAndWidthAndHeight("assets/marker.png", imageWidth, imageHeight);
+  MapMarker mapMarker = MapMarker(geoCoordinates, mapImage);
+  Services.mapController.mapScene.addMapMarker(mapMarker);
+}
+
 }
