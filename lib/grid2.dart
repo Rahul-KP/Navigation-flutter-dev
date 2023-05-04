@@ -66,6 +66,7 @@ class Grid {
     }
     // Services.mapController.mapScene.removeMapPolyline(polyline);
     lines.clear();
+    Services.mapController.mapScene.removeMapPolyline(currentSquare!);
     isDisplayed = false;
   }
 
@@ -186,9 +187,9 @@ class Grid {
   }
 
   void addMapMarker(GeoCoordinates geoCoordinates) {
-  int imageWidth = 60;
-  int imageHeight = 60;
-  MapImage mapImage = MapImage.withFilePathAndWidthAndHeight("assets/marker.png", imageWidth, imageHeight);
+  int imageWidth = 80;
+  int imageHeight = 120;
+  MapImage mapImage = MapImage.withFilePathAndWidthAndHeight("images/marker.png", imageWidth, imageHeight);
   MapMarker mapMarker = MapMarker(geoCoordinates, mapImage);
   Services.mapController.mapScene.addMapMarker(mapMarker);
 }
