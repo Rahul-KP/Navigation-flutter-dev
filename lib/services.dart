@@ -15,6 +15,7 @@ class Services {
   static SearchRes search = SearchRes();
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
   static late var setStateOverlay;
+  static late var bookingSetStateOverlay;
   late String usertype;
   late String username;
   late BuildContext mapContext;

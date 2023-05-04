@@ -141,6 +141,7 @@ class MapScreenRes {
   void listenToBookings(Services sobj) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
     sobj.listen = ref.onChildAdded.listen((event) {
+      Fluttertoast.showToast(msg: "This should work");
       sobj.formDetails = event.snapshot;
       Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
     });

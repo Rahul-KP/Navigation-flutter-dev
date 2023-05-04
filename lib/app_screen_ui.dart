@@ -3,6 +3,7 @@ import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/grid2.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
+import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/search_res.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,8 @@ class _AppScreenState extends State<AppScreen> {
   }
 
   //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
-  var setStateOverlay;
+  // var setStateOverlay;
+  // var bookingSetStateOverlay;
   var setStateMarkerDetailsCard;
 
   @override
@@ -78,7 +80,7 @@ class _AppScreenState extends State<AppScreen> {
           })),
 
           StatefulBuilder(builder: ((context, setState) {
-            Services.setStateOverlay = setState;
+            Services.bookingSetStateOverlay = setState;
             return BookingWidget(
                 grid: widget.grid,
                 isVisible: (widget.grid != null) ? true : false);
@@ -94,6 +96,7 @@ class _AppScreenState extends State<AppScreen> {
           //this button moves the camera to user's current location - recenter button
           onPressed: () async {
             mapScreenRes.goToUserLoc(sobj);
+            Services.setStateOverlay(() => NavigationNotif.toggleVisibility());
           },
           child: const Icon(
             Icons.add_location_alt_outlined,
