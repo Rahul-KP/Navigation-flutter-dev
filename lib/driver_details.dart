@@ -7,8 +7,8 @@ import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AmbiDriverDetails extends StatefulWidget {
-  late Services sobj;
-  AmbiDriverDetails({super.key, required Services sobj});
+  final Services sobj;
+  AmbiDriverDetails({super.key, required this.sobj});
   @override
   State<AmbiDriverDetails> createState() => _AmbiDriverDetailsState();
 }

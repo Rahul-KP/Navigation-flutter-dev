@@ -2,6 +2,7 @@
 import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/grid.dart';
+import 'package:AmbiNav/listeners.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/map.dart';
 import 'package:AmbiNav/map_functions.dart';
@@ -28,6 +29,11 @@ class _AppScreenState extends State<AppScreen> {
     super.initState();
     if (widget.grid != null) {
       widget.grid!.getGrid();
+    }
+    if (sobj.usertype == 'driver') {
+      FireListener(sobj).listenToBookings(appScreenRes);
+    } else if (sobj.usertype == 'user') {
+      FireListener(sobj).listenToAcceptance();
     }
   }
 

@@ -24,7 +24,7 @@ class Routing {
     try {
       _routingEngine = here.RoutingEngine();
       this.sobj = sobj;
-      ref = FirebaseDatabase.instance.ref('Drivers/' + sobj.username);
+      ref = FirebaseDatabase.instance.ref('results');
     } on InstantiationException {
       throw ("Initialization of RoutingEngine failed.");
     }
@@ -104,11 +104,13 @@ class Routing {
     _routingEngine.calculateCarRoute(waypoints, here.CarOptions(),
         (here.RoutingError? routingError, List<here.Route>? routeList) async {
       if (routingError == null) {
-        String usertype = sobj.getCred('usertype')!;
+        // String? usertype = await sobj.getCred('usertype');
+        String usertype = sobj.usertype;
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
+        Fluttertoast.showToast(msg: usertype.toString());
         if (usertype == 'driver') {
           _broadcastRoute(route);
         }

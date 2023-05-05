@@ -6,13 +6,12 @@ class Services {
   late String username;
   late String usertype;
 
-
-  String? getCred(String key) {
+  Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
     box.then((value) {
       return value.get(key);
     });
-    return null;
+    return Future<Null>.value(null);
   }
 
   void setCred(String key, String value) {

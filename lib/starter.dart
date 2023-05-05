@@ -40,7 +40,7 @@ class Starter {
 
   Future<void> firebaseLogin() async {
     try {
-      // final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      final userCredential = await FirebaseAuth.instance.signInAnonymously();
       print("Signed in with temporary account.");
       // Fluttertoast.showToast(msg: userCredential.user!.uid);
     } on FirebaseAuthException catch (e) {

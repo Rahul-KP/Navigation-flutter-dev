@@ -91,8 +91,8 @@ class AppScreenRes {
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.navigation),
-              onPressed: (() => this.setStateOverlay(
-                  () => NavigationNotif.toggleVisibility())))));
+              onPressed: (() =>
+                  Fluttertoast.showToast(msg: "Have a good day")))));
     }
 
     return actionButtonList;
