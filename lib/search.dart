@@ -1,4 +1,5 @@
 import 'package:AmbiNav/main.dart';
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
@@ -12,7 +13,7 @@ import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
 // import 'main.dart' as mm;
 
-class SearchRes {
+class Search {
   MapImage? _poiMapImage;
   List<MapMarker> _mapMarkerList = [];
   static var setStateMarkerDetailsCard;
@@ -35,7 +36,7 @@ class SearchRes {
     }
 
     MapMarker mapMarker = MapMarker(geoCoordinates, _poiMapImage!);
-    Services.mapController.mapScene.addMapMarker(mapMarker);
+    MapServices.mapController.mapScene.addMapMarker(mapMarker);
     _mapMarkerList.add(mapMarker);
 
     return mapMarker;
@@ -50,7 +51,7 @@ class SearchRes {
   void search(String queryString, Services sobj) async {
     // Code to implement search functionality
     //clear map markers before every search
-    clearMap();
+    MapServices().clearMapMarkers(_mapMarkerList);
     //instantiate search engine
     late SearchEngine _searchEngine;
     try {
@@ -64,7 +65,7 @@ class SearchRes {
     searchOptions.maxItems = 30;
 
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(sobj.userLocation);
+    TextQueryArea queryArea = TextQueryArea.withCenter(await MapServices().getCurrentLoc());
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
@@ -98,7 +99,8 @@ class SearchRes {
 
   void _pickMapMarker(core.Point2D touchPoint, Services sobj) {
     double radiusInPixel = 2;
-    Services.mapController.pickMapItems(touchPoint, radiusInPixel,
+    obj.initRoutingEngine(sobj);
+    MapServices.mapController.pickMapItems(touchPoint, radiusInPixel,
         (pickMapItemsResult) async {
       if (pickMapItemsResult == null) {
         // Pick operation failed.
@@ -139,17 +141,11 @@ class SearchRes {
   }
 
   void setTapGestureHandler() {
-    Services.mapController.gestures.tapListener =
-        TapListener((core.Point2D touchPoint) {
+    TapListener listener = TapListener((core.Point2D touchPoint) {
       _pickMapMarker(touchPoint, sobj);
     });
+    MapServices().setTapGestureHandler(listener);
   }
 
-  void clearMap() {
-    _mapMarkerList.forEach((mapMarker) {
-      Services.mapController.mapScene.removeMapMarker(mapMarker);
-    });
-    _mapMarkerList.clear();
-    obj.clearMap();
-  }
+  
 }

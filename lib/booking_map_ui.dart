@@ -1,4 +1,4 @@
-import 'package:AmbiNav/grid2.dart';
+import 'package:AmbiNav/grid.dart';
 import 'package:flutter/material.dart';
 
 class BookingWidget extends StatefulWidget {

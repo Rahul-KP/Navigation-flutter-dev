@@ -1,9 +1,14 @@
 import 'dart:math';
+import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 
 class CountDownTimer extends StatefulWidget {
+  final AppScreenRes appScreenRes;
+
+  const CountDownTimer({super.key, required this.appScreenRes});
+
   @override
   _CountDownTimerState createState() => _CountDownTimerState();
 }
@@ -27,7 +32,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     controller.reverse(from: 1.0);
     controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
-        Services.setStateOverlay(() {
+        widget.appScreenRes.setStateOverlay(() {
           NavigationNotif.toggleVisibility();
         });
       }

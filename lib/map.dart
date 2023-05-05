@@ -1,5 +1,6 @@
 // Code for map widget
 import 'package:AmbiNav/main.dart';
+import 'package:AmbiNav/map_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -21,43 +22,40 @@ class MapWidget extends StatelessWidget {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
       }
-      
 
       const double distanceToEarthInMeters = 4000;
       MapMeasure mapMeasureZoom =
           MapMeasure(MapMeasureKind.distance, distanceToEarthInMeters);
 
-      hereMapController.camera
-          .lookAtPointWithMeasure(sobj.userLocation, mapMeasureZoom);
+      MapServices().getCurrentLoc().then((value) {
+        hereMapController.camera.lookAtPointWithMeasure(value, mapMeasureZoom);
+        MapServices.mapController = hereMapController;
+        _addLocationIndicator(
+            value, LocationIndicatorIndicatorStyle.navigation);
+      });
     });
-
-    Services.mapController = hereMapController;
-    _addLocationIndicator(
-        sobj.userLocation, LocationIndicatorIndicatorStyle.navigation);
   }
 
   void _addLocationIndicator(GeoCoordinates geoCoordinates,
-      LocationIndicatorIndicatorStyle indicatorStyle) {
+      LocationIndicatorIndicatorStyle indicatorStyle) async {
     // mm.sobj.locationIndicator.locationIndicatorStyle = indicatorStyle;
-    sobj.locationIndicator = LocationIndicator();
-    sobj.locationIndicator.locationIndicatorStyle = indicatorStyle;
-
+    MapServices.locationIndicator = LocationIndicator();
+    MapServices.locationIndicator.locationIndicatorStyle = indicatorStyle;
 
     // A LocationIndicator is intended to mark the user's current location,
     // including a bearing direction.
     // For testing purposes, we create a Location object. Usually, you may want to get this from
     // a GPS sensor instead.
-    Location location = Location.withCoordinates(sobj.userLocation);
+    Location location = Location.withCoordinates(await MapServices().getCurrentLoc());
     location.horizontalAccuracyInMeters = 1.0;
     // location.time = DateTime.now();
     // // location.bearingInDegrees = _getRandom(0, 360);
 
     // mm.sobj.locationIndicator.updateLocation(location);
-    sobj.locationIndicator.updateLocation(location);
-
+    MapServices.locationIndicator.updateLocation(location);
 
     // A LocationIndicator listens to the lifecycle of the map view,
     // therefore, for example, it will get destroyed when the map view gets destroyed.
-    Services.mapController.addLifecycleListener(sobj.locationIndicator);
+    MapServices.mapController.addLifecycleListener(MapServices.locationIndicator);
   }
 }

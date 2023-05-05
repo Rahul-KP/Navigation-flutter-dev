@@ -1,156 +1,87 @@
-import 'package:AmbiNav/services.dart';
-import 'package:flutter/material.dart';
-import 'driver_details.dart';
-import 'user_details.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:bordered_text/bordered_text.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:here_sdk/core.dart' as here_core;
+import 'package:here_sdk/core.engine.dart';
+import 'package:here_sdk/core.errors.dart';
+import 'package:location/location.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-String finalAmbulanceCode = "";
+class Starter {
+  Future<void> loadCreds() async {
+    //loading the .env file
+    await Hive.initFlutter();
+    await dotenv.load(fileName: "credentials.env");
+  }
 
-class loginpg extends StatefulWidget {
-  final Services sobj;
-  const loginpg({super.key, required this.sobj});
+  String? getSecret(String key) {
+    return dotenv.env[key];
+    //here.access.key.id
+  }
 
-  @override
-  State<loginpg> createState() => _loginpgState();
-}
+  Future<void> initializeHERESDK() async {
+    // Needs to be called before accessing SDKOptions to load necessary libraries.
+    here_core.SdkContext.init(here_core.IsolateOrigin.main);
 
-class _loginpgState extends State<loginpg> {
-  @override
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("images/ambiBg.jpg"), fit: BoxFit.cover)),
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.center,
-                end: Alignment.bottomCenter,
-                colors: [
-              Color.fromARGB(221, 24, 24, 24),
-              Color.fromARGB(221, 0, 0, 0)
-            ])),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 92.0,
-                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
-                    child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(255, 5, 5, 5),
-                      backgroundImage: AssetImage('images/ambi2.png'),
-                      radius: 90.0,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  BorderedText(
-                    strokeWidth: 4,
-                    strokeColor: Color.fromARGB(255, 251, 251, 251),
-                    child: Text("AMBINAV",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 40,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.5,
-                        )),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  BorderedText(
-                    strokeWidth: 0.8,
-                    strokeColor: Color.fromARGB(255, 0, 0, 0),
-                    child: Text("Choose your role",
-                        style: GoogleFonts.rokkitt(
-                          fontSize: 21,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
-                        )),
-                  ),
-                  SizedBox(
-                    height: 40.0,
-                    width: 260.0,
-                    child: Divider(
-                      color: Color.fromARGB(255, 243, 249, 251),
-                      thickness: 1.6,
-                    ),
-                  ),
-                  Card(
-                    borderOnForeground: true,
-                    color: Colors.grey[200],
-                    elevation: 8.0,
-                    shadowColor: Color.fromARGB(255, 255, 255, 255),
-                    child: InkWell(
-                      splashColor:
-                          Color.fromARGB(255, 25, 143, 96).withAlpha(30),
-                      onTap: () {
-                        debugPrint('Card tapped.');
-                        // Connect to map
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AmbiDriverDetails(sobj: widget.sobj,)));
-                      },
-                      child: const SizedBox(
-                        width: 200,
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'Ambulance Driver',
-                            style: TextStyle(
-                              letterSpacing: 0.7,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Card(
-                    color: Colors.grey[200],
-                    elevation: 8.0,
-                    shadowColor: Color.fromARGB(255, 247, 248, 247),
-                    child: InkWell(
-                      splashColor:
-                          Color.fromARGB(255, 72, 202, 21).withAlpha(30),
-                      onTap: () {
-                        debugPrint('Card tapped.');
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => userDetails(sobj: widget.sobj,)));
-                        // Connect to map
-                      },
-                      child: const SizedBox(
-                        width: 200,
-                        height: 50,
-                        child: Center(
-                            child: Text('User Driver',
-                                style: TextStyle(
-                                  letterSpacing: 0.7,
-                                  fontSize: 16,
-                                ))),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+    // Clear the cache occupied by a previous instance.
+    await SDKNativeEngine.sharedInstance?.dispose();
+
+    // Set your credentials for the HERE SDK.
+    String accessKeyId = this.getSecret("here.access.key.id")!;
+    String accessKeySecret = this.getSecret("here.access.key.secret")!;
+    SDKOptions sdkOptions =
+        SDKOptions.withAccessKeySecret(accessKeyId, accessKeySecret);
+
+    try {
+      await SDKNativeEngine.makeSharedInstance(sdkOptions);
+    } on InstantiationException {
+      throw Exception("Failed to initialize the HERE SDK.");
+    }
+  }
+
+  Future<void> firebaseLogin() async {
+    try {
+      // final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      print("Signed in with temporary account.");
+      // Fluttertoast.showToast(msg: userCredential.user!.uid);
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          print("Anonymous auth hasn't been enabled for this project.");
+          break;
+        default:
+          print("Unknown error.");
+      }
+    }
+  }
+
+  Future<void> getPermissions() async {
+    Location location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+    // LocationData temp = await location.getLocation();
+    // userLocation = core.GeoCoordinates(temp.latitude!, temp.longitude!);
+  }
+
+  void loadHiveBox(String username, String usertype) async {
+    var box = await Hive.openBox('creds');
+    box.put('username', username);
+    box.put('usertype', usertype);
   }
 }

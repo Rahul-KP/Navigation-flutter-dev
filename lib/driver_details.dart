@@ -1,9 +1,9 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'starter.dart';
+import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AmbiDriverDetails extends StatefulWidget {
@@ -107,19 +107,18 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
 
                       if (username != '' && code != '') {
                         logindata.setBool('login', false);
-
                         logindata.setString('username', username);
                         logindata.setString('usertype', 'driver');
-                        // Services.usertype = 'driver';  
-                        
-                        widget.sobj.usertype='driver';                   
-                        widget.sobj.username=username;
-                        Fluttertoast.showToast(msg: username);
+                        sobj.setCred('username', username);
+                        sobj.setCred('usertype', 'driver');
+                        sobj.username = username;
+                        sobj.usertype = 'driver';
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AppScreen(sobj: widget.sobj)));
+                                builder: (context) =>
+                                    AppScreen(sobj: widget.sobj)));
                       }
                     },
                     child: Container(
@@ -156,9 +155,11 @@ class _AmbiDriverDetailsState extends State<AmbiDriverDetails> {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: ((context) => loginpg(sobj: widget.sobj,))));
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: ((context) => loginpg(
+                                        sobj: widget.sobj,
+                                      ))));
                         },
                         child: Text(
                           '  Click here',

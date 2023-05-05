@@ -1,3 +1,4 @@
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:here_sdk/core.dart';
 import 'package:here_sdk/core.errors.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 // import 'main.dart' as mm;
 
@@ -59,7 +61,7 @@ class Routing {
     double widthInPixels = 20;
     MapPolyline routeMapPolyline = MapPolyline(
         routeGeoPolyline, widthInPixels, Color.fromARGB(160, 0, 144, 138));
-    Services.mapController.mapScene.addMapPolyline(routeMapPolyline);
+    MapServices.mapController.mapScene.addMapPolyline(routeMapPolyline);
     _mapPolylines.add(routeMapPolyline);
   }
 
@@ -92,7 +94,7 @@ class Routing {
   }
 
   Future<void> addRoute(destinationGeoCoordinates) async {
-    GeoCoordinates startGeoCoordinates = sobj.userLocation;
+    GeoCoordinates startGeoCoordinates = await MapServices().getCurrentLoc();
     var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
@@ -102,14 +104,15 @@ class Routing {
     _routingEngine.calculateCarRoute(waypoints, here.CarOptions(),
         (here.RoutingError? routingError, List<here.Route>? routeList) async {
       if (routingError == null) {
+        String usertype = sobj.getCred('usertype')!;
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
         showRouteOnMap(route.geometry);
-        if (sobj.usertype == 'driver') {
+        if (usertype == 'driver') {
           _broadcastRoute(route);
         }
-        if (sobj.usertype == 'user') {
+        if (usertype == 'user') {
           ref.onValue.listen((event) {
             Fluttertoast.showToast(msg: "here");
             print(event.snapshot.value.toString());
@@ -124,13 +127,6 @@ class Routing {
     });
   }
 
-  void clearMap() {
-    for (var mapPolyline in _mapPolylines) {
-      Services.mapController.mapScene.removeMapPolyline(mapPolyline);
-    }
-    _mapPolylines.clear();
-  }
-
   //add route to database
   void _broadcastRoute(here.Route route) {
     List route_ = [];
@@ -138,7 +134,8 @@ class Routing {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
     ref.update({'route': route_});
-    sobj.pathToBeShared = route_;
+    var box = Hive.openBox('routes');
+    box.then((value) => value.put('route', route_));
     Fluttertoast.showToast(msg: "path now put to firebase rtdb");
   }
 }

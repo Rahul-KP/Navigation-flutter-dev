@@ -1,4 +1,4 @@
-import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/search.dart';
 import 'package:flutter/material.dart';
 
 class DisplayMarkerInfo extends StatefulWidget {
@@ -22,8 +22,8 @@ class _DisplayMarkerInfoState extends State<DisplayMarkerInfo> {
         child: Container(
             height: 100,
             child: ListTile(
-          title: Text(SearchRes.place),
-          subtitle: Text(SearchRes.vicinity),
+          title: Text(Search.place),
+          subtitle: Text(Search.vicinity),
         )),
       ),
       visible: DisplayMarkerInfo.isVisible,

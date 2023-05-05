@@ -1,12 +1,14 @@
 import 'dart:convert';
-import 'package:AmbiNav/booking_map.dart';
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:AmbiNav/starter.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:what3words/what3words.dart';
 import 'package:http/http.dart' as http;
 
@@ -27,7 +29,7 @@ class Grid {
 
   Grid() {
     Services _sobj = Services();
-    _api = What3WordsV3(_sobj.getSecret('what3words.api.key')!);
+    _api = What3WordsV3(Starter().getSecret('what3words.api.key')!);
     print("Initialized W3W");
   }
 
@@ -49,19 +51,16 @@ class Grid {
   }
 
   void _showGrid() {
-    Fluttertoast.showToast(msg: "Should show grid soon");
     for (MapPolyline polyline in lines) {
-      Services.mapController.mapScene.addMapPolyline(polyline);
+      MapServices.mapController.mapScene.addMapPolyline(polyline);
     }
     isDisplayed = true;
   }
 
   Future<void> removeGrid() async {
-    Fluttertoast.showToast(msg: "removing");
     for (MapPolyline element in lines) {
       print('removing!');
-      Fluttertoast.showToast(msg: "removing 2");
-      Services.mapController.mapScene.removeMapPolyline(element);
+      MapServices.mapController.mapScene.removeMapPolyline(element);
     }
     // Services.mapController.mapScene.removeMapPolyline(polyline);
     lines.clear();
@@ -106,32 +105,29 @@ class Grid {
 
   Future<void> getGrid() async {
     GeoCoordinates NEC =
-        Services.mapController.camera.boundingBox!.northEastCorner;
+        MapServices.mapController.camera.boundingBox!.northEastCorner;
     GeoCoordinates SWC =
-        Services.mapController.camera.boundingBox!.southWestCorner;
+        MapServices.mapController.camera.boundingBox!.southWestCorner;
     GridSectionRequestBuilder gsrb = GridSectionRequestBuilder(
         _api,
         Coordinates(NEC.latitude, NEC.longitude),
         Coordinates(SWC.latitude, SWC.longitude));
     Response<GridSection> grid;
     grid = await gsrb.execute();
-    Fluttertoast.showToast(msg: "Request successful grid");
     print("Request successful grid2");
 
     if (grid.isSuccessful()) {
       _convertGrid(grid.data()!.lines);
       _showGrid();
-      Fluttertoast.showToast(msg: "Grid shown!");
     } else {
       print(grid.error()!.message);
     }
 
     // lat and long when screen is tapped
-    Services.mapController.gestures.tapListener =
+    MapServices.mapController.gestures.tapListener =
         TapListener((Point2D touchPoint) async {
       GeoCoordinates geoCoordinates =
-          Services.mapController.viewToGeoCoordinates(touchPoint)!;
-      Fluttertoast.showToast(msg: "Tapped!");
+          MapServices.mapController.viewToGeoCoordinates(touchPoint)!;
       marked = markerState();
       print('Tap at: ' +
           geoCoordinates.latitude.toString() +
@@ -139,7 +135,7 @@ class Grid {
           geoCoordinates.longitude.toString());
       // Fluttertoast.showToast(msg: 'Tap at: '+ geoCoordinates.latitude.toString()+'\n' +geoCoordinates.longitude.toString());
       var url = Uri.https('api.what3words.com', 'v3/convert-to-3wa', {
-        'key': sobj.getSecret('what3words.api.key')!,
+        'key': Starter().getSecret('what3words.api.key')!,
         'coordinates': geoCoordinates.latitude.toString() +
             ',' +
             geoCoordinates.longitude.toString(),
@@ -155,8 +151,11 @@ class Grid {
         Fluttertoast.showToast(msg: parsed['words']);
         print(parsed['words']);
         if (isBooking) {
-          sobj.bobj.lat = geoCoordinates.latitude;
-          sobj.bobj.lon = geoCoordinates.longitude;
+          var box = Hive.openBox('booking');
+          box.then((value_) {
+            value_.put('lat', geoCoordinates.latitude);
+            value_.put('lon', geoCoordinates.longitude);
+          });
         }
       }
 
@@ -168,7 +167,7 @@ class Grid {
 
       if (!marked) {
         // Fluttertoast.showToast(msg: "removing the marker");
-        Services.mapController.mapScene.removeMapPolyline(currentSquare!);
+        MapServices.mapController.mapScene.removeMapPolyline(currentSquare!);
         currentSquare = null;
         marked = markerState();
       }
@@ -178,9 +177,9 @@ class Grid {
       // Fluttertoast.showToast(msg: "redd marker!");
 
       if (currentSquare != null) {
-        Services.mapController.mapScene.removeMapPolyline(currentSquare!);
+        MapServices.mapController.mapScene.removeMapPolyline(currentSquare!);
       }
-      Services.mapController.mapScene.addMapPolyline(currentSquare!);
+      MapServices.mapController.mapScene.addMapPolyline(currentSquare!);
     });
   }
 }
