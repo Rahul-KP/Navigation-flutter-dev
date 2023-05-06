@@ -1,16 +1,18 @@
 import 'package:AmbiNav/search.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DisplayMarkerInfo extends StatefulWidget {
   static bool isVisible = false;
-  static bool addInfo = false;
+   bool addInfo = false;
 
   DisplayMarkerInfo({super.key});
+
   static void toggleVisisbility() {
     isVisible = !isVisible;
   }
 
-  static addressInfo(addInfo) {
+  void  addressInfo(addInfo) {
     if (addInfo) {
       addInfo = false;
     } else {
@@ -31,8 +33,10 @@ class _DisplayMarkerInfoState extends State<DisplayMarkerInfo> {
         child: ElevatedButton(
           child: const Text('Address!'),
           onPressed: () {
-            DisplayMarkerInfo.addressInfo(DisplayMarkerInfo.addInfo);
-            if (DisplayMarkerInfo.addInfo) {
+            DisplayMarkerInfo dm = DisplayMarkerInfo();
+            dm.addressInfo(dm.addInfo);
+            Fluttertoast.showToast(msg: "address state is: " +dm.addInfo.toString());
+            if (dm.addInfo) {
               //show info
               Scaffold.of(context).showBottomSheet<void>(
                 shape: const RoundedRectangleBorder(
