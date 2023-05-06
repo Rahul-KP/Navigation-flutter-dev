@@ -21,20 +21,20 @@ class AppScreen extends StatefulWidget {
 }
 
 class _AppScreenState extends State<AppScreen> {
-
   AppScreenRes appScreenRes = AppScreenRes();
 
   @override
   void initState() {
     super.initState();
-    sobj.streamLoc();
     if (widget.grid != null) {
       widget.grid!.getGrid();
-    }
-    if (sobj.usertype == 'driver') {
-      FireListener(sobj).listenToBookings(appScreenRes);
-    } else if (sobj.usertype == 'user') {
-      FireListener(sobj).listenToAcceptance();
+    } else {
+      sobj.streamLoc();
+      if (sobj.usertype == 'driver') {
+        FireListener(sobj).listenToBookings(appScreenRes);
+      } else if (sobj.usertype == 'user') {
+        FireListener(sobj).listenToAcceptance();
+      }
     }
   }
 
