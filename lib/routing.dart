@@ -1,4 +1,5 @@
 import 'package:AmbiNav/map_functions.dart';
+import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,6 @@ class Routing {
     try {
       _routingEngine = here.RoutingEngine();
       this.sobj = sobj;
-      ref = FirebaseDatabase.instance.ref('results');
     } on InstantiationException {
       throw ("Initialization of RoutingEngine failed.");
     }
@@ -132,6 +132,7 @@ class Routing {
   //add route to database
   void _broadcastRoute(here.Route route) {
     List route_ = [];
+    ref = FirebaseDatabase.instance.ref('Bookings/' + NavigationNotif.hashvalue);
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
