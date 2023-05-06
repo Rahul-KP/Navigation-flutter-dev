@@ -94,8 +94,8 @@ class Routing {
   }
 
   Future<void> addRoute(destinationGeoCoordinates) async {
-    GeoCoordinates startGeoCoordinates = await MapServices().getCurrentLoc();
-    var startWaypoint = here.Waypoint.withDefaults(startGeoCoordinates);
+    // GeoCoordinates startGeoCoordinates = await MapServices().getCurrentLoc();
+    var startWaypoint = here.Waypoint.withDefaults(sobj.userLocation!);
     var destinationWaypoint =
         here.Waypoint.withDefaults(destinationGeoCoordinates);
 

@@ -65,7 +65,7 @@ class Search {
     searchOptions.maxItems = 30;
 
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(await MapServices().getCurrentLoc());
+    TextQueryArea queryArea = TextQueryArea.withCenter(sobj.userLocation!);
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
