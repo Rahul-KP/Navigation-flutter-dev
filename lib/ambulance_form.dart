@@ -100,19 +100,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       child: new ElevatedButton(
                     child: const Text("Submit"),
                     onPressed: () async {
-                      var box = await Hive.openBox('booking');
-                      GeoCoordinates userLoc = await MapServices().getCurrentLoc();
-
-                      String hashvalue = generateFormHash(
-                          patient_name.text, age.text, preferred_hosp.text);
-                      
-                      box.put('name', patient_name.text);
-                      box.put('age', age.text);
-                      box.put('preferred_hosp', preferred_hosp.text);
-                      box.put('gender', gender!);
-                      box.put('lat', userLoc.latitude);
-                      box.put('lon', userLoc.longitude);
-                      box.put('hash', hashvalue);
+                      _book();
                       //listen to firebase to plot path on user side
                       // ref.set({
                       //   "patient_name": patient_name.text,
@@ -121,8 +109,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       // });
                       widget.sobj.goToUserLoc();
                       MapServices.mapController.camera.zoomTo(20);
-                      while (
-                          MapServices.mapController.camera.boundingBox == null) {}
+                      while (MapServices.mapController.camera.boundingBox ==
+                          null) {}
                       print("Grid is to be drawn after submit!");
                       Grid grid = Grid();
                       grid.isBooking = true;
@@ -139,5 +127,21 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                 ],
               ),
             )));
+  }
+
+  void _book() async {
+    var box = await Hive.openBox('booking');
+    // GeoCoordinates userLoc = await MapServices().getCurrentLoc();
+
+    String hashvalue =
+        generateFormHash(patient_name.text, age.text, preferred_hosp.text);
+
+    box.put('name', patient_name.text);
+    box.put('age', age.text);
+    box.put('preferred_hosp', preferred_hosp.text);
+    box.put('gender', gender!);
+    box.put('lat', sobj.userLocation.latitude);
+    box.put('lon', sobj.userLocation.longitude);
+    box.put('hash', hashvalue);
   }
 }
