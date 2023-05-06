@@ -1,27 +1,22 @@
-
-import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search.dart';
-import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'grid.dart' as gd;
 
 class SearchWidget extends StatefulWidget {
-  Services sobj;
-  SearchWidget({super.key, required this.sobj});
+  Search seobj;
+  SearchWidget({super.key, required this.seobj});
 
   static bool isVisible = false;
-  final Search search = Search();
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
   void toggleVisibility() {
     isVisible = !isVisible;
-    if(isVisible == false) {
+    if (isVisible == false) {
       // Grid.setTapGestureHandler();
-       gd.Grid grid = gd.Grid();
+      gd.Grid grid = gd.Grid();
 
       grid.getGrid();
-
     } else {
-      search.setTapGestureHandler();
+      seobj.setTapGestureHandler();
     }
   }
 
@@ -30,7 +25,6 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -45,13 +39,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     border: OutlineInputBorder(),
                     hintText: 'Enter destination',
                   ),
-                  onSubmitted: (
-                    (value) {
-                      Search sobj = Search();
-                      sobj.search(value, widget.sobj);
-                      // SearchWidget.toggleVisibility();
-                    } 
-                  ),
+                  onSubmitted: ((value) {
+                    widget.seobj.search(value);
+                    // SearchWidget.toggleVisibility();
+                  }),
                 ),
               ],
             ),

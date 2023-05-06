@@ -4,6 +4,7 @@ import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/login.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
+import 'package:AmbiNav/search.dart';
 import 'package:AmbiNav/search_overlay_ui.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +14,18 @@ class AppScreenRes {
   late var setStateOverlay;
   late var bookingSetStateOverlay;
   late SearchWidget searchWidget;
+  late Search seobj;
   Grid grid = Grid();
+  late var context;
+
+  void setContext(var context) {
+    this.context = context;
+  }
 
   Widget? chooseOverlayWidget(Services sobj) {
     if (sobj.usertype == 'user') {
       return SearchWidget(
-        sobj: sobj,
+        seobj: seobj,
       );
     } else if (sobj.usertype == 'driver') {
       return NavigationNotif(
@@ -67,7 +74,8 @@ class AppScreenRes {
   }
 
   List<Widget> getActionButtonList(Services sobj) {
-    searchWidget = SearchWidget(sobj: sobj);
+    seobj = Search(context, sobj);
+    searchWidget = SearchWidget(seobj: seobj);
     List<Widget> actionButtonList = [];
     actionButtonList.add(Padding(
         padding: const EdgeInsets.only(right: 15.0),

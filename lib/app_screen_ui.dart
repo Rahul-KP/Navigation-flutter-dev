@@ -25,6 +25,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+    appScreenRes.setContext(context);
     if (widget.grid != null) {
       widget.grid!.getGrid();
     } else {

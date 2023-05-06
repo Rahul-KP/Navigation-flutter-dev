@@ -1,4 +1,4 @@
-import 'package:AmbiNav/main.dart';
+import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
@@ -12,7 +12,6 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-// import 'main.dart' as mm;
 
 class Search {
   MapImage? _poiMapImage;
@@ -21,8 +20,15 @@ class Search {
   static String place = "";
   static String oldVicinity = "";
   static String vicinity = "";
-  static late var context ;
+  static var context;
+  late PersistentBottomSheetController controller;
   Routing obj = Routing();
+  late Services sobj;
+
+  Search(var ctx, Services sobj) {
+    context = ctx;
+    this.sobj = sobj;
+  }
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -51,7 +57,7 @@ class Search {
     mapMarker.metadata = metadata;
   }
 
-  void search(String queryString, Services sobj) async {
+  void search(String queryString) async {
     // Code to implement search functionality
     //clear map markers before every search
     MapServices().clearMapMarkers(_mapMarkerList);
@@ -100,9 +106,9 @@ class Search {
     });
   }
 
-  void _pickMapMarker(core.Point2D touchPoint, Services sobj) {
-    double radiusInPixel = 2;
+  void _pickMapMarker(core.Point2D touchPoint) {
     obj.initRoutingEngine(sobj);
+    double radiusInPixel = 2;
     MapServices.mapController.pickMapItems(touchPoint, radiusInPixel,
         (pickMapItemsResult) async {
       if (pickMapItemsResult == null) {
@@ -150,23 +156,16 @@ class Search {
     });
   }
 
-
   void markerInfo() {
-    Scaffold.of(context).showBottomSheet<void>(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-        ),
-      ),
+    controller = AppScreen.scaffoldKey.currentState!.showBottomSheet(
       (BuildContext context) {
         return Container(
           height: 180,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
-                topRight: Radius.circular(30.0),
-                topLeft: Radius.circular(30.0)),
-            color: Color.fromARGB(255, 159, 211, 214),
+                topRight: Radius.circular(25.0),
+                topLeft: Radius.circular(25.0)),
+            color: Color.fromARGB(255, 0, 145, 197),
           ),
           child: Center(
             child: Column(
@@ -178,12 +177,12 @@ class Search {
                   child: Container(
                       height: 80,
                       child: ListTile(
-                        title: Text(Search.place),
-                        subtitle: Text(Search.vicinity),
+                        title: Text(Search.place, style: TextStyle(color: Colors.white, fontSize: 16),),
+                        subtitle: Text(Search.vicinity, style: TextStyle(color: Colors.white)),
                       )),
                 ),
                 ElevatedButton(
-                  child: const Text('Close BottomSheet'),
+                  child: const Text('Directions'),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -194,11 +193,12 @@ class Search {
         );
       },
     );
+    controller.closed.then((value) {obj.removeRoute(); oldVicinity = '';});
   }
 
   void setTapGestureHandler() {
     TapListener listener = TapListener((core.Point2D touchPoint) {
-      _pickMapMarker(touchPoint, sobj);
+      _pickMapMarker(touchPoint);
     });
     MapServices().setTapGestureHandler(listener);
   }
