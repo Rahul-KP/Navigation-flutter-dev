@@ -140,8 +140,8 @@ class AmbulanceFormState extends State<AmbulanceForm> {
     box.put('age', age.text);
     box.put('preferred_hosp', preferred_hosp.text);
     box.put('gender', gender!);
-    box.put('lat', sobj.userLocation.latitude);
-    box.put('lon', sobj.userLocation.longitude);
+    box.put('lat', sobj.userLocation!.latitude);
+    box.put('lon', sobj.userLocation!.longitude);
     box.put('hash', hashvalue);
   }
 }

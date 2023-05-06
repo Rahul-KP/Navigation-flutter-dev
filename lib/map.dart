@@ -22,14 +22,13 @@ class MapWidget extends StatelessWidget {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
       }
-
+      MapServices.mapController = hereMapController;
       const double distanceToEarthInMeters = 4000;
       MapMeasure mapMeasureZoom =
           MapMeasure(MapMeasureKind.distance, distanceToEarthInMeters);
 
       MapServices().getCurrentLoc().then((value) {
         hereMapController.camera.lookAtPointWithMeasure(value, mapMeasureZoom);
-        MapServices.mapController = hereMapController;
         _addLocationIndicator(
             value, LocationIndicatorIndicatorStyle.navigation);
       });

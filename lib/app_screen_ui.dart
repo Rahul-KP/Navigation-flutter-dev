@@ -28,7 +28,6 @@ class _AppScreenState extends State<AppScreen> {
     if (widget.grid != null) {
       widget.grid!.getGrid();
     } else {
-      widget.sobj.streamLoc();
       if (widget.sobj.usertype == 'driver') {
         FireListener(widget.sobj).listenToBookings(appScreenRes);
       } else if (widget.sobj.usertype == 'user') {

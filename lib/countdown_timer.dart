@@ -33,7 +33,7 @@ class _CountDownTimerState extends State<CountDownTimer>
     controller.addStatusListener((status) {
       if (status == AnimationStatus.dismissed) {
         widget.appScreenRes.setStateOverlay(() {
-          NavigationNotif.toggleVisibility(null);
+          NavigationNotif.toggleVisibility(null, '');
         });
       }
     });

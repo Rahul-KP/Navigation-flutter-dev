@@ -21,9 +21,8 @@ class FireListener {
       double long = double.parse(
           event.snapshot.child('user_location/lon').value.toString());
       appScreenRes.setStateOverlay(() {
-        NavigationNotif.toggleVisibility(GeoCoordinates(lat, long));
+        NavigationNotif.toggleVisibility(GeoCoordinates(lat, long), event.snapshot.key.toString());
       });
-      Fluttertoast.showToast(msg: "show something");
     });
   }
 

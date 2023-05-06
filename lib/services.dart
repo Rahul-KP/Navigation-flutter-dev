@@ -10,7 +10,8 @@ class Services {
   late String username;
   late String usertype;
   DatabaseReference? currentLocRef = null;
-  late core.GeoCoordinates userLocation;
+  bool isBooking = false;
+  core.GeoCoordinates? userLocation = null;
 
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
@@ -59,7 +60,7 @@ class Services {
     location.onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
-      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
+      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation!);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
       print("degrees" + cameraLoc_.bearingInDegrees.toString());
@@ -73,15 +74,15 @@ class Services {
   }
 
   void _broadcastLoc() async {
-    if (currentLocRef == null) {
-      currentLocRef =
-          FirebaseDatabase.instance.ref('current_loc/' + this.username);
+    if (currentLocRef != null) {
+      if (isBooking == true) {
+        currentLocRef!
+            .set({'lat': userLocation!.latitude, 'lon': userLocation!.longitude});
+      }
     }
-    currentLocRef!
-        .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 
   void goToUserLoc() async {
-    MapServices.mapController.camera.lookAtPoint(userLocation);
+    MapServices.mapController.camera.lookAtPoint(userLocation!);
   }
 }
