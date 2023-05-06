@@ -46,6 +46,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                     if (widget.grid != null) {
                       widget.grid!.sobj.bookAmbulance();
                       setState((() => widget.toggleVisibility()));
+                      widget.grid!.isBooking = false;
                       widget.grid!.removeGrid();
                     }
                   },
