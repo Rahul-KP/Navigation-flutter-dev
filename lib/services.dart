@@ -9,7 +9,7 @@ import 'package:location/location.dart';
 class Services {
   late String username;
   late String usertype;
-  late DatabaseReference currentLocRef;
+  DatabaseReference? currentLocRef = null;
   late core.GeoCoordinates userLocation;
 
   Future<String?> getCred(String key) {
@@ -54,8 +54,6 @@ class Services {
 
   void streamLoc() async {
     Location location = await Location();
-    currentLocRef =
-        FirebaseDatabase.instance.ref('current_loc/' + this.username);
     location.changeSettings(
         accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
@@ -75,7 +73,11 @@ class Services {
   }
 
   void _broadcastLoc() async {
-    currentLocRef
+    if (currentLocRef == null) {
+      currentLocRef =
+          FirebaseDatabase.instance.ref('current_loc/' + this.username);
+    }
+    currentLocRef!
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 

@@ -46,7 +46,7 @@ class MapWidget extends StatelessWidget {
     // including a bearing direction.
     // For testing purposes, we create a Location object. Usually, you may want to get this from
     // a GPS sensor instead.
-    Location location = Location.withCoordinates(await MapServices().getCurrentLoc());
+    Location location = Location.withCoordinates(GeoCoordinates(12.9716, 77.5946));
     location.horizontalAccuracyInMeters = 1.0;
     // location.time = DateTime.now();
     // // location.bearingInDegrees = _getRandom(0, 360);
