@@ -146,6 +146,4 @@ class Search {
     });
     MapServices().setTapGestureHandler(listener);
   }
-
-  
 }

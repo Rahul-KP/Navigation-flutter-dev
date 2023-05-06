@@ -27,6 +27,7 @@ class _AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+    sobj.streamLoc();
     if (widget.grid != null) {
       widget.grid!.getGrid();
     }

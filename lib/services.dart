@@ -1,11 +1,21 @@
+import 'package:AmbiNav/map_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:here_sdk/core.dart' as core;
+import 'package:location/location.dart';
 
 class Services {
   late String username;
   late String usertype;
+  late DatabaseReference currentLocRef;
+  late core.GeoCoordinates userLocation;
+
+  Services() {
+    this.currentLocRef =
+        FirebaseDatabase.instance.ref('current_loc/' + this.username);
+  }
 
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
@@ -45,5 +55,30 @@ class Services {
         }
       }
     });
+  }
+
+  void streamLoc() async {
+    Location location = await Location();
+    location.changeSettings(
+        accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 1);
+    location.onLocationChanged.listen((LocationData currentLocation) {
+      userLocation = core.GeoCoordinates(
+          currentLocation.latitude!, currentLocation.longitude!);
+      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
+      cameraLoc_.bearingInDegrees = currentLocation
+          .heading; // Degrees of the horizontal direction the user is facing
+      print("degrees" + cameraLoc_.bearingInDegrees.toString());
+      MapServices.locationIndicator.updateLocation(cameraLoc_);
+
+      if (this.usertype == 'driver') {
+        // broadcast the location if the ambulance driver is using the app
+        _broadcastLoc();
+      }
+    });
+  }
+
+  void _broadcastLoc() async {
+    currentLocRef
+        .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
   }
 }
