@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Services {
   late String username;
@@ -21,8 +22,10 @@ class Services {
     });
   }
 
-  void logout() {
+  void logout() async {
     Hive.deleteBoxFromDisk('creds');
+    SharedPreferences login = await SharedPreferences.getInstance();
+    login.setBool('login', true);
   }
 
   void bookAmbulance() async {
