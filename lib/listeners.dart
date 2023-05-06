@@ -5,6 +5,7 @@ import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class FireListener {
   late Services sobj;
@@ -47,5 +48,22 @@ class FireListener {
     rt.initRoutingEngine(sobj);
     rt.showRouteOnMap(GeoPolyline(newlist));
     // Fluttertoast.showToast(msg: "LIGHT");
+  }
+
+  void listenToAmbLoc() async {
+    var box = await Hive.openBox('booking');
+    String hash = box.get('hash');
+    Fluttertoast.showToast(msg: hash);
+    DatabaseReference ref = FirebaseDatabase.instance.ref('Bookings/' + hash);
+    ref.onChildChanged.listen((event) { 
+      Fluttertoast.showToast(msg: "zelda");
+      Fluttertoast.showToast(msg: event.snapshot.children.toString());
+      double lat = double.parse(
+          event.snapshot.child('ambulance_loc/lat').value.toString());
+      double long = double.parse(
+          event.snapshot.child('ambulance_loc/lon').value.toString());
+      Services().updateAmbLoc(GeoCoordinates(lat,long));
+      Fluttertoast.showToast(msg: "123");
+    });
   }
 }

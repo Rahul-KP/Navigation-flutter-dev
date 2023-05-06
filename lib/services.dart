@@ -1,5 +1,7 @@
+import 'package:AmbiNav/listeners.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,6 +53,7 @@ class Services {
         }
       }
     });
+    FireListener(this).listenToAmbLoc();
   }
 
   void streamLoc() async {
@@ -84,5 +87,9 @@ class Services {
 
   void goToUserLoc() async {
     MapServices.mapController.camera.lookAtPoint(userLocation!);
+  }
+
+  void updateAmbLoc(core.GeoCoordinates loc) {
+    Fluttertoast.showToast(msg: "Legend of zelda");
   }
 }
