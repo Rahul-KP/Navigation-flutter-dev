@@ -22,7 +22,8 @@ class FireListener {
       double long = double.parse(
           event.snapshot.child('user_location/lon').value.toString());
       appScreenRes.setStateOverlay(() {
-        NavigationNotif.toggleVisibility(GeoCoordinates(lat, long), event.snapshot.key.toString());
+        NavigationNotif.toggleVisibility(
+            GeoCoordinates(lat, long), event.snapshot.key.toString());
       });
     });
   }
@@ -54,16 +55,12 @@ class FireListener {
     var box = await Hive.openBox('booking');
     String hash = box.get('hash');
     Fluttertoast.showToast(msg: hash);
-    DatabaseReference ref = FirebaseDatabase.instance.ref('Bookings/' + hash);
-    ref.onChildChanged.listen((event) { 
-      Fluttertoast.showToast(msg: "zelda");
-      Fluttertoast.showToast(msg: event.snapshot.children.toString());
-      double lat = double.parse(
-          event.snapshot.child('ambulance_loc/lat').value.toString());
-      double long = double.parse(
-          event.snapshot.child('ambulance_loc/lon').value.toString());
-      Services().updateAmbLoc(GeoCoordinates(lat,long));
-      Fluttertoast.showToast(msg: "123");
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref('Bookings/' + hash + '/ambulance_loc');
+    ref.onChildChanged.listen((event) {
+      double lat = double.parse(event.snapshot.child('lat').value.toString());
+      double long = double.parse(event.snapshot.child('lon').value.toString());
+      Services().updateAmbLoc(GeoCoordinates(lat, long));
     });
   }
 }
