@@ -12,11 +12,6 @@ class Services {
   late DatabaseReference currentLocRef;
   late core.GeoCoordinates userLocation;
 
-  Services() {
-    this.currentLocRef =
-        FirebaseDatabase.instance.ref('current_loc/' + this.username);
-  }
-
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
     box.then((value) {
@@ -59,6 +54,7 @@ class Services {
 
   void streamLoc() async {
     Location location = await Location();
+    currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + this.username);
     location.changeSettings(
         accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
