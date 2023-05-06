@@ -4,6 +4,7 @@ import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
@@ -144,6 +145,52 @@ class Search {
       // double lat = topmostMapMarker.coordinates.latitude;
       // double lon = topmostMapMarker.coordinates.longitude;
     });
+  }
+
+
+  void markerInfo(context) {
+    Scaffold.of(context).showBottomSheet<void>(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      (BuildContext context) {
+        return Container(
+          height: 180,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(30.0),
+                topLeft: Radius.circular(30.0)),
+            color: Color.fromARGB(255, 159, 211, 214),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Align(
+                  // alignment: Alignment.bottomCenter,
+                  child: Container(
+                      height: 80,
+                      child: ListTile(
+                        title: Text(Search.place),
+                        subtitle: Text(Search.vicinity),
+                      )),
+                ),
+                ElevatedButton(
+                  child: const Text('Close BottomSheet'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void setTapGestureHandler() {

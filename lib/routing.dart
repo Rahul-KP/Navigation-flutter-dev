@@ -55,6 +55,8 @@ class Routing {
     Fluttertoast.showToast(msg: routeDetails);
   }
 
+  
+
   showRouteOnMap(GeoPolyline routeGeoPolyline) {
     // Show route as polyline.
     double widthInPixels = 20;
@@ -116,6 +118,7 @@ class Routing {
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
+
         showRouteOnMap(route.geometry);
         Fluttertoast.showToast(msg: usertype.toString());
         if (usertype == 'driver') {
