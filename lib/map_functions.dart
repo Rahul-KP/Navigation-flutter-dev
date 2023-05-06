@@ -12,14 +12,6 @@ class MapServices {
     MapServices.mapController.gestures.tapListener = listener;
   }
 
-  void goToUserLoc() async {
-    // Code to move the camera to user's current location
-    LocationData temp = await Location().getLocation();
-    here_core.GeoCoordinates userLocation =
-        here_core.GeoCoordinates(temp.latitude!, temp.longitude!);
-    MapServices.mapController.camera.lookAtPoint(userLocation);
-  }
-
   void clearMapMarkers(List<MapMarker> mapMarkerList) {
     mapMarkerList.forEach((mapMarker) {
       MapServices.mapController.mapScene.removeMapMarker(mapMarker);

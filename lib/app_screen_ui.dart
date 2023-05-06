@@ -3,9 +3,7 @@ import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/booking_map_ui.dart';
 import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/listeners.dart';
-import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/map.dart';
-import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/search.dart';
 import 'package:AmbiNav/services.dart';
@@ -13,8 +11,9 @@ import 'package:flutter/material.dart';
 
 class AppScreen extends StatefulWidget {
   Grid? grid = null;
+  final Services sobj;
 
-  AppScreen({super.key, required Services sobj, this.grid});
+  AppScreen({super.key, required this.sobj, this.grid});
   static final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   State<AppScreen> createState() => _AppScreenState();
@@ -29,11 +28,11 @@ class _AppScreenState extends State<AppScreen> {
     if (widget.grid != null) {
       widget.grid!.getGrid();
     } else {
-      sobj.streamLoc();
-      if (sobj.usertype == 'driver') {
-        FireListener(sobj).listenToBookings(appScreenRes);
-      } else if (sobj.usertype == 'user') {
-        FireListener(sobj).listenToAcceptance();
+      widget.sobj.streamLoc();
+      if (widget.sobj.usertype == 'driver') {
+        FireListener(widget.sobj).listenToBookings(appScreenRes);
+      } else if (widget.sobj.usertype == 'user') {
+        FireListener(widget.sobj).listenToAcceptance();
       }
     }
   }
@@ -49,7 +48,7 @@ class _AppScreenState extends State<AppScreen> {
       key: AppScreen.scaffoldKey,
       drawer: Drawer(
         child: SafeArea(
-          child: Column(children: appScreenRes.getDrawerOptions(context, sobj)),
+          child: Column(children: appScreenRes.getDrawerOptions(context, widget.sobj)),
         ),
       ),
       appBar: AppBar(
@@ -65,17 +64,17 @@ class _AppScreenState extends State<AppScreen> {
               }
             },
           ),
-          actions: appScreenRes.getActionButtonList(sobj)),
+          actions: appScreenRes.getActionButtonList(widget.sobj)),
       body: Stack(
         children: <Widget>[
           // MapWidget
-          MapWidget(sobj: sobj),
+          MapWidget(sobj: widget.sobj),
           //here the stateful builder is used to render search widget of search.dart (a card element to enter destination)
           //it renders without redrawing the entire screen
           //if the below lines are not included , map will be redrawn every time the search button is toggled
           StatefulBuilder(builder: ((context, setState) {
             appScreenRes.setStateOverlay = setState;
-            return appScreenRes.chooseOverlayWidget(sobj)!;
+            return appScreenRes.chooseOverlayWidget(widget.sobj)!;
           })),
 
           StatefulBuilder(builder: ((context, setState) {
@@ -94,7 +93,7 @@ class _AppScreenState extends State<AppScreen> {
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button
           onPressed: () async {
-            MapServices().goToUserLoc();
+            widget.sobj.goToUserLoc();
           },
           child: const Icon(
             Icons.add_location_alt_outlined,

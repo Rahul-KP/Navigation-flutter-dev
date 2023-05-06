@@ -54,7 +54,8 @@ class Services {
 
   void streamLoc() async {
     Location location = await Location();
-    currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + this.username);
+    currentLocRef =
+        FirebaseDatabase.instance.ref('current_loc/' + this.username);
     location.changeSettings(
         accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
@@ -76,5 +77,9 @@ class Services {
   void _broadcastLoc() async {
     currentLocRef
         .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
+  }
+
+  void goToUserLoc() async {
+    MapServices.mapController.camera.lookAtPoint(userLocation);
   }
 }

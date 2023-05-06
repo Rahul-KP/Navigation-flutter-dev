@@ -119,7 +119,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       //   "age": age.text,
                       //   "preferred_hospital": preferred_hosp.text
                       // });
-                      MapServices().goToUserLoc();
+                      widget.sobj.goToUserLoc();
                       MapServices.mapController.camera.zoomTo(20);
                       while (
                           MapServices.mapController.camera.boundingBox == null) {}

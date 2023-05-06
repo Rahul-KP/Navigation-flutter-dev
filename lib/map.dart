@@ -53,7 +53,7 @@ class MapWidget extends StatelessWidget {
 
     // mm.sobj.locationIndicator.updateLocation(location);
     MapServices.locationIndicator.updateLocation(location);
-
+    sobj.streamLoc();
     // A LocationIndicator listens to the lifecycle of the map view,
     // therefore, for example, it will get destroyed when the map view gets destroyed.
     MapServices.mapController.addLifecycleListener(MapServices.locationIndicator);
