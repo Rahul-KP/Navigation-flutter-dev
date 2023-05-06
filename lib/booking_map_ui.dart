@@ -58,6 +58,8 @@ class _BookingWidgetState extends State<BookingWidget> {
                   child: Text('No', style: style),
                   onTap: () {
                     setState((() => widget.toggleVisibility()));
+                    widget.grid!.removeGrid();
+                    widget.grid = null;
                   },
                 ), // Text here
               ],

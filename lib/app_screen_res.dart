@@ -1,4 +1,5 @@
 import 'package:AmbiNav/ambulance_form.dart';
+import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/login.dart';
 import 'package:AmbiNav/map_functions.dart';
@@ -51,12 +52,15 @@ class AppScreenRes {
           title: const Text('Book an ambulance'),
           leading: Icon(Icons.edit_note_rounded),
         ),
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AmbulanceForm(
-                      sobj: sobj,
-                    ))),
+        onTap: () {
+          AppScreen.scaffoldKey.currentState!.closeDrawer();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AmbulanceForm(
+                        sobj: sobj,
+                      )));
+        },
       ));
     }
     return drawerButtonList;

@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crypto/crypto.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:here_sdk/core.dart';
 import 'package:hive_flutter/adapters.dart';
 
 // User defined ambulance form widget
@@ -115,6 +114,7 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       Grid grid = Grid();
                       grid.isBooking = true;
                       Fluttertoast.showToast(msg: "Something");
+                      Navigator.pop(context);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: ((context) => AppScreen(
                                 sobj: sobj,
