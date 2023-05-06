@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class DisplayMarkerInfo extends StatefulWidget {
   static bool isVisible = false;
-   bool addInfo = true;
+  static bool addInfo = false;
 
   DisplayMarkerInfo({super.key});
 
@@ -12,7 +12,7 @@ class DisplayMarkerInfo extends StatefulWidget {
     isVisible = !isVisible;
   }
 
-  void  addressInfo(addInfo) {
+  static addressInfo(addInfo) {
     if (addInfo) {
       addInfo = false;
     } else {
