@@ -18,7 +18,7 @@ class Search {
   List<MapMarker> _mapMarkerList = [];
   static var setStateMarkerDetailsCard;
   static String place = "";
-  static String oldPlace = "";
+  static String oldVicinity = "";
   static String vicinity = "";
   Routing obj = Routing();
 
@@ -126,16 +126,17 @@ class Search {
               customMetadataValue as SearchResultMetadata;
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
-          if (place == oldPlace) {
-            oldPlace = '';
+          if (vicinity == oldVicinity) {
+            oldVicinity = '';
             obj.removeRoute();
+          } else {
+            await obj
+                .addRoute(searchResultMetadata.searchResult.geoCoordinates!);
           }
-          await obj.addRoute(searchResultMetadata.searchResult.geoCoordinates!);
-
           setStateMarkerDetailsCard(() {
             DisplayMarkerInfo.isVisible = true;
           });
-          oldPlace = place;
+          oldVicinity = vicinity;
           return;
         }
       }
