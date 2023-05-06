@@ -11,7 +11,6 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
-// import 'main.dart' as mm;
 
 class Routing {
   late here.RoutingEngine _routingEngine;
@@ -52,7 +51,7 @@ class Routing {
         _formatTime(estimatedTravelTimeInSeconds) +
         ', Length: ' +
         _formatLength(lengthInMeters);
-    ref.update({"0": routeDetails});
+    // ref.update({"0": routeDetails});
     Fluttertoast.showToast(msg: routeDetails);
   }
 
@@ -93,6 +92,12 @@ class Routing {
     }
   }
 
+  void removeRoute() async {
+    _mapPolylines.forEach((MapPolyline element) {
+      MapServices.mapController.mapScene.removeMapPolyline(element);
+    });
+  }
+
   Future<void> addRoute(destinationGeoCoordinates) async {
     // GeoCoordinates startGeoCoordinates = await MapServices().getCurrentLoc();
     var startWaypoint = here.Waypoint.withDefaults(sobj.userLocation!);
@@ -100,6 +105,8 @@ class Routing {
         here.Waypoint.withDefaults(destinationGeoCoordinates);
 
     List<here.Waypoint> waypoints = [startWaypoint, destinationWaypoint];
+
+    if (_mapPolylines.isNotEmpty) this.removeRoute();
 
     _routingEngine.calculateCarRoute(waypoints, here.CarOptions(),
         (here.RoutingError? routingError, List<here.Route>? routeList) async {
@@ -114,14 +121,6 @@ class Routing {
         if (usertype == 'driver') {
           _broadcastRoute(route);
         }
-        if (usertype == 'user') {
-          ref.onValue.listen((event) {
-            Fluttertoast.showToast(msg: "here");
-            print(event.snapshot.value.toString());
-            Fluttertoast.showToast(
-                msg: (event.snapshot.value.runtimeType.toString()));
-          });
-        }
       } else {
         var error = routingError.toString();
         Fluttertoast.showToast(msg: error);
@@ -132,7 +131,8 @@ class Routing {
   //add route to database
   void _broadcastRoute(here.Route route) {
     List route_ = [];
-    ref = FirebaseDatabase.instance.ref('Bookings/' + NavigationNotif.hashvalue);
+    ref =
+        FirebaseDatabase.instance.ref('Bookings/' + NavigationNotif.hashvalue);
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
