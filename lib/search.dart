@@ -21,6 +21,7 @@ class Search {
   static String place = "";
   static String oldVicinity = "";
   static String vicinity = "";
+  static late var context ;
   Routing obj = Routing();
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
@@ -127,6 +128,7 @@ class Search {
               customMetadataValue as SearchResultMetadata;
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
+
           if (vicinity == oldVicinity) {
             oldVicinity = '';
             obj.removeRoute();
@@ -134,9 +136,10 @@ class Search {
             await obj
                 .addRoute(searchResultMetadata.searchResult.geoCoordinates!);
           }
-          setStateMarkerDetailsCard(() {
-            DisplayMarkerInfo.isVisible = true;
-          });
+          // setStateMarkerDetailsCard(() {
+          //   DisplayMarkerInfo.isVisible = true;
+          // });
+          markerInfo();
           oldVicinity = vicinity;
           return;
         }
@@ -148,7 +151,7 @@ class Search {
   }
 
 
-  void markerInfo(context) {
+  void markerInfo() {
     Scaffold.of(context).showBottomSheet<void>(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

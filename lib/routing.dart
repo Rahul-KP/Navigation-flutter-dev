@@ -52,6 +52,10 @@ class Routing {
         ', Length: ' +
         _formatLength(lengthInMeters);
     // ref.update({"0": routeDetails});
+    Hive.openBox("marker").then((box) {
+      box.put('eta', estimatedTravelTimeInSeconds);
+    } );
+    
     Fluttertoast.showToast(msg: routeDetails);
   }
 
