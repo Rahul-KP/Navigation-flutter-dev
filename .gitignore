@@ -17,6 +17,7 @@ linux/
 macos/
 plugins/
 *.env
+newbuild.sh
 
 # IntelliJ related
 *.iml
