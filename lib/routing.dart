@@ -1,5 +1,6 @@
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
+import 'package:AmbiNav/search.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/routing.dart' as here;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import 'marker_details_ui.dart';
 // import 'main.dart' as mm;
 
 class Routing {
@@ -55,6 +58,8 @@ class Routing {
     ref.update({"0": routeDetails});
     Fluttertoast.showToast(msg: routeDetails);
   }
+
+  
 
   showRouteOnMap(GeoPolyline routeGeoPolyline) {
     // Show route as polyline.
@@ -109,6 +114,7 @@ class Routing {
         // When error is null, then the list guaranteed to be not null.
         here.Route route = routeList!.first;
         _showRouteDetails(route);
+
         showRouteOnMap(route.geometry);
         Fluttertoast.showToast(msg: usertype.toString());
         if (usertype == 'driver') {
@@ -132,7 +138,8 @@ class Routing {
   //add route to database
   void _broadcastRoute(here.Route route) {
     List route_ = [];
-    ref = FirebaseDatabase.instance.ref('Bookings/' + NavigationNotif.hashvalue);
+    ref =
+        FirebaseDatabase.instance.ref('Bookings/' + NavigationNotif.hashvalue);
     for (var element in route.geometry.vertices) {
       route_.add({"lat": element.latitude, "lon": element.longitude});
     }
