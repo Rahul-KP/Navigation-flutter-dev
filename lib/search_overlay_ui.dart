@@ -1,13 +1,20 @@
-import 'package:AmbiNav/search_res.dart';
+import 'package:AmbiNav/map_functions.dart';
+import 'package:AmbiNav/search.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {
-  const SearchWidget({super.key});
+  Search seobj;
+  SearchWidget({super.key, required this.seobj});
 
   static bool isVisible = false;
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
-  static void toggleVisibility() {
+  void toggleVisibility() {
     isVisible = !isVisible;
+    if (isVisible == true) {
+      seobj.setTapGestureHandler();
+    } else {
+      MapServices().clearMapMarkers(seobj.mapMarkerList);
+    }
   }
 
   @override
@@ -15,9 +22,6 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-
-  SearchRes search = SearchRes();
-
   @override
   Widget build(BuildContext context) {
     return Visibility(
@@ -32,12 +36,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     border: OutlineInputBorder(),
                     hintText: 'Enter destination',
                   ),
-                  onSubmitted: (
-                    (value) {
-                      search.search(value);
-                      SearchWidget.toggleVisibility();
-                    } 
-                  ),
+                  onSubmitted: ((value) {
+                    widget.seobj.search(value);
+                    // SearchWidget.toggleVisibility();
+                  }),
                 ),
               ],
             ),

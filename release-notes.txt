@@ -1,1 +1,2 @@
-Now the form response event is listened to , and the details can be seen on the console when a form is submitted
+what3words grid can now be displayed and removed using a toggle button.
+Ambulance booking grid is fixed. Booking is done when the first booking is done.

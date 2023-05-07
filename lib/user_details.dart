@@ -1,13 +1,16 @@
 import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'starter.dart';
+import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'main.dart' as mm;
 
 class userDetails extends StatefulWidget {
-  const userDetails({super.key});
+  final Services sobj;
+  const userDetails({super.key, required this.sobj});
 
   @override
   State<userDetails> createState() => _userDetailsState();
@@ -105,16 +108,28 @@ class _userDetailsState extends State<userDetails> {
 
                       if (username != '' && code != '') {
                         logindata.setBool('login', false);
-
                         logindata.setString('username', username);
-                        logindata.setString('usertype', 'user');
-                        Services.usertype = 'user';
-                        Fluttertoast.showToast(msg: username);
+                        sobj.setCred('username', username);
+                        sobj.username = username;
+                        if (codeController.text == 'pol1234') {
+                          logindata.setString('usertype', 'police');
+                          sobj.setCred('usertype', 'police');
+                          sobj.usertype = 'police';
+                          Fluttertoast.showToast(
+                              msg:
+                                  "You are now logged in as a traffic authority!");
+                        } else {
+                          logindata.setString('usertype', 'user');
+                          sobj.setCred('usertype', 'user');
+                          sobj.usertype = 'user';
+                        }
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AppScreen()));
+                                builder: (context) => AppScreen(
+                                      sobj: widget.sobj,
+                                    )));
                       }
                     },
                     child: Container(
@@ -151,9 +166,11 @@ class _userDetailsState extends State<userDetails> {
                     Container(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: ((context) => loginpg())));
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: ((context) => loginpg(
+                                        sobj: widget.sobj,
+                                      ))));
                         },
                         child: Text(
                           '  Click here',

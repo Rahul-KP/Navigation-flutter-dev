@@ -1,7 +1,10 @@
+import 'package:AmbiNav/app_screen_ui.dart';
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/marker_details_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/search_result_metadata.dart';
 import 'package:AmbiNav/services.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.errors.dart'; //for handling search instantiation Exception
@@ -9,14 +12,23 @@ import 'package:here_sdk/gestures.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/core.dart' as core;
 import 'package:here_sdk/search.dart';
-import 'package:intl/intl.dart';
 
-class SearchRes {
+class Search {
   MapImage? _poiMapImage;
-  List<MapMarker> _mapMarkerList = [];
+  List<MapMarker> mapMarkerList = [];
   static var setStateMarkerDetailsCard;
   static String place = "";
+  static String oldVicinity = "";
   static String vicinity = "";
+  static var context;
+  late PersistentBottomSheetController controller;
+  Routing obj = Routing();
+  late Services sobj;
+
+  Search(var ctx, Services sobj) {
+    context = ctx;
+    this.sobj = sobj;
+  }
 
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
@@ -33,8 +45,8 @@ class SearchRes {
     }
 
     MapMarker mapMarker = MapMarker(geoCoordinates, _poiMapImage!);
-    Services.mapController.mapScene.addMapMarker(mapMarker);
-    _mapMarkerList.add(mapMarker);
+    MapServices.mapController.mapScene.addMapMarker(mapMarker);
+    mapMarkerList.add(mapMarker);
 
     return mapMarker;
   }
@@ -48,7 +60,7 @@ class SearchRes {
   void search(String queryString) async {
     // Code to implement search functionality
     //clear map markers before every search
-    _clearMap();
+    MapServices().clearMapMarkers(mapMarkerList);
     //instantiate search engine
     late SearchEngine _searchEngine;
     try {
@@ -57,14 +69,12 @@ class SearchRes {
       throw Exception("Initialization of SearchEngine failed.");
     }
 
-    _setTapGestureHandler();
-
     SearchOptions searchOptions = SearchOptions();
     searchOptions.languageCode = core.LanguageCode.enUs;
     searchOptions.maxItems = 30;
 
     //build the search query
-    TextQueryArea queryArea = TextQueryArea.withCenter(Services.userLocation);
+    TextQueryArea queryArea = TextQueryArea.withCenter(sobj.userLocation!);
     TextQuery query = TextQuery.withArea(queryString, queryArea);
 
     // _searchEngine.searchByText(query, searchOptions, (p0, p1) { });
@@ -97,8 +107,9 @@ class SearchRes {
   }
 
   void _pickMapMarker(core.Point2D touchPoint) {
+    obj.initRoutingEngine(sobj);
     double radiusInPixel = 2;
-    Services.mapController.pickMapItems(touchPoint, radiusInPixel,
+    MapServices.mapController.pickMapItems(touchPoint, radiusInPixel,
         (pickMapItemsResult) async {
       if (pickMapItemsResult == null) {
         // Pick operation failed.
@@ -124,13 +135,18 @@ class SearchRes {
           place = searchResultMetadata.searchResult.title;
           vicinity = searchResultMetadata.searchResult.address.addressText;
 
-          Routing obj = Routing();
-          obj.initRoutingEngine();
-          await obj.addRoute(Services.userLocation, searchResultMetadata.searchResult.geoCoordinates);
-
-          setStateMarkerDetailsCard((){
-            DisplayMarkerInfo.isVisible = true;
-          });
+          if (vicinity == oldVicinity) {
+            oldVicinity = '';
+            obj.removeRoute();
+          } else {
+            await obj
+                .addRoute(searchResultMetadata.searchResult.geoCoordinates!);
+          }
+          // setStateMarkerDetailsCard(() {
+          //   DisplayMarkerInfo.isVisible = true;
+          // });
+          markerInfo();
+          oldVicinity = vicinity;
           return;
         }
       }
@@ -140,17 +156,50 @@ class SearchRes {
     });
   }
 
-  void _setTapGestureHandler() {
-    Services.mapController.gestures.tapListener =
-        TapListener((core.Point2D touchPoint) {
-      _pickMapMarker(touchPoint);
-    });
+  void markerInfo() {
+    controller = AppScreen.scaffoldKey.currentState!.showBottomSheet(
+      (BuildContext context) {
+        return Container(
+          height: 180,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(25.0),
+                topLeft: Radius.circular(25.0)),
+            color: Color.fromARGB(255, 0, 145, 197),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Align(
+                  // alignment: Alignment.bottomCenter,
+                  child: Container(
+                      height: 80,
+                      child: ListTile(
+                        title: Text(Search.place, style: TextStyle(color: Colors.white, fontSize: 16),),
+                        subtitle: Text(Search.vicinity, style: TextStyle(color: Colors.white)),
+                      )),
+                ),
+                ElevatedButton(
+                  child: const Text('Directions'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    controller.closed.then((value) {obj.removeRoute(); oldVicinity = '';});
   }
 
-  void _clearMap() {
-    _mapMarkerList.forEach((mapMarker) {
-      Services.mapController.mapScene.removeMapMarker(mapMarker);
+  void setTapGestureHandler() {
+    TapListener listener = TapListener((core.Point2D touchPoint) {
+      _pickMapMarker(touchPoint);
     });
-    _mapMarkerList.clear();
+    MapServices().setTapGestureHandler(listener);
   }
 }

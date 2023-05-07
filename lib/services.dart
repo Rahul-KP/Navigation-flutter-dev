@@ -1,92 +1,137 @@
-import 'dart:async';
-
+import 'package:AmbiNav/listeners.dart';
+import 'package:AmbiNav/map_functions.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:here_sdk/core.dart' as core;
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/mapview.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:here_sdk/core.dart' as core;
 import 'package:location/location.dart';
 
 class Services {
-  static late HereMapController mapController;
-  //used to reference setState() for search widget (setState is copied to this variable in StatefulBuilder)
-  static late var setStateOverlay;
-  static late String usertype;
-  static late String username;
-  static late BuildContext mapContext;
-  static late core.GeoCoordinates userLocation; // user's location
-  static LocationIndicator locationIndicator = LocationIndicator();
-  static DatabaseReference ref = FirebaseDatabase.instance.ref('routes');
-  //this current_loc is used for driver's current location
-  //NOTE: not setting this in  All Drivers key of rtdb because this has to be used by IoT device
-  //and the IoT device is slow in handling nested data
-  static DatabaseReference currentLocRef = FirebaseDatabase.instance.ref('current_loc/' + username);
-  //a field to note which driver has accepted which patient and to broadcast route i.e pathToBeShared field
-  static late DatabaseReference driverProfiles;
-  //a listen flag for ambulance driver to not listen to bookings once a patient has been accepted
-  //after the trip is complete , resubscribe to bookings listener
-  static late StreamSubscription<DatabaseEvent> listen;
-  static late DataSnapshot formDetails;
-  static bool flag = false;
-  static late List pathToBeShared;
+  late String username;
+  late String usertype;
+  MapMarker? ambulance = null;
+  // LocationIndicator? ambulance;
+  DatabaseReference? currentLocRef = null;
+  bool isBooking = false;
+  core.GeoCoordinates? userLocation = null;
+  late Routing? ambroute; 
+  static late var endDestinationSetSateOverlay;
 
-  static Future<void> loadCreds() async {
-    //loading the .env file
-    await dotenv.load(fileName: "credentials.env");
+  static var listen = null;
+
+  Future<String?> getCred(String key) {
+    var box = Hive.openBox('creds');
+    box.then((value) {
+      return value.get(key);
+    });
+    return Future<Null>.value(null);
   }
 
-  static String? getSecret(String key) {
-    return dotenv.env[key];
-    //here.access.key.id
+  void setCred(String key, String value) {
+    var box = Hive.openBox('creds');
+    box.then((value_) {
+      value_.put(key, value);
+    });
   }
 
-  static void setLoc() async {
+  void logout() async {
+    Hive.deleteBoxFromDisk('creds');
+    SharedPreferences login = await SharedPreferences.getInstance();
+    login.setBool('login', true);
+  }
+
+  void bookAmbulance() async {
+    DatabaseReference ref = FirebaseDatabase.instance.ref("Bookings");
+    var box = await Hive.openBox('booking');
+    //call to hashing function
+    Fluttertoast.showToast(msg: "Booking Successful!");
+    ref.update({
+      box.get('hash'): {
+        "patient_name": box.get('name'),
+        "age": box.get('age'),
+        "preferred_hospital": box.get('preferred_hosp'),
+        "gender": box.get('gender'),
+        "user_location": {
+          "lat": box.get('lat'),
+          "lon": box.get('lon'),
+        }
+      }
+    });
+    FireListener(this).listenToAcceptance();
+  }
+
+  void streamLoc() async {
     Location location = await Location();
-    location.changeSettings(accuracy: LocationAccuracy.high,interval: 5000,distanceFilter: 1);
+    location.changeSettings(
+        accuracy: LocationAccuracy.high, interval: 1000, distanceFilter: 1);
     location.onLocationChanged.listen((LocationData currentLocation) {
       userLocation = core.GeoCoordinates(
           currentLocation.latitude!, currentLocation.longitude!);
-      flag = true;
-      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation);
+      core.Location cameraLoc_ = core.Location.withCoordinates(userLocation!);
       cameraLoc_.bearingInDegrees = currentLocation
           .heading; // Degrees of the horizontal direction the user is facing
-          print("degrees"+cameraLoc_.bearingInDegrees.toString());
-      locationIndicator.updateLocation(cameraLoc_);
+      print("degrees" + cameraLoc_.bearingInDegrees.toString());
+      MapServices.locationIndicator.updateLocation(cameraLoc_);
 
-      if (usertype == 'driver') {
+      if (this.usertype == 'driver') {
         // broadcast the location if the ambulance driver is using the app
         _broadcastLoc();
       }
     });
   }
 
-  static void _broadcastLoc() async {
-    currentLocRef
-        .set({'lat': userLocation.latitude, 'lon': userLocation.longitude});
+  void _broadcastLoc() async {
+    if (currentLocRef != null) {
+      if (isBooking == true) {
+        currentLocRef!.set(
+            {'lat': userLocation!.latitude, 'lon': userLocation!.longitude});
+      }
+    }
   }
 
-  static Future<void> getPermissions() async {
-    Location location = Location();
+  void goToUserLoc() async {
+    MapServices.mapController.camera.lookAtPoint(userLocation!);
+  }
 
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+  //prepaing ambulance map marker
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
+  Future<Uint8List> _loadFileAsUint8List(String fileName) async {
+    // The path refers to the assets directory as specified in pubspec.yaml.
+    ByteData fileData = await rootBundle.load('assets/' + fileName);
+    return Uint8List.view(fileData.buffer);
+  }
+
+  Future<MapMarker> _addAmbMapMarker(core.GeoCoordinates geoCoordinates) async {
+    MapImage? _ambImage;
+    // Reuse existing MapImage for new map markers.
+    if (_ambImage == null) {
+      Uint8List imagePixelData = await _loadFileAsUint8List('ambulance.png');
+      _ambImage =
+          MapImage.withPixelDataAndImageFormat(imagePixelData, ImageFormat.png);
     }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
+    MapMarker mapMarker = MapMarker(geoCoordinates, _ambImage);
+    // later ,to clear map marker add all map markers to the same list
+    // _mapMarkerList.add(mapMarker);
+    return mapMarker;
+  }
+
+  void updateAmbLoc(core.GeoCoordinates loc) {
+    // if (ambulance == null) {
+    //   ambulance = LocationIndicator();
+    //   // MapServices.mapController.addLifecycleListener(ambulance!);
+    // }
+    // ambulance!.updateLocation(core.Location.withCoordinates(loc));
+    if (ambulance != null) {
+      MapServices.mapController.mapScene.removeMapMarker(ambulance!);
     }
-    LocationData temp = await location.getLocation();
-    Services.userLocation = core.GeoCoordinates(temp.latitude!,temp.longitude!);
+    _addAmbMapMarker(loc).then((value) {
+      ambulance = value;
+      MapServices.mapController.mapScene.addMapMarker(value);
+    });
   }
 }

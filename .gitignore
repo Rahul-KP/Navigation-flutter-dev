@@ -17,6 +17,7 @@ linux/
 macos/
 plugins/
 *.env
+newbuild.sh
 
 # IntelliJ related
 *.iml
@@ -56,3 +57,4 @@ heresdk-explore-flutter-4.13.0.0.3315.tar.gz
 firebase_rules.txt
 lib/firebase_options.dart
 ios/firebase_app_id_file.json
+/book ambulance
