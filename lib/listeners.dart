@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
@@ -6,6 +8,7 @@ import 'package:AmbiNav/services.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
+import 'package:here_sdk/mapview.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'dart:math' as math;
 
@@ -60,8 +63,11 @@ class FireListener {
   void listenToAmbLoc() async {
     var box = await Hive.openBox('booking');
     String hash = box.get('hash');
+    double userlat = box.get('lat');
+    double userlon = box.get('lon');
     double lat = 0, long = 0;
     bool flag = false;
+    bool once = true;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref('Bookings/' + hash + '/ambulance_loc');
     ref.onChildChanged.listen((event) {
@@ -77,16 +83,49 @@ class FireListener {
         //     msg: "You are at " + lat.toString() + ", " + long.toString());
         sobj.updateAmbLoc(GeoCoordinates(lat, long));
         flag = false;
+        if (once) {
+          midPoint(lat, long).then((value) {
+            MapServices.mapController.camera.lookAtPointWithMeasure(
+                value,
+                MapMeasure(MapMeasureKind.distance,
+                    distance(lat, long, userlat, userlon)));
+          });
+          once = false;
+        }
         //check if the ambulance has arrived
-        MapServices().getCurrentLoc().then((useloc) {
-          double d = distance(lat, long, useloc.latitude, useloc.longitude);
-          if (d < 300) {
-            //code the part to end trip
-            Fluttertoast.showToast(msg: "Ambulance in vicinity");
-          }
-        });
+        double d = distance(lat, long, userlat, userlon);
+        if (d < 300) {
+          //code the part to end trip
+          Fluttertoast.showToast(msg: "Ambulance in vicinity");
+        }
       }
     });
+  }
+
+  Future<GeoCoordinates> midPoint(double lat1_, double lon1_) async {
+    var box = await Hive.openBox('booking');
+    double lat2 = degreesToRadians(box.get('lat'));
+    double lon2 = degreesToRadians(box.get('lon'));
+
+    double lat1 = degreesToRadians(lat1_);
+    double lon1 = degreesToRadians(lon1_);
+
+    double bx = cos(lat2) * cos(lon2 - lon1);
+    double by = cos(lat2) * sin(lon2 - lon1);
+
+    double midLat = atan2(sin(lat1) + sin(lat2),
+        sqrt((cos(lat1) + bx) * (cos(lat1) + bx) + by * by));
+    double midLon = lon1 + atan2(by, cos(lat1) + bx);
+
+    return GeoCoordinates(radiansToDegrees(midLat), radiansToDegrees(midLon));
+  }
+
+  double degreesToRadians(double degrees) {
+    return degrees * pi / 180.0;
+  }
+
+  double radiansToDegrees(double radians) {
+    return radians * 180.0 / pi;
   }
 
   double distance(double lat1, double lon1, double lat2, double lon2) {
