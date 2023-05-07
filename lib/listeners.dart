@@ -1,4 +1,5 @@
 import 'package:AmbiNav/app_screen_res.dart';
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:AmbiNav/services.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/core.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'dart:math' as math;
 
 class FireListener {
   late Services sobj;
@@ -58,7 +60,7 @@ class FireListener {
   void listenToAmbLoc() async {
     var box = await Hive.openBox('booking');
     String hash = box.get('hash');
-    double? lat, long;
+    double lat = 0, long = 0;
     bool flag = false;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref('Bookings/' + hash + '/ambulance_loc');
@@ -70,12 +72,36 @@ class FireListener {
         long = double.parse(event.snapshot.value.toString());
         flag = true;
       }
-      if (lat != null && long != null && flag) {
+      if (flag) {
         // Fluttertoast.showToast(
         //     msg: "You are at " + lat.toString() + ", " + long.toString());
-        sobj.updateAmbLoc(GeoCoordinates(lat!, long!));
+        sobj.updateAmbLoc(GeoCoordinates(lat, long));
         flag = false;
+        //check if the ambulance has arrived
+        MapServices().getCurrentLoc().then((useloc) {
+          double d = distance(lat, long, useloc.latitude, useloc.longitude);
+          if (d < 300) {
+            //code the part to end trip
+            Fluttertoast.showToast(msg: "Ambulance in vicinity");
+          }
+        });
       }
     });
+  }
+
+  double distance(double lat1, double lon1, double lat2, double lon2) {
+    double r = 6371; // radius of the Earth in km
+    double phi1 = math.pi * lat1 / 180;
+    double phi2 = math.pi * lat2 / 180;
+    double delta_phi = math.pi * (lat2 - lat1) / 180;
+    double delta_lambda = math.pi * (lon2 - lon1) / 180;
+    double a = math.sin(delta_phi / 2) * math.sin(delta_phi / 2) +
+        math.cos(phi1) *
+            math.cos(phi2) *
+            math.sin(delta_lambda / 2) *
+            math.sin(delta_lambda / 2);
+    double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+    double d = r * c * 1000; // distance in km
+    return d;
   }
 }

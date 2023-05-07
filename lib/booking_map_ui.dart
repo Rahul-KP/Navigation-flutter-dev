@@ -60,6 +60,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                   onTap: () {
                     setState((() => widget.toggleVisibility()));
                     widget.grid!.removeGrid();
+                    widget.grid!.isBooking = false;
                     widget.grid = null;
                   },
                 ), // Text here
