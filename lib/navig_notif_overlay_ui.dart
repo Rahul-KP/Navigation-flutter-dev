@@ -59,7 +59,7 @@ class _NavigationNotifState extends State<NavigationNotif> {
             widget.sobj.isBooking = true;
             rt.addRoute(NavigationNotif.patientLoc);
             // //after the formhas been accepted by the driver , stop listening to other forms
-            // sobj.listen.cancel();
+            Services.listen.cancel();
             DatabaseReference ref1 = FirebaseDatabase.instance
                 .ref('Bookings/' + NavigationNotif.hashvalue);
             print((ref1.get()).runtimeType.toString());

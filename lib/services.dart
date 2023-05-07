@@ -1,12 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:AmbiNav/listeners.dart';
-// import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/routing.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:here_sdk/mapview.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -24,6 +20,8 @@ class Services {
   core.GeoCoordinates? userLocation = null;
   late Routing? ambroute; 
   static late var endDestinationSetSateOverlay;
+
+  static var listen;
 
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');

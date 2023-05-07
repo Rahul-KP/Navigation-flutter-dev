@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:AmbiNav/app_screen_res.dart';
-import 'package:AmbiNav/end_destination_ui.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
@@ -23,7 +22,7 @@ class FireListener {
 
   void listenToBookings(AppScreenRes appScreenRes) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref('Bookings');
-    ref.onChildAdded.listen((event) async {
+    Services.listen = ref.onChildAdded.listen((event) async {
       double lat = double.parse(
           event.snapshot.child('user_location/lat').value.toString());
       double long = double.parse(
