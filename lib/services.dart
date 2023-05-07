@@ -15,8 +15,8 @@ import 'package:location/location.dart';
 class Services {
   late String username;
   late String usertype;
-  // MapMarker? ambulance = null;
-  LocationIndicator? ambulance;
+  MapMarker? ambulance = null;
+  // LocationIndicator? ambulance;
   DatabaseReference? currentLocRef = null;
   bool isBooking = false;
   core.GeoCoordinates? userLocation = null;
@@ -94,23 +94,22 @@ class Services {
   void goToUserLoc() async {
     MapServices.mapController.camera.lookAtPoint(userLocation!);
   }
-  
+
   //prepaing ambulance map marker
-  
+
   Future<Uint8List> _loadFileAsUint8List(String fileName) async {
     // The path refers to the assets directory as specified in pubspec.yaml.
     ByteData fileData = await rootBundle.load('assets/' + fileName);
     return Uint8List.view(fileData.buffer);
   }
 
-  Future<MapMarker> _addAmbMapMarker(
-      core.GeoCoordinates geoCoordinates) async {
+  Future<MapMarker> _addAmbMapMarker(core.GeoCoordinates geoCoordinates) async {
     MapImage? _ambImage;
     // Reuse existing MapImage for new map markers.
     if (_ambImage == null) {
       Uint8List imagePixelData = await _loadFileAsUint8List('ambulance.png');
-      _ambImage = MapImage.withPixelDataAndImageFormat(
-          imagePixelData, ImageFormat.png);
+      _ambImage =
+          MapImage.withPixelDataAndImageFormat(imagePixelData, ImageFormat.png);
     }
 
     MapMarker mapMarker = MapMarker(geoCoordinates, _ambImage);
@@ -120,15 +119,17 @@ class Services {
   }
 
   void updateAmbLoc(core.GeoCoordinates loc) {
-    if (ambulance == null) {
-      ambulance = LocationIndicator();
-      MapServices.mapController.addLifecycleListener(ambulance!);
-    }
-    ambulance!.updateLocation(core.Location.withCoordinates(loc));
-    // if(ambulance != null) {
-    //   MapServices.mapController.mapScene.removeMapMarker(ambulance!);
+    // if (ambulance == null) {
+    //   ambulance = LocationIndicator();
+    //   // MapServices.mapController.addLifecycleListener(ambulance!);
     // }
-    // ambulance = await _addAmbMapMarker(loc);
-    // MapServices.mapController.mapScene.addMapMarker(ambulance!);
+    // ambulance!.updateLocation(core.Location.withCoordinates(loc));
+    if (ambulance != null) {
+      MapServices.mapController.mapScene.removeMapMarker(ambulance!);
+    }
+    _addAmbMapMarker(loc).then((value) {
+      ambulance = value;
+      MapServices.mapController.mapScene.addMapMarker(value);
+    });
   }
 }
