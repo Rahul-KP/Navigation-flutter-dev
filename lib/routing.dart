@@ -124,7 +124,7 @@ class Routing {
         _showRouteDetails(route);
 
         showRouteOnMap(route.geometry);
-        Fluttertoast.showToast(msg: usertype.toString());
+        // Fluttertoast.showToast(msg: usertype.toString());
         if (usertype == 'driver') {
           _broadcastRoute(route);
         }
@@ -146,6 +146,6 @@ class Routing {
     ref.update({'route': route_});
     var box = Hive.openBox('routes');
     box.then((value) => value.put('route', route_));
-    Fluttertoast.showToast(msg: "path now put to firebase rtdb");
+    Fluttertoast.showToast(msg: "User will now see your route");
   }
 }

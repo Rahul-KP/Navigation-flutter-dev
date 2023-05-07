@@ -113,14 +113,14 @@ class AmbulanceFormState extends State<AmbulanceForm> {
                       print("Grid is to be drawn after submit!");
                       Grid grid = Grid();
                       grid.isBooking = true;
-                      Fluttertoast.showToast(msg: "Something");
+                      Fluttertoast.showToast(msg: "Grid is shown");
                       Navigator.pop(context);
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: ((context) => AppScreen(
                                 sobj: sobj,
                                 grid: grid,
                               ))));
-                      Fluttertoast.showToast(msg: "hahahah");
+                      // Fluttertoast.showToast(msg: "hahahah");
                       // grid.getGrid(true);
                     },
                   ))

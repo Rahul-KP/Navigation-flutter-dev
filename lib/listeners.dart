@@ -165,11 +165,11 @@ class FireListener {
         // Fluttertoast.showToast(msg: data.toString());
         if (data.runtimeType.toString() != 'String' &&
             !hashes.contains(event.snapshot.key.toString())) {
-              Fluttertoast.showToast(msg: event.snapshot.key.toString());
+              // Fluttertoast.showToast(msg: event.snapshot.key.toString());
           List d = data as List;
           _convertToPolyline(d);
           hashes.add(event.snapshot.key.toString());
-          Fluttertoast.showToast(msg: hashes.length.toString());
+          // Fluttertoast.showToast(msg: hashes.length.toString());
         }
       }
     });

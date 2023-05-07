@@ -83,15 +83,16 @@ class AppScreenRes {
         child: IconButton(
             icon: Icon(Icons.grid_on),
             onPressed: ((() async {
-              Fluttertoast.showToast(
-                  msg: MapServices.mapController.camera.state.zoomLevel
-                      .toString());
+              double zoom;
               if (grid.isDisplayed) {
                 grid.removeGrid();
               } else {
-                if (MapServices.mapController.camera.state.zoomLevel
-                        .toDouble() >=
-                    19) grid.getGrid();
+                zoom =
+                    MapServices.mapController.camera.state.zoomLevel.toDouble();
+                if (zoom >= 19)
+                  grid.getGrid();
+                else
+                  Fluttertoast.showToast(msg: "Zoom in more to see grid!");
               }
             })))));
     if (sobj.usertype == 'user') {
