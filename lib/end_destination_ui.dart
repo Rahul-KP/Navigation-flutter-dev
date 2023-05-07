@@ -26,7 +26,7 @@ class _EndDesState extends State<EndDes> {
             elevation: 12.0,
             textStyle: const TextStyle(color: Colors.white),
             backgroundColor: Colors.blue[400]),
-        child: const Text('End Destination'),
+        child: const Text('End trip'),
       ),
       visible: EndDes.isVisible,
     );

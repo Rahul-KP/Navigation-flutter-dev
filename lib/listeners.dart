@@ -60,6 +60,7 @@ class FireListener {
     // Fluttertoast.showToast(msg: "LIGHT");
   }
 
+  //this function is on the user's side
   void listenToAmbLoc() async {
     var box = await Hive.openBox('booking');
     String hash = box.get('hash');
@@ -94,11 +95,13 @@ class FireListener {
         }
         //check if the ambulance has arrived
         double d = distance(lat, long, userlat, userlon);
+        DatabaseReference ref1 = FirebaseDatabase.instance.ref('Bookings/' + hash);
         if (d < 300) {
           //code the part to end trip
           Fluttertoast.showToast(msg: "Ambulance in vicinity");
+          ref1.update({"Reached":"True"});
           Services.endDestinationSetSateOverlay((){
-            EndDes.isVisible=true;
+            // EndDes.isVisible=true;
             EndDes.rt = this.rt;
           });
         }
