@@ -19,6 +19,9 @@ class _EndDesState extends State<EndDes> {
       child: ElevatedButton(
         onPressed: () {
           EndDes.rt.removeRoute();
+          setState(() {
+            EndDes.isVisible = false;
+          });
         },
 
         // style: ButtonStyle(elevation: MaterialStateProperty(12.0 )),

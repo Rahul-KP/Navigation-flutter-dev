@@ -102,8 +102,7 @@ class FireListener {
           Fluttertoast.showToast(msg: "Ambulance in vicinity");
           ref1.update({"Reached":"True"});
           Services.endDestinationSetSateOverlay((){
-            // EndDes.isVisible=true;
-            EndDes.rt = this.rt;
+            rt.removeRoute();
           });
         }
       }
