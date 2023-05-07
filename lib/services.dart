@@ -15,7 +15,8 @@ import 'package:location/location.dart';
 class Services {
   late String username;
   late String usertype;
-  MapMarker? ambulance = null;
+  // MapMarker? ambulance = null;
+  LocationIndicator? ambulance;
   DatabaseReference? currentLocRef = null;
   bool isBooking = false;
   core.GeoCoordinates? userLocation = null;
@@ -58,7 +59,7 @@ class Services {
         }
       }
     });
-    FireListener(this).listenToAmbLoc();
+    FireListener(this).listenToAcceptance();
   }
 
   void streamLoc() async {
@@ -118,12 +119,16 @@ class Services {
     return mapMarker;
   }
 
-  void updateAmbLoc(core.GeoCoordinates loc) async {
-    Fluttertoast.showToast(msg: "Legend of zelda");
-    if(ambulance != null) {
-      MapServices.mapController.mapScene.removeMapMarker(ambulance!);
+  void updateAmbLoc(core.GeoCoordinates loc) {
+    if (ambulance == null) {
+      ambulance = LocationIndicator();
+      MapServices.mapController.addLifecycleListener(ambulance!);
     }
-    ambulance = await _addAmbMapMarker(loc);
-    MapServices.mapController.mapScene.addMapMarker(ambulance!);
+    ambulance!.updateLocation(core.Location.withCoordinates(loc));
+    // if(ambulance != null) {
+    //   MapServices.mapController.mapScene.removeMapMarker(ambulance!);
+    // }
+    // ambulance = await _addAmbMapMarker(loc);
+    // MapServices.mapController.mapScene.addMapMarker(ambulance!);
   }
 }

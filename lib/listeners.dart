@@ -29,10 +29,14 @@ class FireListener {
   }
 
   void listenToAcceptance() async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref('results');
-    ref.onChildChanged.listen((event) async {
+    var box = await Hive.openBox('booking');
+    String hash = box.get('hash');
+    listenToAmbLoc();
+    // Fluttertoast.showToast(msg: "Hash is " + hash);
+    DatabaseReference ref = FirebaseDatabase.instance.ref('Bookings/' + hash);
+    ref.onChildAdded.listen((event) async {
       Object? data = event.snapshot.value;
-      Fluttertoast.showToast(msg: data.toString());
+      // Fluttertoast.showToast(msg: data.toString());
       if (data.runtimeType.toString() != 'String') {
         List d = data as List;
         _convertToPolyline(d);
@@ -54,13 +58,24 @@ class FireListener {
   void listenToAmbLoc() async {
     var box = await Hive.openBox('booking');
     String hash = box.get('hash');
-    Fluttertoast.showToast(msg: hash);
+    double? lat, long;
+    bool flag = false;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref('Bookings/' + hash + '/ambulance_loc');
     ref.onChildChanged.listen((event) {
-      double lat = double.parse(event.snapshot.child('lat').value.toString());
-      double long = double.parse(event.snapshot.child('lon').value.toString());
-      Services().updateAmbLoc(GeoCoordinates(lat, long));
+      // Fluttertoast.showToast(msg: "This is " + event.snapshot.value.toString());
+      if (event.snapshot.key == 'lat') {
+        lat = double.parse(event.snapshot.value.toString());
+      } else if (event.snapshot.key == 'lon') {
+        long = double.parse(event.snapshot.value.toString());
+        flag = true;
+      }
+      if (lat != null && long != null && flag) {
+        // Fluttertoast.showToast(
+        //     msg: "You are at " + lat.toString() + ", " + long.toString());
+        sobj.updateAmbLoc(GeoCoordinates(lat!, long!));
+        flag = false;
+      }
     });
   }
 }

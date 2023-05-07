@@ -30,8 +30,6 @@ class _AppScreenState extends State<AppScreen> {
     } else {
       if (widget.sobj.usertype == 'driver') {
         FireListener(widget.sobj).listenToBookings(appScreenRes);
-      } else if (widget.sobj.usertype == 'user') {
-        FireListener(widget.sobj).listenToAcceptance();
       }
     }
   }
