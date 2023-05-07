@@ -12,7 +12,7 @@ import 'package:hive_flutter/adapters.dart';
 
 // User defined ambulance form widget
 class AmbulanceForm extends StatefulWidget {
-  final Services sobj;
+  Services sobj;
   AmbulanceForm({super.key, required this.sobj});
   @override
   AmbulanceFormState createState() {

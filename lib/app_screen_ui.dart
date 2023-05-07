@@ -1,6 +1,7 @@
 // import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/app_screen_res.dart';
 import 'package:AmbiNav/booking_map_ui.dart';
+import 'package:AmbiNav/end_destination_ui.dart';
 import 'package:AmbiNav/grid.dart';
 import 'package:AmbiNav/listeners.dart';
 import 'package:AmbiNav/map.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 class AppScreen extends StatefulWidget {
   Grid? grid = null;
   final Services sobj;
+  Search?obj;
 
   AppScreen({super.key, required this.sobj, this.grid});
   static final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -43,11 +45,6 @@ class _AppScreenState extends State<AppScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: AppScreen.scaffoldKey,
-      drawer: Drawer(
-        child: SafeArea(
-          child: Column(children: appScreenRes.getDrawerOptions(context, widget.sobj)),
-        ),
-      ),
       appBar: AppBar(
           title: Text("Navigation"),
           leading: IconButton(
@@ -81,11 +78,24 @@ class _AppScreenState extends State<AppScreen> {
                 isVisible: (widget.grid != null) ? true : false);
           })),
 
+          StatefulBuilder(
+            builder: (BuildContext context, setState) {
+              Services.endDestinationSetSateOverlay = setState;
+              return EndDes(
+                sbj: widget.sobj);
+            },
+          ),
+
           StatefulBuilder(builder: ((context, setState) {
             Search.setStateMarkerDetailsCard = setState;
             return DisplayMarkerInfo();
           })),
         ],
+      ),
+       drawer: Drawer(
+        child: SafeArea(
+          child: Column(children: appScreenRes.getDrawerOptions(context, widget.sobj)),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
           //this button moves the camera to user's current location - recenter button

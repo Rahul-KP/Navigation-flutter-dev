@@ -1,6 +1,6 @@
 import 'dart:math';
-
 import 'package:AmbiNav/app_screen_res.dart';
+import 'package:AmbiNav/end_destination_ui.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
 import 'package:AmbiNav/routing.dart';
@@ -14,6 +14,7 @@ import 'dart:math' as math;
 
 class FireListener {
   late Services sobj;
+  Routing rt = Routing();
 
   FireListener(Services sobj) {
     this.sobj = sobj;
@@ -50,11 +51,10 @@ class FireListener {
   }
 
   _convertToPolyline(List l) {
-    List<GeoCoordinates> newlist = [];
+    List<GeoCoordinates> newlist =[]; 
     l.forEach((element) {
       newlist.add(GeoCoordinates(element['lat'], element['lon']));
     });
-    Routing rt = Routing();
     rt.initRoutingEngine(sobj);
     rt.showRouteOnMap(GeoPolyline(newlist));
     // Fluttertoast.showToast(msg: "LIGHT");
@@ -97,6 +97,10 @@ class FireListener {
         if (d < 300) {
           //code the part to end trip
           Fluttertoast.showToast(msg: "Ambulance in vicinity");
+          Services.endDestinationSetSateOverlay((){
+            EndDes.isVisible=true;
+            EndDes.rt = this.rt;
+          });
         }
       }
     });
