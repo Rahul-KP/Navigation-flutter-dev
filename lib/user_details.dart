@@ -2,6 +2,7 @@ import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/main.dart';
 import 'package:AmbiNav/services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -108,11 +109,20 @@ class _userDetailsState extends State<userDetails> {
                       if (username != '' && code != '') {
                         logindata.setBool('login', false);
                         logindata.setString('username', username);
-                        logindata.setString('usertype', 'user');
-                        sobj.setCred('usertype', 'user');
                         sobj.setCred('username', username);
                         sobj.username = username;
-                        sobj.usertype = 'user';
+                        if (codeController.text == 'pol1234') {
+                          logindata.setString('usertype', 'police');
+                          sobj.setCred('usertype', 'police');
+                          sobj.usertype = 'police';
+                          Fluttertoast.showToast(
+                              msg:
+                                  "You are now logged in as a traffic authority!");
+                        } else {
+                          logindata.setString('usertype', 'user');
+                          sobj.setCred('usertype', 'user');
+                          sobj.usertype = 'user';
+                        }
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                             context,

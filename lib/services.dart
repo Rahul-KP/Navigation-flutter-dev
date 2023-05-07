@@ -1,6 +1,10 @@
+import 'package:AmbiNav/listeners.dart';
 import 'package:AmbiNav/map_functions.dart';
+import 'package:AmbiNav/routing.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:here_sdk/mapview.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:here_sdk/core.dart' as core;
@@ -9,9 +13,15 @@ import 'package:location/location.dart';
 class Services {
   late String username;
   late String usertype;
+  MapMarker? ambulance = null;
+  // LocationIndicator? ambulance;
   DatabaseReference? currentLocRef = null;
   bool isBooking = false;
   core.GeoCoordinates? userLocation = null;
+  late Routing? ambroute; 
+  static late var endDestinationSetSateOverlay;
+
+  static var listen = null;
 
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
@@ -51,6 +61,8 @@ class Services {
         }
       }
     });
+    Fluttertoast.showToast(msg: "fail in sobj");
+    FireListener(this).listenToAcceptance();
   }
 
   void streamLoc() async {
@@ -76,13 +88,51 @@ class Services {
   void _broadcastLoc() async {
     if (currentLocRef != null) {
       if (isBooking == true) {
-        currentLocRef!
-            .set({'lat': userLocation!.latitude, 'lon': userLocation!.longitude});
+        currentLocRef!.set(
+            {'lat': userLocation!.latitude, 'lon': userLocation!.longitude});
       }
     }
   }
 
   void goToUserLoc() async {
     MapServices.mapController.camera.lookAtPoint(userLocation!);
+  }
+
+  //prepaing ambulance map marker
+
+  Future<Uint8List> _loadFileAsUint8List(String fileName) async {
+    // The path refers to the assets directory as specified in pubspec.yaml.
+    ByteData fileData = await rootBundle.load('assets/' + fileName);
+    return Uint8List.view(fileData.buffer);
+  }
+
+  Future<MapMarker> _addAmbMapMarker(core.GeoCoordinates geoCoordinates) async {
+    MapImage? _ambImage;
+    // Reuse existing MapImage for new map markers.
+    if (_ambImage == null) {
+      Uint8List imagePixelData = await _loadFileAsUint8List('ambulance.png');
+      _ambImage =
+          MapImage.withPixelDataAndImageFormat(imagePixelData, ImageFormat.png);
+    }
+
+    MapMarker mapMarker = MapMarker(geoCoordinates, _ambImage);
+    // later ,to clear map marker add all map markers to the same list
+    // _mapMarkerList.add(mapMarker);
+    return mapMarker;
+  }
+
+  void updateAmbLoc(core.GeoCoordinates loc) {
+    // if (ambulance == null) {
+    //   ambulance = LocationIndicator();
+    //   // MapServices.mapController.addLifecycleListener(ambulance!);
+    // }
+    // ambulance!.updateLocation(core.Location.withCoordinates(loc));
+    if (ambulance != null) {
+      MapServices.mapController.mapScene.removeMapMarker(ambulance!);
+    }
+    _addAmbMapMarker(loc).then((value) {
+      ambulance = value;
+      MapServices.mapController.mapScene.addMapMarker(value);
+    });
   }
 }
