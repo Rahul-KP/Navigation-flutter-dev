@@ -62,11 +62,11 @@ class _NavigationNotifState extends State<NavigationNotif> {
             Services.listen.cancel();
             DatabaseReference ref1 = FirebaseDatabase.instance
                 .ref('Bookings/' + NavigationNotif.hashvalue);
-            print((ref1.get()).runtimeType.toString());
-            var flag = await ref1.get();
-            print(flag.value);
-            Fluttertoast.showToast(msg: "Printing flag");
-            Fluttertoast.showToast(msg: flag.value.toString());
+            // print((ref1.get()).runtimeType.toString());
+            // var flag = await ref1.get();
+            // print(flag.value);
+            // Fluttertoast.showToast(msg: "Printing flag");
+            // Fluttertoast.showToast(msg: flag.value.toString());
             ref1.onChildAdded.listen((event) {
               if (event.snapshot.key.toString() == "Reached") {
                 Services.endDestinationSetSateOverlay(() {

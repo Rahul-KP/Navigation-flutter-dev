@@ -1,6 +1,7 @@
 import 'package:AmbiNav/ambulance_form.dart';
 import 'package:AmbiNav/app_screen_ui.dart';
 import 'package:AmbiNav/grid.dart';
+import 'package:AmbiNav/listeners.dart';
 import 'package:AmbiNav/login.dart';
 import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/navig_notif_overlay_ui.dart';
@@ -90,13 +91,15 @@ class AppScreenRes {
               icon: Icon(Icons.search),
               onPressed: (() => this
                   .setStateOverlay(() => searchWidget.toggleVisibility())))));
-    } else if (sobj.usertype == 'driver' || sobj.usertype == 'police') {
+    } else if (sobj.usertype == 'driver') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(
               icon: Icon(Icons.navigation),
-              onPressed: (() =>
-                  Fluttertoast.showToast(msg: "Have a good day")))));
+              onPressed: (() {
+                  if (Services.listen != null) {
+                    FireListener(sobj).listenToBookings(this);
+                  }}))));
     }
 
     return actionButtonList;

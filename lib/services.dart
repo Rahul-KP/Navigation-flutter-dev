@@ -21,7 +21,7 @@ class Services {
   late Routing? ambroute; 
   static late var endDestinationSetSateOverlay;
 
-  static var listen;
+  static var listen = null;
 
   Future<String?> getCred(String key) {
     var box = Hive.openBox('creds');
