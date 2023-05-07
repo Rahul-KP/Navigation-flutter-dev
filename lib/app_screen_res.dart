@@ -20,7 +20,7 @@ class AppScreenRes {
       return SearchWidget(
         sobj: sobj,
       );
-    } else if (sobj.usertype == 'driver') {
+    } else if (sobj.usertype == 'driver' || sobj.usertype == 'police') {
       return NavigationNotif(
         sobj: sobj,
         appScreenRes: this,
@@ -90,7 +90,7 @@ class AppScreenRes {
               icon: Icon(Icons.search),
               onPressed: (() => this
                   .setStateOverlay(() => searchWidget.toggleVisibility())))));
-    } else if (sobj.usertype == 'driver') {
+    } else if (sobj.usertype == 'driver' || sobj.usertype == 'police') {
       actionButtonList.add(Padding(
           padding: const EdgeInsets.only(right: 15.0),
           child: IconButton(

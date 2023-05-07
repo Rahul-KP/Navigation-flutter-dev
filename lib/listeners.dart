@@ -14,6 +14,7 @@ import 'dart:math' as math;
 
 class FireListener {
   late Services sobj;
+  List<String> hashes = [];
   Routing rt = Routing();
 
   FireListener(Services sobj) {
@@ -51,7 +52,7 @@ class FireListener {
   }
 
   _convertToPolyline(List l) {
-    List<GeoCoordinates> newlist =[]; 
+    List<GeoCoordinates> newlist = [];
     l.forEach((element) {
       newlist.add(GeoCoordinates(element['lat'], element['lon']));
     });
@@ -97,8 +98,8 @@ class FireListener {
         if (d < 300) {
           //code the part to end trip
           Fluttertoast.showToast(msg: "Ambulance in vicinity");
-          Services.endDestinationSetSateOverlay((){
-            EndDes.isVisible=true;
+          Services.endDestinationSetSateOverlay(() {
+            EndDes.isVisible = true;
             EndDes.rt = this.rt;
           });
         }
@@ -146,5 +147,30 @@ class FireListener {
     double c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
     double d = r * c * 1000; // distance in km
     return d;
+  }
+
+  void listenToAll() {
+    DatabaseReference ref = FirebaseDatabase.instance.ref('Bookings');
+    ref.onChildChanged.listen((event) async {
+      if (event.snapshot.hasChild('ambulance_loc')) {
+        double lat = double.parse(
+            event.snapshot.child('ambulance_loc/lat').value.toString());
+        double lon = double.parse(
+            event.snapshot.child('ambulance_loc/lon').value.toString());
+        sobj.updateAmbLoc(GeoCoordinates(lat, lon));
+      }
+      if (event.snapshot.hasChild('route')) {
+        Object? data = event.snapshot.child('route').value;
+        // Fluttertoast.showToast(msg: data.toString());
+        if (data.runtimeType.toString() != 'String' &&
+            !hashes.contains(event.snapshot.key.toString())) {
+              Fluttertoast.showToast(msg: event.snapshot.key.toString());
+          List d = data as List;
+          _convertToPolyline(d);
+          hashes.add(event.snapshot.key.toString());
+          Fluttertoast.showToast(msg: hashes.length.toString());
+        }
+      }
+    });
   }
 }
