@@ -15,7 +15,7 @@ import 'package:here_sdk/search.dart';
 
 class Search {
   MapImage? _poiMapImage;
-  List<MapMarker> _mapMarkerList = [];
+  List<MapMarker> mapMarkerList = [];
   static var setStateMarkerDetailsCard;
   static String place = "";
   static String oldVicinity = "";
@@ -46,7 +46,7 @@ class Search {
 
     MapMarker mapMarker = MapMarker(geoCoordinates, _poiMapImage!);
     MapServices.mapController.mapScene.addMapMarker(mapMarker);
-    _mapMarkerList.add(mapMarker);
+    mapMarkerList.add(mapMarker);
 
     return mapMarker;
   }
@@ -60,7 +60,7 @@ class Search {
   void search(String queryString) async {
     // Code to implement search functionality
     //clear map markers before every search
-    MapServices().clearMapMarkers(_mapMarkerList);
+    MapServices().clearMapMarkers(mapMarkerList);
     //instantiate search engine
     late SearchEngine _searchEngine;
     try {

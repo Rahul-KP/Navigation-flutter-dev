@@ -65,6 +65,8 @@ class Grid {
     // Services.mapController.mapScene.removeMapPolyline(polyline);
     lines.clear();
     isDisplayed = false;
+    MapServices.mapController.gestures.tapListener = null;
+    if(currentSquare != null) MapServices.mapController.mapScene.removeMapPolyline(currentSquare!);
   }
 
   static List<GeoCoordinates> _getOtherCorners(

@@ -1,6 +1,6 @@
+import 'package:AmbiNav/map_functions.dart';
 import 'package:AmbiNav/search.dart';
 import 'package:flutter/material.dart';
-import 'grid.dart' as gd;
 
 class SearchWidget extends StatefulWidget {
   Search seobj;
@@ -10,13 +10,10 @@ class SearchWidget extends StatefulWidget {
   //function to toggle visibility of search overlay (essentially a card element to enter destination)
   void toggleVisibility() {
     isVisible = !isVisible;
-    if (isVisible == false) {
-      // Grid.setTapGestureHandler();
-      gd.Grid grid = gd.Grid();
-
-      grid.getGrid();
-    } else {
+    if (isVisible == true) {
       seobj.setTapGestureHandler();
+    } else {
+      MapServices().clearMapMarkers(seobj.mapMarkerList);
     }
   }
 

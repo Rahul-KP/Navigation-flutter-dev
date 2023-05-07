@@ -89,7 +89,9 @@ class AppScreenRes {
               if (grid.isDisplayed) {
                 grid.removeGrid();
               } else {
-                grid.getGrid();
+                if (MapServices.mapController.camera.state.zoomLevel
+                        .toDouble() >=
+                    19) grid.getGrid();
               }
             })))));
     if (sobj.usertype == 'user') {
@@ -105,9 +107,10 @@ class AppScreenRes {
           child: IconButton(
               icon: Icon(Icons.navigation),
               onPressed: (() {
-                  if (Services.listen != null) {
-                    FireListener(sobj).listenToBookings(this);
-                  }}))));
+                if (Services.listen != null) {
+                  FireListener(sobj).listenToBookings(this);
+                }
+              }))));
     }
 
     return actionButtonList;
